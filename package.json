@@ -1,0 +1,26 @@
+{
+  "name": "votejs",
+  "version": "0.0.1",
+  "description": "This is a voting application using NodeJS.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yusufshakeel/votejs.git"
+  },
+  "keywords": [
+    "vote",
+    "votejs",
+    "voting",
+    "node",
+    "nodejs"
+  ],
+  "author": "Yusuf Shakeel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yusufshakeel/votejs/issues"
+  },
+  "homepage": "https://github.com/yusufshakeel/votejs#readme"
+}
