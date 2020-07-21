@@ -8,5 +8,12 @@
       "database": "DB_DATABASE",
       "port": "DB_PORT"
     }
+  },
+  "connectionPool": {
+    "knex": {
+      "min": "MIN_CONNECTION_POOL",
+      "max": "MAX_CONNECTION_POOL",
+      "acquireConnectionTimeout": "ACQUIRE_CONNECTION_TIMEOUT"
+    }
   }
 }
