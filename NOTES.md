@@ -37,3 +37,13 @@ Example:
 Configurations are saved inside the `config` directory.
 - `config/default.json` contains the default configurations.
 - `config/custom-environment-variables.json` contains the custom configurations.
+
+### DB Migrations
+The db migration files are stored inside the `migrations` directory.
+
+The configurations of the migrations are inside the `database.json` file.
+
+Run the following to create a new migration file.
+```
+> npm run dbmigrate:create fileName
+```

@@ -8,7 +8,11 @@
     "no-circular-dependecies": "npx madge -c ./app",
     "generate-docs": "npx jsdoc -c jsdocs.config.json",
     "lint": "npx eslint -c .eslintrc.json ./index.js ./app",
-    "precommit": "npm run no-circular-dependecies && npm run lint && npm run test && npm run generate-docs"
+    "precommit": "npm run no-circular-dependecies && npm run lint && npm run test && npm run generate-docs",
+    "dbmigrate:create": "npx db-migrate create",
+    "db:up": "npx db-migrate up --verbose",
+    "db:down": "npx db-migrate down --verbose",
+    "db:reset": "npx db-migrate reset --verbose"
   },
   "repository": {
     "type": "git",
@@ -34,6 +38,8 @@
   },
   "dependencies": {
     "config": "^3.3.1",
+    "db-migrate": "^0.11.11",
+    "db-migrate-pg": "^1.2.2",
     "knex": "^0.21.2",
     "pg": "^8.3.0",
     "uuid": "^8.2.0"
