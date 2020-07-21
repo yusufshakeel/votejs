@@ -15,7 +15,7 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db, cb) {
-  db.createTable('CANDIDATE', {
+  db.createTable('ELECTION', {
     id: {
       type: 'int',
       unsigned: true,
@@ -28,18 +28,26 @@ exports.up = function (db, cb) {
       unique: true,
       notNull: true
     },
-    displayHeader: {
+    title: {
       type: 'string',
-      maxLength: 500,
+      maxLength: 1000,
       notNull: true
     },
     summary: {
       type: 'string'
     },
-    candidateStatus: {
+    startsAt: {
+      type: 'timestamptz',
+      notNull: true
+    },
+    endsAt: {
+      type: 'timestamptz',
+      notNull: true
+    },
+    electionStatus: {
       type: 'string',
       notNull: true,
-      defaultValue: 'ACTIVE'
+      defaultValue: 'DRAFT'
     },
     createdAt: {
       type: 'timestamptz',
@@ -52,7 +60,7 @@ exports.up = function (db, cb) {
 };
 
 exports.down = function (db, cb) {
-  db.dropTable('CANDIDATE', {}, cb);
+  db.dropTable('ELECTION', {}, cb);
 };
 
 exports._meta = {
