@@ -1,5 +1,6 @@
 {
   "nodeEnvironment": "dev",
+  "logLevel": "info",
   "database": {
     "postgres": {
       "host": "localhost",

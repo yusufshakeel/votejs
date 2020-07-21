@@ -1,5 +1,6 @@
 {
   "nodeEnvironment": "NODE_ENV",
+  "logLevel": "LOG_LEVEL",
   "database": {
     "postgres": {
       "host": "DB_HOST",

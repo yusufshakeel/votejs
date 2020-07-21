@@ -5,6 +5,8 @@ const config = require('config');
 module.exports = function ConfigService() {
   const nodeEnvironment = config.get('nodeEnvironment');
 
+  const logLevel = config.get('logLevel');
+
   const database = {
     postgres: {
       host: config.get('database.postgres.host'),
@@ -26,6 +28,7 @@ module.exports = function ConfigService() {
 
   return {
     nodeEnvironment,
+    logLevel,
     database,
     connectionPool
   };
