@@ -70,7 +70,17 @@ exports.up = function (db, cb) {
       type: 'string',
     },
     countryCode: {
-      type: 'string'
+      type: 'string',
+      notNull: true,
+      foreignKey: {
+        name: 'ADMIN_countryCode_COUNTRY_countryCode_fk',
+        table: 'COUNTRY',
+        rules: {
+          onDelete: 'CASCADE',
+          onUpdate: 'CASCADE'
+        },
+        mapping: 'countryCode'
+      }
     },
     createdAt: {
       type: 'timestamptz',
