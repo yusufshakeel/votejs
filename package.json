@@ -4,7 +4,10 @@
   "description": "This is a voting application using NodeJS.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest -c jest.config.json",
+    "generate-docs": "npx jsdoc -c jsdocs.config.json",
+    "lint": "npx eslint -c .eslintrc.json ./index.js ./app",
+    "precommit": "npm run lint && npm run test && npm run generate-docs"
   },
   "repository": {
     "type": "git",
@@ -22,5 +25,10 @@
   "bugs": {
     "url": "https://github.com/yusufshakeel/votejs/issues"
   },
-  "homepage": "https://github.com/yusufshakeel/votejs#readme"
+  "homepage": "https://github.com/yusufshakeel/votejs#readme",
+  "devDependencies": {
+    "eslint": "^7.5.0",
+    "jest": "^26.1.0",
+    "jsdoc": "^3.6.4"
+  }
 }

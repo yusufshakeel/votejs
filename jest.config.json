@@ -1,0 +1,19 @@
+{
+  "verbose": true,
+  "bail": 1,
+  "collectCoverage": true,
+  "collectCoverageFrom": [
+    "**/*.{js,jsx}",
+    "!**/coverage/**",
+    "!**/docs/**",
+    "!**/node_modules/**",
+    "!**/tests/**"
+  ],
+  "coverageThreshold": {
+    "global": {
+      "branches": 90,
+      "functions": 90,
+      "lines": 90
+    }
+  }
+}
