@@ -47,3 +47,12 @@ Run the following to create a new migration file.
 ```
 > npm run dbmigrate:create fileName
 ```
+
+Reference: [db-migrate Documentation](https://db-migrate.readthedocs.io/en/latest/) 
+
+### DB reset generate
+Run the following command to hard reset i.e. remove all the data and re-initialise the tables with seed data.
+
+```
+> npm run db:reset-generate
+```

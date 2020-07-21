@@ -14,16 +14,22 @@ function upsertCountries(countries, txn) {
 }
 
 async function run() {
-  return knex.transaction(async txn => {
-    const countries = require('./country.js');
-
-    INFO('Inserting countries...');
-    await Promise.all(upsertCountries(countries, txn));
-  });
+  try {
+    return knex.transaction(async txn => {
+      const countries = require('./country.js');
+      INFO('Inserting countries...');
+      await Promise.all(upsertCountries(countries, txn));
+    });
+  } catch (err) {
+    throw err;
+  }
 }
 
 run()
   .then(() => {
     INFO('Done!');
+  })
+  .catch(err => {
+    ERROR('An error occurred while setting up the seed data.', err);
   })
   .finally(() => knex.destroy());

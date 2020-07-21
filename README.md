@@ -34,4 +34,4 @@ Note! If you have some other values then use that.
 ➜ export DB_PORT=5432
 ```
 
-
+For more details check the [NOTES.md](./NOTES.md) file.
