@@ -1,0 +1,12 @@
+{
+  "nodeEnvironment": "DEV",
+  "database": {
+    "postgres": {
+      "host": "localhost",
+      "user": "",
+      "password": "",
+      "database": "",
+      "port": 5432
+    }
+  }
+}

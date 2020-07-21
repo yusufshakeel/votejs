@@ -30,5 +30,8 @@
     "eslint": "^7.5.0",
     "jest": "^26.1.0",
     "jsdoc": "^3.6.4"
+  },
+  "dependencies": {
+    "config": "^3.3.1"
   }
 }
