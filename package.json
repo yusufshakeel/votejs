@@ -12,7 +12,9 @@
     "dbmigrate:create": "npx db-migrate create",
     "db:up": "npx db-migrate up --verbose",
     "db:down": "npx db-migrate down --verbose",
-    "db:reset": "npx db-migrate reset --verbose"
+    "db:reset": "npx db-migrate reset --verbose",
+    "db:seed": "node seed/index.js",
+    "db:reset-generate": "npm run db:reset && npm run db:up && npm run db:seed"
   },
   "repository": {
     "type": "git",
