@@ -6,4 +6,6 @@ cache:
   directories:
     - "node_modules"
 script:
+  - npm run no-circular-dependecies
+  - npm run lint
   - npm run test
