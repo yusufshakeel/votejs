@@ -1,5 +1,5 @@
 {
-  "nodeEnvironment": "DEV",
+  "nodeEnvironment": "dev",
   "database": {
     "postgres": {
       "host": "localhost",
