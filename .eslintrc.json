@@ -122,6 +122,10 @@
         "keywords": true
       }
     ],
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
     "complexity": [
       "error",
       10

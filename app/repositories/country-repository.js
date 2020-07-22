@@ -1,6 +1,6 @@
 'use strict';
 
-const {isEmpty} = require('lodash');
+const { isEmpty } = require('lodash');
 const TableRepository = require('./table-repository.js');
 const tableRepository = new TableRepository();
 const T = tableRepository.tables();
@@ -8,7 +8,7 @@ const T = tableRepository.tables();
 const columnsToReturn = ['countryCode', 'countryName', 'code'];
 
 function CountryRepository(mappers) {
-  const {countryMapper} = mappers;
+  const { countryMapper } = mappers;
 
   this.create = async function (domainCountry, transaction) {
     const dbCountry = countryMapper.domainToDb(domainCountry);
@@ -20,20 +20,20 @@ function CountryRepository(mappers) {
   this.findByCountryCode = async function (countryCode, transaction) {
     return transaction(T.COUNTRY)
       .select(columnsToReturn)
-      .where({countryCode});
+      .where({ countryCode });
   };
 
   this.findByCode = async function (code, transaction) {
     return transaction(T.COUNTRY)
       .select(columnsToReturn)
-      .where({code});
+      .where({ code });
   };
 
   this.updateByCountryCode = async function (countryCode, domainCountry, transaction) {
     const dbCountry = countryMapper.domainToDb(domainCountry);
     return transaction(T.COUNTRY)
       .update(dbCountry)
-      .where({countryCode})
+      .where({ countryCode })
       .returning(columnsToReturn);
   };
 
