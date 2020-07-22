@@ -14,7 +14,7 @@ const countryDbToDomain = {
   code: 'code'
 };
 
-module.exports = function CountryMapper() {
+function CountryMapper() {
   this.domainToDb = function (domainCountry) {
     return objectMapper(domainCountry, countryDomainToDb);
   };
@@ -22,4 +22,6 @@ module.exports = function CountryMapper() {
   this.dbToDomain = function (dbCountry) {
     return objectMapper(dbCountry, countryDbToDomain);
   };
-};
+}
+
+module.exports = CountryMapper;

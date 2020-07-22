@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function TableRepository() {
+function TableRepository() {
   this.tables = function () {
     return {
       ADMIN: 'ADMIN',
@@ -12,4 +12,6 @@ module.exports = function TableRepository() {
       VOTER: 'VOTER'
     };
   };
-};
+}
+
+module.exports = TableRepository;

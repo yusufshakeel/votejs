@@ -2,7 +2,7 @@
 
 const pinoLogger = require('pino');
 
-module.exports = function LogService(configService, pino = pinoLogger) {
+function LogService(configService, pino = pinoLogger) {
   const logger = pino({
     level: configService.logLevel,
   });
@@ -13,4 +13,6 @@ module.exports = function LogService(configService, pino = pinoLogger) {
     ERROR: (...params) => logger.error(...params),
     VERBOSE: (...params) => logger.verbose(...params),
   };
-};
+}
+
+module.exports = LogService;

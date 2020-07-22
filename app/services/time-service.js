@@ -2,7 +2,7 @@
 
 const momentjs = require('moment');
 
-module.exports = function TimeService(moment = momentjs) {
+function TimeService(moment = momentjs) {
   this.now = function () {
     return moment().toDate();
   };
@@ -10,4 +10,6 @@ module.exports = function TimeService(moment = momentjs) {
   this.nowAsISOString = function() {
     return moment().toISOString();
   };
-};
+}
+
+module.exports = TimeService;

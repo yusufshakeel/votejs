@@ -49,6 +49,10 @@ exports.up = function (db, cb) {
       notNull: true,
       defaultValue: 'DRAFT'
     },
+    electionSettings: {
+      type: 'jsonb',
+      notNull: true
+    },
     createdAt: {
       type: 'timestamptz',
       notNull: true

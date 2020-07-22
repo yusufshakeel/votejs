@@ -2,7 +2,7 @@
 
 const config = require('config');
 
-module.exports = function ConfigService() {
+function ConfigService() {
   const nodeEnvironment = config.get('nodeEnvironment');
 
   const logLevel = config.get('logLevel');
@@ -32,4 +32,6 @@ module.exports = function ConfigService() {
     database,
     connectionPool
   };
-};
+}
+
+module.exports = ConfigService;

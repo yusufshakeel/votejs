@@ -2,7 +2,7 @@
 
 const Knex = require('knex');
 
-module.exports = function KnexService(configService) {
+function KnexService(configService) {
   return Knex({
     client: 'pg',
     connection: {
@@ -15,4 +15,6 @@ module.exports = function KnexService(configService) {
     },
     acquireConnectionTimeout: configService.connectionPool.knex.acquireConnectionTimeout
   });
-};
+}
+
+module.exports = KnexService;
