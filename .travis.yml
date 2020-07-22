@@ -16,7 +16,7 @@ cache:
   directories:
     - "node_modules"
 before_script:
-  - psql -c 'create database if not exists votejs' -U postgres
+  - psql -c 'DROP DATABASE IF EXISTS votejs; CREATE DATABASE votejs;' -U postgres
 script:
   - npm run db:up
   - npm run db:seed
