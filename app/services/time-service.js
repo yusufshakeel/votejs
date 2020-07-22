@@ -7,7 +7,7 @@ function TimeService(moment = momentjs) {
     return moment().toDate();
   };
 
-  this.nowAsISOString = function() {
+  this.nowAsISOString = function () {
     return moment().toISOString();
   };
 }

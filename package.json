@@ -8,6 +8,7 @@
     "no-circular-dependecies": "npx madge -c ./app",
     "generate-docs": "npx jsdoc -c jsdocs.config.json",
     "lint": "npx eslint -c .eslintrc.json ./index.js ./app",
+    "lint:fix": "npx eslint --fix -c .eslintrc.json ./index.js ./app",
     "precommit": "npm run no-circular-dependecies && npm run lint && npm run test && npm run generate-docs",
     "dbmigrate:create": "npx db-migrate create",
     "db:up": "npx db-migrate up --verbose",
@@ -35,8 +36,11 @@
   "homepage": "https://github.com/yusufshakeel/votejs#readme",
   "devDependencies": {
     "eslint": "^7.5.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "jest": "^26.1.0",
-    "jsdoc": "^3.6.4"
+    "jsdoc": "^3.6.4",
+    "prettier": "^2.0.5"
   },
   "dependencies": {
     "config": "^3.3.1",
