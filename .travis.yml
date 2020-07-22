@@ -8,6 +8,8 @@ cache:
     - "node_modules"
 before_script:
   - psql -c 'create database votejs' -U postgres
+before_install:
+  - sudo service postgresql restart
 env:
   global:
     - DB_USER=postgres
