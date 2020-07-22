@@ -1,15 +1,6 @@
 language: node_js
 node_js:
   - 10
-install:
-  npm install
-cache:
-  directories:
-    - "node_modules"
-before_script:
-  - psql -c 'create database votejs' -U postgres
-before_install:
-  - sudo service postgresql restart
 env:
   global:
     - DB_USER=postgres
@@ -17,6 +8,15 @@ env:
     - DB_PASSWORD=
     - DB_HOST=localhost
     - DB_DATABASE=votejs
+before_install:
+  - sudo service postgresql restart
+install:
+  npm install
+cache:
+  directories:
+    - "node_modules"
+before_script:
+  - psql -c 'create database if not exists votejs' -U postgres
 script:
   - npm run db:up
   - npm run db:seed
