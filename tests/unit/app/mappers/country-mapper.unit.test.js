@@ -2,7 +2,7 @@
 
 const Mappers = require('../../../../app/mappers');
 const mapper = new Mappers();
-const {countryMapper} = mapper;
+const { countryMapper } = mapper;
 
 test('Should be able to map domain to db', () => {
   const domainCountry = {
