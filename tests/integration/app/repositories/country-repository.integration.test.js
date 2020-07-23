@@ -7,7 +7,7 @@ const Repositories = require('../../../../app/repositories');
 const services = new Services();
 const mappers = new Mappers();
 const repositories = new Repositories(mappers);
-const {countryRepository} = repositories;
+const { countryRepository } = repositories;
 
 const fakeDomainCountry = function () {
   const uuid = services.uuidService.uuid();
@@ -55,7 +55,11 @@ test('Should be able to update by countryCode', async () => {
     const dataToUpdate = fakeDomainCountry();
     const createdCountry = await createFakeCountry(txn);
     const firstCreated = createdCountry[0];
-    const result = await countryRepository.updateByCountryCode(firstCreated.countryCode, dataToUpdate, txn);
+    const result = await countryRepository.updateByCountryCode(
+      firstCreated.countryCode,
+      dataToUpdate,
+      txn
+    );
     const firstFetched = result[0];
     expect(firstFetched).toStrictEqual(dataToUpdate);
   });
