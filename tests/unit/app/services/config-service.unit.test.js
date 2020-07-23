@@ -6,7 +6,14 @@ const configService = ConfigService();
 
 test('Should confirm the required properties', () => {
   expect(keys(configService).sort()).toStrictEqual(
-    ['nodeEnvironment', 'database', 'connectionPool', 'logLevel', 'passwordHashConfig'].sort()
+    [
+      'nodeEnvironment',
+      'database',
+      'connectionPool',
+      'logLevel',
+      'passwordHashConfig',
+      'passwordHashingSecretKey'
+    ].sort()
   );
 });
 

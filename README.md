@@ -21,6 +21,8 @@ Run the following command to install all the packages.
 ➜ npm install
 ```
 
+#### DB setup
+
 First we need to create a database in Postgres. Then export the following environment variables.
 
 On my local machine the host, user, password, database and port for Postgres are the following.
@@ -37,6 +39,12 @@ Note! If you have some other values then use that.
 
 For more details check the [NOTES.md](./NOTES.md) file.
 
+#### Secret Key
+
+Set the password hashing secret key as environment variable.
+```
+➜ export PASSWORD_HASHING_SECRET_KEY=this-is-my-secret-key
+```
 
 ## License
 It's free :smiley:

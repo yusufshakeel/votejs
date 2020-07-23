@@ -16,5 +16,6 @@
       "max": "MAX_CONNECTION_POOL",
       "acquireConnectionTimeout": "ACQUIRE_CONNECTION_TIMEOUT"
     }
-  }
+  },
+  "passwordHashingSecretKey": "PASSWORD_HASHING_SECRET_KEY"
 }

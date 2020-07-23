@@ -7,6 +7,8 @@ function ConfigService() {
 
   const logLevel = config.get('logLevel');
 
+  const passwordHashingSecretKey = config.get('passwordHashingSecretKey');
+
   const database = {
     postgres: {
       host: config.get('database.postgres.host'),
@@ -36,6 +38,7 @@ function ConfigService() {
 
   return {
     nodeEnvironment,
+    passwordHashingSecretKey,
     logLevel,
     database,
     connectionPool,

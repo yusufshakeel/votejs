@@ -24,5 +24,6 @@
     "iterations": 204800,
     "keylen": 256,
     "digest": "sha512"
-  }
+  },
+  "passwordHashingSecretKey": ""
 }
