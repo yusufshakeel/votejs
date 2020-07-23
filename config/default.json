@@ -25,5 +25,7 @@
     "keylen": 256,
     "digest": "sha512"
   },
-  "passwordHashingSecretKey": ""
+  "encryptionAlgorithm": "aes-256-cbc",
+  "encryptionKey": "crypto-key-exactly-32-chars-long",
+  "encryptionIVLength": 16
 }

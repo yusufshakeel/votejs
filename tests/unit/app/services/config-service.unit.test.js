@@ -12,7 +12,9 @@ test('Should confirm the required properties', () => {
       'connectionPool',
       'logLevel',
       'passwordHashConfig',
-      'passwordHashingSecretKey'
+      'encryptionAlgorithm',
+      'encryptionKey',
+      'encryptionIVLength'
     ].sort()
   );
 });

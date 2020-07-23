@@ -14,7 +14,8 @@ test('Should confirm the existence of required properties', () => {
       'logService',
       'base64Service',
       'passwordService',
-      'stringifyService'
+      'stringifyService',
+      'cryptoService'
     ].sort()
   );
 });

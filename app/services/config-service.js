@@ -7,7 +7,9 @@ function ConfigService() {
 
   const logLevel = config.get('logLevel');
 
-  const passwordHashingSecretKey = config.get('passwordHashingSecretKey');
+  const encryptionAlgorithm = config.get('encryptionAlgorithm');
+  const encryptionKey = config.get('encryptionKey');
+  const encryptionIVLength = config.get('encryptionIVLength');
 
   const database = {
     postgres: {
@@ -38,7 +40,9 @@ function ConfigService() {
 
   return {
     nodeEnvironment,
-    passwordHashingSecretKey,
+    encryptionAlgorithm,
+    encryptionKey,
+    encryptionIVLength,
     logLevel,
     database,
     connectionPool,

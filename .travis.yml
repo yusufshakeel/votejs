@@ -8,6 +8,7 @@ env:
     - DB_PASSWORD=
     - DB_HOST=localhost
     - DB_DATABASE=votejs
+    - ENCRYPTION_KEY=crypto-key-exactly-32-chars-long
 before_install:
   - sudo service postgresql restart
 install:

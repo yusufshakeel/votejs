@@ -39,12 +39,15 @@ Note! If you have some other values then use that.
 
 For more details check the [NOTES.md](./NOTES.md) file.
 
-#### Secret Key
+#### Encryption Key
 
-Set the password hashing secret key as environment variable.
+Set the encryption key as environment variable. Max sure it is exactly 256 bits long (32 characters).
 ```
-➜ export PASSWORD_HASHING_SECRET_KEY=this-is-my-secret-key
+➜ export ENCRYPTION_KEY=crypto-key-exactly-32-chars-long
 ```
+Note! Encryption algorithm used: `aes-256-cbc` and IV length is `16`.
+
+
 
 ## License
 It's free :smiley:
