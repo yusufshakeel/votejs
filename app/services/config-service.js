@@ -26,11 +26,20 @@ function ConfigService() {
     }
   };
 
+  const passwordHashConfig = {
+    algo: config.get('passwordHashing.algo'),
+    saltSize: config.get('passwordHashing.saltSize'),
+    iterations: config.get('passwordHashing.iterations'),
+    keylen: config.get('passwordHashing.keylen'),
+    digest: config.get('passwordHashing.digest')
+  };
+
   return {
     nodeEnvironment,
     logLevel,
     database,
-    connectionPool
+    connectionPool,
+    passwordHashConfig
   };
 }
 
