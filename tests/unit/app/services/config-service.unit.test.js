@@ -1,6 +1,6 @@
 'use strict';
 
-const {keys} = require('lodash');
+const { keys } = require('lodash');
 const ConfigService = require('../../../../app/services/config-service.js');
 
 test('Should confirm the require properties', () => {

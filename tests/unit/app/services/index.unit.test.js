@@ -1,6 +1,6 @@
 'use strict';
 
-const {keys} = require('lodash');
+const { keys } = require('lodash');
 const Services = require('../../../../app/services');
 
 test('Should confirm the existence of required properties', () => {

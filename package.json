@@ -8,7 +8,7 @@
     "no-circular-dependecies": "npx madge -c ./app",
     "generate-docs": "npx jsdoc -c jsdocs.config.json",
     "lint": "npx eslint -c .eslintrc.json ./index.js ./app ./tests",
-    "lint:fix": "npx eslint --fix -c .eslintrc.json ./index.js ./app",
+    "lint:fix": "npx eslint --fix -c .eslintrc.json ./index.js ./app ./tests",
     "precommit": "npm run no-circular-dependecies && npm run lint && npm run test && npm run generate-docs",
     "dbmigrate:create": "npx db-migrate create",
     "db:up": "npx db-migrate up --verbose",
