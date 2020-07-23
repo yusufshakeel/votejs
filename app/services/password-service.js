@@ -3,7 +3,7 @@
 const crypto = require('crypto');
 
 function PasswordService(configService, base64Service, stringifyService) {
-  const DEFAULT_CONFIG = configService.passwordHashConfig;
+  const { passwordHashConfig: DEFAULT_CONFIG } = configService;
 
   const generateSalt = function (config) {
     return crypto.randomBytes(config.saltSize).toString('hex');
