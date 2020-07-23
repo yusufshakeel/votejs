@@ -36,3 +36,16 @@ Note! If you have some other values then use that.
 ```
 
 For more details check the [NOTES.md](./NOTES.md) file.
+
+
+## License
+It's free :smiley:
+
+[MIT License](https://github.com/yusufshakeel/votejs/blob/master/LICENSE) Copyright (c) 2020 Yusuf Shakeel
+
+#### Back this project
+
+If you find this project useful and interesting then feel free to support me on [Patreon](https://www.patreon.com/yusufshakeel).
+
+#### Donate
+Feeling generous :smiley: [Donate via PayPal](https://www.paypal.me/yusufshakeel)
