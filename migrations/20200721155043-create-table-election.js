@@ -15,7 +15,7 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db, cb) {
-  db.createTable('ELECTION', {
+  return db.createTable('ELECTION', {
     id: {
       type: 'int',
       unsigned: true,
@@ -30,7 +30,7 @@ exports.up = function (db, cb) {
     },
     title: {
       type: 'string',
-      maxLength: 1000,
+      length: 1000,
       notNull: true
     },
     summary: {
@@ -64,7 +64,7 @@ exports.up = function (db, cb) {
 };
 
 exports.down = function (db, cb) {
-  db.dropTable('ELECTION', {}, cb);
+  return db.dropTable('ELECTION', {}, cb);
 };
 
 exports._meta = {

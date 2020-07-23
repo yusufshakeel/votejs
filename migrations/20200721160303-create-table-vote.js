@@ -15,7 +15,7 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db, cb) {
-  db.createTable('VOTE', {
+  return db.createTable('VOTE', {
     id: {
       type: 'int',
       unsigned: true,
@@ -83,7 +83,7 @@ exports.up = function (db, cb) {
 };
 
 exports.down = function (db, cb) {
-  db.dropTable('VOTE', {}, cb);
+  return db.dropTable('VOTE', {}, cb);
 };
 
 exports._meta = {

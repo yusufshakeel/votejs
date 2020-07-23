@@ -15,29 +15,29 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db, cb) {
-  db.createTable('COUNTRY', {
+  return db.createTable('COUNTRY', {
     countryCode: {
       type: 'string',
-      maxLength: 3,
+      length: 3,
       notNull: true,
       unique: true,
       primaryKey: true
     },
     countryName: {
       type: 'string',
-      maxLength: 200,
+      length: 200,
       notNull: true
     },
     code: {
       type: 'string',
-      maxLength: 2,
+      length: 2,
       unique: true
     }
   }, cb);
 };
 
 exports.down = function(db, cb) {
-  db.dropTable('COUNTRY', {}, cb);
+  return db.dropTable('COUNTRY', {}, cb);
 };
 
 exports._meta = {

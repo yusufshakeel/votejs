@@ -10,11 +10,11 @@ const repositories = new Repositories(mappers);
 const { countryRepository } = repositories;
 
 const fakeDomainCountry = function () {
-  const uuid = services.uuidService.uuid();
+  const str = Math.random().toString(36).substr(2);
   return {
-    countryCode: `CC-${uuid}`,
-    countryName: `CName-${uuid}`,
-    code: `C-${uuid}`
+    countryCode: `${str.substring(0, 3)}`,
+    countryName: `${str}`,
+    code: `${str.substring(0, 2)}`
   };
 };
 

@@ -16,7 +16,7 @@ exports.setup = function (options, seedLink) {
 
 exports.up = function (db, cb) {
   db.runSql('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
-  db.createTable('ADMIN', {
+  return db.createTable('ADMIN', {
     id: {
       type: 'int',
       unsigned: true,
@@ -31,28 +31,28 @@ exports.up = function (db, cb) {
     },
     firstName: {
       type: 'string',
-      maxLength: 255,
+      length: 255,
       notNull: true
     },
     middleName: {
       type: 'string',
-      maxLength: 255
+      length: 255
     },
     lastName: {
       type: 'string',
-      maxLength: 255
+      length: 255
     },
     emailId: {
       type: 'string',
       unique: true,
       notNull: true,
-      maxLength: 300
+      length: 300
     },
     userName: {
       type: 'string',
       unique: true,
       notNull: true,
-      maxLength: 100
+      length: 100
     },
     password: {
       type: 'string',
@@ -72,6 +72,7 @@ exports.up = function (db, cb) {
     countryCode: {
       type: 'string',
       notNull: true,
+      length: 3,
       foreignKey: {
         name: 'ADMIN_countryCode_COUNTRY_countryCode_fk',
         table: 'COUNTRY',
@@ -93,7 +94,7 @@ exports.up = function (db, cb) {
 };
 
 exports.down = function (db, cb) {
-  db.dropTable('ADMIN', {}, cb);
+  return db.dropTable('ADMIN', {}, cb);
 };
 
 exports._meta = {
