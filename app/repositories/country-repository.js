@@ -1,6 +1,6 @@
 'use strict';
 
-const { isEmpty } = require('lodash');
+const { isEmpty, first } = require('lodash');
 const TableRepository = require('./table-repository.js');
 const tableRepository = new TableRepository();
 const T = tableRepository.tables();
@@ -12,23 +12,29 @@ function CountryRepository(mappers) {
 
   this.create = async function (domainCountry, transaction) {
     const dbCountry = countryMapper.domainToDb(domainCountry);
-    return transaction(T.COUNTRY).insert(dbCountry).returning(columnsToReturn);
+    const result = await transaction(T.COUNTRY).insert(dbCountry).returning(columnsToReturn);
+    return countryMapper.dbToDomain(first(result));
   };
 
   this.findByCountryCode = async function (countryCode, transaction) {
-    return transaction(T.COUNTRY).select(columnsToReturn).where({ countryCode });
+    const result = await transaction(T.COUNTRY).select(columnsToReturn).where({ countryCode });
+    if (isEmpty(result)) return null;
+    return countryMapper.dbToDomain(first(result));
   };
 
   this.findByCode = async function (code, transaction) {
-    return transaction(T.COUNTRY).select(columnsToReturn).where({ code });
+    const result = await transaction(T.COUNTRY).select(columnsToReturn).where({ code });
+    if (isEmpty(result)) return null;
+    return countryMapper.dbToDomain(first(result));
   };
 
   this.updateByCountryCode = async function (countryCode, domainCountry, transaction) {
     const dbCountry = countryMapper.domainToDb(domainCountry);
-    return transaction(T.COUNTRY)
+    const result = await transaction(T.COUNTRY)
       .update(dbCountry)
       .where({ countryCode })
       .returning(columnsToReturn);
+    return countryMapper.dbToDomain(first(result));
   };
 
   this.upsert = async function (domainCountry, transaction) {

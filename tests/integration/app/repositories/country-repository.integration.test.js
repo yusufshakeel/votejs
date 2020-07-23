@@ -11,10 +11,11 @@ const { countryRepository } = repositories;
 
 const fakeDomainCountry = function () {
   const str = Math.random().toString(36).substr(2);
+  const digit = Math.random().toString(10).substr(2, 1);
   return {
     countryCode: `${str.substring(0, 3)}`,
     countryName: `${str}`,
-    code: `${str.substring(0, 2)}`
+    code: `${digit[0]}${str.substring(0, 1)}`
   };
 };
 
@@ -26,27 +27,40 @@ test('Should be able to create new entry in country table', async () => {
   return services.knexService.transaction(async txn => {
     const domainCountry = fakeDomainCountry();
     const result = await countryRepository.create(domainCountry, txn);
-    expect(result[0]).toStrictEqual(domainCountry);
+    expect(result).toStrictEqual(domainCountry);
   });
 });
 
 test('Should be able to fetch data by countryCode', async () => {
   return services.knexService.transaction(async txn => {
     const createdCountry = await createFakeCountry(txn);
-    const firstCreated = createdCountry[0];
-    const fetchedCountry = await countryRepository.findByCountryCode(firstCreated.countryCode, txn);
-    const firstFetched = fetchedCountry[0];
-    expect(firstFetched).toStrictEqual(firstCreated);
+    const fetchedCountry = await countryRepository.findByCountryCode(
+      createdCountry.countryCode,
+      txn
+    );
+    expect(fetchedCountry).toStrictEqual(createdCountry);
+  });
+});
+
+test('Should return null when searching country by countryCode that does not exists', async () => {
+  return services.knexService.transaction(async txn => {
+    const fetchedCountry = await countryRepository.findByCountryCode('---', txn);
+    expect(fetchedCountry).toBeNull();
   });
 });
 
 test('Should be able to fetch data by code', async () => {
   return services.knexService.transaction(async txn => {
     const createdCountry = await createFakeCountry(txn);
-    const firstCreated = createdCountry[0];
-    const fetchedCountry = await countryRepository.findByCode(firstCreated.code, txn);
-    const firstFetched = fetchedCountry[0];
-    expect(firstFetched).toStrictEqual(firstCreated);
+    const fetchedCountry = await countryRepository.findByCode(createdCountry.code, txn);
+    expect(fetchedCountry).toStrictEqual(createdCountry);
+  });
+});
+
+test('Should return null when searching country by code that does not exists', async () => {
+  return services.knexService.transaction(async txn => {
+    const fetchedCountry = await countryRepository.findByCode('--', txn);
+    expect(fetchedCountry).toBeNull();
   });
 });
 
@@ -54,23 +68,20 @@ test('Should be able to update by countryCode', async () => {
   return services.knexService.transaction(async txn => {
     const dataToUpdate = fakeDomainCountry();
     const createdCountry = await createFakeCountry(txn);
-    const firstCreated = createdCountry[0];
-    const result = await countryRepository.updateByCountryCode(
-      firstCreated.countryCode,
+    const fetchedCountry = await countryRepository.updateByCountryCode(
+      createdCountry.countryCode,
       dataToUpdate,
       txn
     );
-    const firstFetched = result[0];
-    expect(firstFetched).toStrictEqual(dataToUpdate);
+    expect(fetchedCountry).toStrictEqual(dataToUpdate);
   });
 });
 
 test('Should be able to upsert - create', async () => {
   return services.knexService.transaction(async txn => {
     const domainCountry = fakeDomainCountry();
-    const result = await countryRepository.upsert(domainCountry, txn);
-    const firstFetched = result[0];
-    expect(firstFetched).toStrictEqual(domainCountry);
+    const fetchedCountry = await countryRepository.upsert(domainCountry, txn);
+    expect(fetchedCountry).toStrictEqual(domainCountry);
   });
 });
 
@@ -78,9 +89,8 @@ test('Should be able to upsert - update', async () => {
   return services.knexService.transaction(async txn => {
     const domainCountry = fakeDomainCountry();
     const createdCountry = await countryRepository.create(domainCountry, txn);
-    const result = await countryRepository.upsert(domainCountry, txn);
-    const firstFetched = result[0];
-    expect(firstFetched).toStrictEqual(createdCountry[0]);
+    const fetchedCountry = await countryRepository.upsert(domainCountry, txn);
+    expect(fetchedCountry).toStrictEqual(createdCountry);
   });
 });
 
