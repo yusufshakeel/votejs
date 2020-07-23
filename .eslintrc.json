@@ -86,7 +86,8 @@
         "ignoreTrailingComments": true,
         "ignoreUrls": true,
         "ignoreStrings": true,
-        "ignoreTemplateLiterals": true
+        "ignoreTemplateLiterals": true,
+        "ignoreRegExpLiterals": true
       }
     ],
     "comma-dangle": [
