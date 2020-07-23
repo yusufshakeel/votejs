@@ -9,5 +9,7 @@ test('Should return dummy uuid', () => {
 
 test('Should return actual uuid v4', () => {
   const uuidService = new UUIDService();
-  expect(/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/gi.test(uuidService.uuid())).toBeTruthy();
+  expect(
+    /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/gi.test(uuidService.uuid())
+  ).toBeTruthy();
 });

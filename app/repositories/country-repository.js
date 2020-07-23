@@ -12,21 +12,15 @@ function CountryRepository(mappers) {
 
   this.create = async function (domainCountry, transaction) {
     const dbCountry = countryMapper.domainToDb(domainCountry);
-    return transaction(T.COUNTRY)
-      .insert(dbCountry)
-      .returning(columnsToReturn);
+    return transaction(T.COUNTRY).insert(dbCountry).returning(columnsToReturn);
   };
 
   this.findByCountryCode = async function (countryCode, transaction) {
-    return transaction(T.COUNTRY)
-      .select(columnsToReturn)
-      .where({ countryCode });
+    return transaction(T.COUNTRY).select(columnsToReturn).where({ countryCode });
   };
 
   this.findByCode = async function (code, transaction) {
-    return transaction(T.COUNTRY)
-      .select(columnsToReturn)
-      .where({ code });
+    return transaction(T.COUNTRY).select(columnsToReturn).where({ code });
   };
 
   this.updateByCountryCode = async function (countryCode, domainCountry, transaction) {
