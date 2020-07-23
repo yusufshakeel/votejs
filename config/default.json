@@ -22,7 +22,7 @@
     "algo": "PBKDF2",
     "saltSize": 64,
     "iterations": 204800,
-    "keylen": 128,
+    "keylen": 256,
     "digest": "sha512"
   }
 }

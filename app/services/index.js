@@ -19,8 +19,8 @@ function Services() {
   this.knexService = KnexService(this.configService);
   this.passwordService = new PasswordService(
     this.configService,
-    this.logService,
-    this.base64Service
+    this.base64Service,
+    this.stringifyService
   );
 }
 
