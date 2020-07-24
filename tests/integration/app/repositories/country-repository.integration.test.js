@@ -6,7 +6,8 @@ const Repositories = require('../../../../app/repositories');
 
 const services = new Services();
 const mappers = new Mappers();
-const repositories = new Repositories(mappers);
+const { configService } = services;
+const repositories = new Repositories(mappers, configService);
 const { countryRepository } = repositories;
 
 const fakeDomainCountry = function () {
