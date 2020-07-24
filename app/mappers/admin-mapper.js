@@ -14,8 +14,8 @@ const adminDomainToDb = {
   accountStatus: 'accountStatus',
   gender: 'gender',
   countryCode: 'countryCode',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  'audit.createdAt': 'createdAt',
+  'audit.updatedAt': 'updatedAt'
 };
 
 const adminDbToDomain = {
@@ -30,8 +30,8 @@ const adminDbToDomain = {
   accountStatus: 'accountStatus',
   gender: 'gender',
   countryCode: 'countryCode',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  createdAt: 'audit.createdAt',
+  updatedAt: 'audit.updatedAt'
 };
 
 function AdminMapper() {

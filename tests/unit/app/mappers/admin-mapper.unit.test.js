@@ -16,8 +16,10 @@ const fakeDomainAdmin = {
   accountStatus: 'ACTIVE',
   gender: 'MALE',
   countryCode: 'IND',
-  createdAt: '2020-07-22T18:03:16.533Z',
-  updatedAt: '2020-07-22T18:03:16.533Z'
+  audit: {
+    createdAt: '2020-07-22T18:03:16.533Z',
+    updatedAt: '2020-07-22T18:03:16.533Z'
+  }
 };
 const fakeDbAdmin = {
   guid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
