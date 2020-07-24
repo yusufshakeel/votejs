@@ -1,9 +1,10 @@
 'use strict';
 
-const { isEmpty, first } = require('lodash');
+const { isEmpty, first, pickBy } = require('lodash');
 const TableRepository = require('./table-repository.js');
 const tableRepository = new TableRepository();
 const T = tableRepository.tables();
+const { ADMIN_ACCOUNT_STATUS_ACTIVE } = require('../constants/admin-constants.js');
 
 const columnsToReturn = [
   'guid',
@@ -93,6 +94,27 @@ function AdminRepository(mappers, configService) {
       .update(dbAdmin)
       .where({ guid })
       .returning(columnsToReturn);
+    return adminMapper.dbToDomain(first(result));
+  };
+
+  this.validationForLogin = async function (
+    { userName, emailId, password, passcode },
+    transaction
+  ) {
+    const whereClause = adminMapper.domainToDb({
+      userName,
+      emailId,
+      password,
+      passcode,
+      accountStatus: ADMIN_ACCOUNT_STATUS_ACTIVE
+    });
+    const result = await findBy({
+      whereClause: pickBy(whereClause),
+      columns: columnsToReturn,
+      limit: 1,
+      transaction
+    });
+    if (isEmpty(result)) return null;
     return adminMapper.dbToDomain(first(result));
   };
 }

@@ -19,7 +19,7 @@ const getFakeDomainAdmin = (guid = uuidService.uuid()) => ({
   lastName: 'Doe',
   emailId: `${guid}@example.com`,
   userName: `${guid}`,
-  password: 'password-in-hash-form',
+  password: 'root1234',
   passcode: '123456',
   accountStatus: 'ACTIVE',
   gender: 'FEMALE',
@@ -156,6 +156,37 @@ test('Should return null when updating admin that does not exists - updateByGuid
     };
     const result = await adminRepository.updateByGuid(guid, dataToUpdate, txn);
     expect(result).toBeNull();
+  });
+});
+
+test('Should be able to validate for login', async () => {
+  return knexService.transaction(async txn => {
+    const guid = uuidService.uuid();
+    const fakeDomainAdmin = getFakeDomainAdmin(guid);
+    await adminRepository.create(fakeDomainAdmin, txn);
+    const fetchedAdmin = await adminRepository.validationForLogin(
+      {
+        emailId: fakeDomainAdmin.emailId,
+        password: fakeDomainAdmin.password,
+        passcode: fakeDomainAdmin.passcode
+      },
+      txn
+    );
+    expect(fetchedAdmin.guid).toBe(guid);
+  });
+});
+
+test('Should return null if login validation fails - validateForLogin', async () => {
+  return knexService.transaction(async txn => {
+    const fetchedAdmin = await adminRepository.validationForLogin(
+      {
+        emailId: 'hahaha',
+        password: 'hahaha',
+        passcode: 'hahah'
+      },
+      txn
+    );
+    expect(fetchedAdmin).toBeNull();
   });
 });
 
