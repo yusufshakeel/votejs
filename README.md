@@ -41,7 +41,7 @@ For more details check the [NOTES.md](./NOTES.md) file.
 
 #### Encryption Key
 
-Set the encryption key as environment variable. Max sure it is exactly 256 bits long (32 characters).
+Set the encryption key as environment variable. Make sure it is exactly 256 bits long (32 characters).
 ```
 ➜ export ENCRYPTION_KEY=crypto-key-exactly-32-chars-long
 ```
