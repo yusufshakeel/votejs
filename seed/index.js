@@ -11,17 +11,32 @@ const {
   configService
 } = services;
 const repositories = new Repositories(mappers, configService);
-const { countryRepository } = repositories;
+const { countryRepository, adminRepository } = repositories;
+
+function createDevDemoAdmins(admins, txn) {
+  INFO('Creating admin for demo...');
+  return admins.map(admin => {
+    const domainAdmin = {
+      ...admin,
+      password: services.passwordService.hashPassword('root1234')
+    };
+    return adminRepository.create(domainAdmin, txn);
+  });
+}
 
 function upsertCountries(countries, txn) {
+  INFO('Creating countries...');
   return countries.map(country => countryRepository.upsert(country, txn));
 }
 
 async function run() {
   return knex.transaction(async txn => {
     const countries = require('./country.js');
-    INFO('Inserting countries...');
+    const admins = require('./admin.js');
     await Promise.all(upsertCountries(countries, txn));
+    if (configService.nodeEnvironment === 'dev') {
+      await Promise.all(createDevDemoAdmins(admins.dev, txn));
+    }
   });
 }
 

@@ -26,7 +26,8 @@ exports.up = function (db, cb) {
     guid: {
       type: 'uuid',
       unique: true,
-      notNull: true
+      notNull: true,
+      defaultValue: new String('uuid_generate_v4()')
     },
     firstName: {
       type: 'string',
@@ -84,7 +85,8 @@ exports.up = function (db, cb) {
     },
     createdAt: {
       type: 'timestamptz',
-      notNull: true
+      notNull: true,
+      defaultValue: new String('CURRENT_TIMESTAMP')
     },
     updatedAt: {
       type: 'timestamptz'

@@ -21,9 +21,26 @@ Run the following command to install all the packages.
 ➜ npm install
 ```
 
-#### DB setup
+#### Environment
 
-First we need to create a database in Postgres. Then export the following environment variables.
+Set the environment by setting the environment variable `NODE_ENV`.
+
+Allowed values: dev, stage, prod
+```
+➜ export NODE_ENV=dev
+```
+
+#### Encryption Key
+
+Set the encryption key as environment variable. Make sure it is exactly 256 bits long (32 characters).
+```
+➜ export ENCRYPTION_KEY=crypto-key-exactly-32-chars-long
+```
+Note! Encryption algorithm used: `aes-256-cbc` and IV length is `16`.
+
+#### Database setup
+
+Create a database in Postgres. Then export the following environment variables.
 
 On my local machine the host, user, password, database and port for Postgres are the following.
 
@@ -39,14 +56,27 @@ Note! If you have some other values then use that.
 
 For more details check the [NOTES.md](./NOTES.md) file.
 
-#### Encryption Key
+#### Seed
 
-Set the encryption key as environment variable. Make sure it is exactly 256 bits long (32 characters).
+Run the following command to insert the seed data in database.
 ```
-➜ export ENCRYPTION_KEY=crypto-key-exactly-32-chars-long
+➜ npm run db:seed
 ```
-Note! Encryption algorithm used: `aes-256-cbc` and IV length is `16`.
 
+#### Demo admin for DEV environment
+
+For development environment the following demo admin account is created when you run the `db:seed` command.
+
+You can use the demo admin to explore the APIs in dev environment.
+
+```
+{
+  userName: 'demo.dev.admin',
+  emailId: 'demo.dev.admin@example.com',
+  password: 'root1234'
+  passcode: '123456'
+}
+```
 
 
 ## License
