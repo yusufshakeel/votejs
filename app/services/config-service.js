@@ -21,6 +21,8 @@ function ConfigService() {
     }
   };
 
+  const dbQueryLimit = config.get('dbQuery.limit');
+
   const connectionPool = {
     knex: {
       min: config.get('connectionPool.knex.min'),
@@ -45,6 +47,7 @@ function ConfigService() {
     encryptionIVLength,
     logLevel,
     database,
+    dbQueryLimit,
     connectionPool,
     passwordHashConfig
   };

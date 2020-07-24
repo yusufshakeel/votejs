@@ -9,6 +9,7 @@ test('Should confirm the required properties', () => {
     [
       'nodeEnvironment',
       'database',
+      'dbQueryLimit',
       'connectionPool',
       'logLevel',
       'passwordHashConfig',

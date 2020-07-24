@@ -10,6 +10,9 @@
       "port": 5432
     }
   },
+  "dbQuery": {
+    "limit": 20
+  },
   "connectionPool": {
     "knex": {
       "min": 5,
