@@ -1,9 +1,9 @@
 'use strict';
 
-const insert = async ({ table, dataToInsert, columnsToReturn = ['guid'], transaction }) =>
+const insertQuery = async ({ table, dataToInsert, columnsToReturn = ['guid'], transaction }) =>
   transaction(table).insert(dataToInsert).returning(columnsToReturn);
 
-const select = async ({
+const selectQuery = async ({
   table,
   whereClause,
   columnsToReturn = ['guid'],
@@ -12,7 +12,7 @@ const select = async ({
   transaction
 }) => transaction(table).select(columnsToReturn).where(whereClause).limit(limit).offset(offset);
 
-const update = async ({
+const updateQuery = async ({
   table,
   whereClause,
   dataToUpdate,
@@ -21,7 +21,7 @@ const update = async ({
 }) => transaction(table).update(dataToUpdate).where(whereClause).returning(columnsToReturn);
 
 module.exports = {
-  insert,
-  update,
-  select
+  insertQuery,
+  updateQuery,
+  selectQuery
 };

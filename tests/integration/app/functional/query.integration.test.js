@@ -1,7 +1,7 @@
 'use strict';
 
 const { keys, first } = require('lodash');
-const query = require('../../../../app/functional/query.js');
+const { selectQuery, insertQuery, updateQuery } = require('../../../../app/functional/query.js');
 const Services = require('../../../../app/services');
 const Mappers = require('../../../../app/mappers');
 const TableRepository = require('../../../../app/repositories/table-repository.js');
@@ -34,7 +34,6 @@ const getFakeDomainAdmin = (guid = uuidService.uuid()) => ({
 });
 
 test('Should be able to find by select query', async () => {
-  const { select: selectQuery } = query;
   return knexService.transaction(async txn => {
     const result = await selectQuery({
       table: T.COUNTRY,
@@ -49,7 +48,6 @@ test('Should be able to find by select query', async () => {
 });
 
 test('Should be able to find by select query with lesser arguments', async () => {
-  const { select: selectQuery } = query;
   return knexService.transaction(async txn => {
     const result = await selectQuery({
       table: T.COUNTRY,
@@ -61,7 +59,6 @@ test('Should be able to find by select query with lesser arguments', async () =>
 });
 
 test('Should be able to create using insert query', async () => {
-  const { insert: insertQuery } = query;
   return knexService.transaction(async txn => {
     const guid = uuidService.uuid();
     const fakeDomainAdmin = getFakeDomainAdmin(guid);
@@ -82,7 +79,6 @@ test('Should be able to create using insert query', async () => {
 });
 
 test('Should be able to create using insert query with lesser arguments', async () => {
-  const { insert: insertQuery } = query;
   return knexService.transaction(async txn => {
     const guid = uuidService.uuid();
     const fakeDomainAdmin = getFakeDomainAdmin(guid);
@@ -101,7 +97,6 @@ test('Should be able to create using insert query with lesser arguments', async 
 });
 
 test('Should be able to update', async () => {
-  const { insert: insertQuery, update: updateQuery } = query;
   return knexService.transaction(async txn => {
     const guid = uuidService.uuid();
     const fakeDomainAdmin = getFakeDomainAdmin(guid);
@@ -128,7 +123,6 @@ test('Should be able to update', async () => {
 });
 
 test('Should be able to update with lesser arguments', async () => {
-  const { insert: insertQuery, update: updateQuery } = query;
   return knexService.transaction(async txn => {
     const guid = uuidService.uuid();
     const fakeDomainAdmin = getFakeDomainAdmin(guid);
