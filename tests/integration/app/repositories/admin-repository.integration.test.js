@@ -3,6 +3,7 @@
 const Services = require('../../../../app/services');
 const AdminRepository = require('../../../../app/repositories/admin-repository.js');
 const AdminMapper = require('../../../../app/mappers/admin-mapper.js');
+const { ADMIN_ACCOUNT_STATUS_ACTIVE } = require('../../../../app/constants/admin-constants.js');
 
 const services = new Services();
 const { configService, knexService, uuidService, timeService } = services;
@@ -32,7 +33,7 @@ const getFakeDomainAdmin = (guid = uuidService.uuid()) => ({
   userName: `${guid}`,
   password: 'root1234',
   passcode: '123456',
-  accountStatus: 'ACTIVE',
+  accountStatus: ADMIN_ACCOUNT_STATUS_ACTIVE,
   gender: 'FEMALE',
   countryCode: 'IND',
   audit: {
@@ -41,7 +42,7 @@ const getFakeDomainAdmin = (guid = uuidService.uuid()) => ({
 });
 
 const getFakeDomainAdminResponse = guid => ({
-  accountStatus: 'ACTIVE',
+  accountStatus: ADMIN_ACCOUNT_STATUS_ACTIVE,
   audit: {
     createdAt: now
   },
@@ -123,13 +124,13 @@ test('Should be able to fetch admin by accountStatus', async () => {
       adminRepository.create(getFakeAdmin(), txn)
     ]);
     const fetchedAdmins = await adminRepository.findByAccountStatus(
-      'ACTIVE',
+      ADMIN_ACCOUNT_STATUS_ACTIVE,
       { limit: 3, page: 1 },
       txn
     );
     expect(fetchedAdmins.length).toBe(3);
     fetchedAdmins.forEach(admin => {
-      expect(admin.accountStatus).toBe('ACTIVE');
+      expect(admin.accountStatus).toBe(ADMIN_ACCOUNT_STATUS_ACTIVE);
     });
   });
 });

@@ -3,6 +3,7 @@
 const Services = require('../../../../app/services');
 const VoterRepository = require('../../../../app/repositories/voter-repository.js');
 const VoterMapper = require('../../../../app/mappers/voter-mapper.js');
+const { VOTER_ACCOUNT_STATUS_ACTIVE } = require('../../../../app/constants/voter-constants.js');
 
 const services = new Services();
 const { configService, knexService, uuidService, timeService } = services;
@@ -32,7 +33,7 @@ const getFakeDomainVoter = (guid = uuidService.uuid()) => ({
   userName: `${guid}`,
   password: 'root1234',
   passcode: '123456',
-  accountStatus: 'ACTIVE',
+  accountStatus: VOTER_ACCOUNT_STATUS_ACTIVE,
   gender: 'FEMALE',
   countryCode: 'IND',
   audit: {
@@ -41,7 +42,7 @@ const getFakeDomainVoter = (guid = uuidService.uuid()) => ({
 });
 
 const getFakeDomainVoterResponse = guid => ({
-  accountStatus: 'ACTIVE',
+  accountStatus: VOTER_ACCOUNT_STATUS_ACTIVE,
   audit: {
     createdAt: now
   },
@@ -123,13 +124,13 @@ test('Should be able to fetch voter by accountStatus', async () => {
       voterRepository.create(getFakevoter(), txn)
     ]);
     const fetchedVoters = await voterRepository.findByAccountStatus(
-      'ACTIVE',
+      VOTER_ACCOUNT_STATUS_ACTIVE,
       { limit: 3, page: 1 },
       txn
     );
     expect(fetchedVoters.length).toBe(3);
     fetchedVoters.forEach(voter => {
-      expect(voter.accountStatus).toBe('ACTIVE');
+      expect(voter.accountStatus).toBe(VOTER_ACCOUNT_STATUS_ACTIVE);
     });
   });
 });
