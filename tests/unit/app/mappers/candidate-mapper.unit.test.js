@@ -23,6 +23,7 @@ const { candidateMapper } = mapper;
 
 const fakeDomainCandidate = {
   guid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
+  candidateHandle: 'candidateHandle',
   displayHeader: 'Some header',
   summary: 'Some summary',
   candidateStatus: 'ACTIVE',
@@ -34,6 +35,7 @@ const fakeDomainCandidate = {
 
 const fakeDbCandidate = {
   guid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
+  candidateHandle: 'candidateHandle',
   displayHeader: 'Some header',
   summary: 'Some summary',
   candidateStatus: 'ACTIVE',

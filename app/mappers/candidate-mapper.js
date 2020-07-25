@@ -4,6 +4,7 @@ const objectMapper = require('object-mapper');
 
 const candidateDomainToDb = {
   guid: 'guid',
+  candidateHandle: 'candidateHandle',
   displayHeader: 'displayHeader',
   summary: 'summary',
   candidateStatus: 'candidateStatus',
@@ -13,6 +14,7 @@ const candidateDomainToDb = {
 
 const candidateDbToDomain = {
   guid: 'guid',
+  candidateHandle: 'candidateHandle',
   displayHeader: 'displayHeader',
   summary: 'summary',
   candidateStatus: 'candidateStatus',
