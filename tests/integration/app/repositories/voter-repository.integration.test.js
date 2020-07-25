@@ -117,11 +117,11 @@ test('Should return null if voter is not found - findByUserName', async () => {
 
 test('Should be able to fetch voter by accountStatus', async () => {
   return knexService.transaction(async txn => {
-    const getFakevoter = () => getFakeDomainVoter(uuidService.uuid());
+    const getFakeVoter = () => getFakeDomainVoter(uuidService.uuid());
     await Promise.all([
-      voterRepository.create(getFakevoter(), txn),
-      voterRepository.create(getFakevoter(), txn),
-      voterRepository.create(getFakevoter(), txn)
+      voterRepository.create(getFakeVoter(), txn),
+      voterRepository.create(getFakeVoter(), txn),
+      voterRepository.create(getFakeVoter(), txn)
     ]);
     const fetchedVoters = await voterRepository.findByAccountStatus(
       VOTER_ACCOUNT_STATUS_ACTIVE,
