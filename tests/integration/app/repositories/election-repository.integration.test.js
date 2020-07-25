@@ -3,7 +3,10 @@
 const Services = require('../../../../app/services');
 const ElectionRepository = require('../../../../app/repositories/election-repository.js');
 const ElectionMapper = require('../../../../app/mappers/election-mapper.js');
-const { ELECTION_STATUS_DRAFT, ELECTION_STATUS_ACTIVE } = require('../../../../app/constants/election-constants.js');
+const {
+  ELECTION_STATUS_DRAFT,
+  ELECTION_STATUS_ACTIVE
+} = require('../../../../app/constants/election-constants.js');
 
 const services = new Services();
 const { configService, knexService, uuidService, timeService } = services;
