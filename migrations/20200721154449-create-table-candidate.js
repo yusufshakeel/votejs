@@ -29,6 +29,12 @@ exports.up = function (db, cb) {
       notNull: true,
       defaultValue: new String('uuid_generate_v4()')
     },
+    candidateHandle: {
+      type: 'string',
+      unique: true,
+      notNull: true,
+      length: 128
+    },
     displayHeader: {
       type: 'string',
       length: 500,

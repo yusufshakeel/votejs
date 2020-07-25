@@ -52,7 +52,7 @@ exports.up = function (db, cb) {
       type: 'string',
       unique: true,
       notNull: true,
-      length: 100
+      length: 128
     },
     password: {
       type: 'string',
