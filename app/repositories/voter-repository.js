@@ -36,7 +36,7 @@ function VoterRepository(mappers, configService) {
   this.findByGuid = async function (guid, transaction) {
     const result = await findBy({
       whereClause: { guid },
-      columns: columnsToReturn,
+      columnsToReturn,
       transaction
     });
     if (isEmpty(result)) return null;
@@ -46,7 +46,7 @@ function VoterRepository(mappers, configService) {
   this.findByEmailId = async function (emailId, transaction) {
     const result = await findBy({
       whereClause: { emailId },
-      columns: columnsToReturn,
+      columnsToReturn,
       transaction
     });
     if (isEmpty(result)) return null;
@@ -56,7 +56,7 @@ function VoterRepository(mappers, configService) {
   this.findByUserName = async function (userName, transaction) {
     const result = await findBy({
       whereClause: { userName },
-      columns: columnsToReturn,
+      columnsToReturn,
       transaction
     });
     if (isEmpty(result)) return null;
@@ -70,7 +70,7 @@ function VoterRepository(mappers, configService) {
   ) {
     const result = await findBy({
       whereClause: { accountStatus },
-      columns: columnsToReturn,
+      columnsToReturn,
       limit,
       offset: (page - 1) * limit,
       transaction
@@ -100,7 +100,7 @@ function VoterRepository(mappers, configService) {
     });
     const result = await findBy({
       whereClause: pickBy(whereClause),
-      columns: columnsToReturn,
+      columnsToReturn,
       limit: 1,
       transaction
     });

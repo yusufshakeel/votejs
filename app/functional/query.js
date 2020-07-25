@@ -6,11 +6,11 @@ const insert = async ({ table, dataToInsert, columnsToReturn = ['guid'], transac
 const select = async ({
   table,
   whereClause,
-  columns = ['guid'],
+  columnsToReturn = ['guid'],
   limit = 1,
   offset = 0,
   transaction
-}) => transaction(table).select(columns).where(whereClause).limit(limit).offset(offset);
+}) => transaction(table).select(columnsToReturn).where(whereClause).limit(limit).offset(offset);
 
 const update = async ({
   table,

@@ -31,7 +31,7 @@ function CountryRepository(mappers) {
   this.findByCountryCode = async function (countryCode, transaction) {
     const result = await findBy({
       whereClause: { countryCode },
-      columns: columnsToReturn,
+      columnsToReturn,
       transaction
     });
     if (isEmpty(result)) return null;
@@ -41,7 +41,7 @@ function CountryRepository(mappers) {
   this.findByCode = async function (code, transaction) {
     const result = await findBy({
       whereClause: { code },
-      columns: columnsToReturn,
+      columnsToReturn,
       transaction
     });
     if (isEmpty(result)) return null;

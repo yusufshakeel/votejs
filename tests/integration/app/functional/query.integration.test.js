@@ -39,7 +39,7 @@ test('Should be able to find by select query', async () => {
     const result = await selectQuery({
       table: T.COUNTRY,
       whereClause: { countryCode: 'IND' },
-      columns: ['countryName'],
+      columnsToReturn: ['countryName'],
       limit: 1,
       offset: 0,
       transaction: txn
