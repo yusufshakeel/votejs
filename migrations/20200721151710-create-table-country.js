@@ -15,7 +15,21 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db, cb) {
+  db.runSql('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
   return db.createTable('COUNTRY', {
+    id: {
+      type: 'int',
+      unsigned: true,
+      notNull: true,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    guid: {
+      type: 'uuid',
+      unique: true,
+      notNull: true,
+      defaultValue: new String('uuid_generate_v4()')
+    },
     countryCode: {
       type: 'string',
       length: 3,

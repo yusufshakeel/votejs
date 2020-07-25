@@ -15,7 +15,6 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db, cb) {
-  db.runSql('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
   return db.createTable('ADMIN', {
     id: {
       type: 'int',
