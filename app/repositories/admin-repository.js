@@ -89,18 +89,15 @@ function AdminRepository(mappers, configService) {
   this.updateByGuid = async function (guid, domainAdmin, transaction) {
     const fetchedAdmin = await this.findByGuid(guid, transaction);
     if (isEmpty(fetchedAdmin)) return null;
-    const dbAdmin = adminMapper.domainToDb(domainAdmin);
+    const dataToUpdate = adminMapper.updateDomainToDb(domainAdmin);
     const result = await transaction(T.ADMIN)
-      .update(dbAdmin)
+      .update(dataToUpdate)
       .where({ guid })
       .returning(columnsToReturn);
     return adminMapper.dbToDomain(first(result));
   };
 
-  this.validationForLogin = async function (
-    { userName, emailId, password, passcode },
-    transaction
-  ) {
+  this.validateForLogin = async function ({ userName, emailId, password, passcode }, transaction) {
     const whereClause = adminMapper.domainToDb({
       userName,
       emailId,

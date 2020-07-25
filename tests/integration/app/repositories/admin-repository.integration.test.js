@@ -1,16 +1,27 @@
 'use strict';
 
 const Services = require('../../../../app/services');
-const Mappers = require('../../../../app/mappers');
-const Repositories = require('../../../../app/repositories');
+const AdminRepository = require('../../../../app/repositories/admin-repository.js');
+const AdminMapper = require('../../../../app/mappers/admin-mapper.js');
 
 const services = new Services();
-const mappers = new Mappers();
 const { configService, knexService, uuidService, timeService } = services;
-const repositories = new Repositories(mappers, configService);
-const { adminRepository } = repositories;
 
 const now = timeService.now();
+
+function FakeAuditMapper() {
+  this.updateDomainAudit = function () {
+    return { audit: { updatedAt: now } };
+  };
+}
+
+function FakeMappers() {
+  this.auditMapper = new FakeAuditMapper();
+  this.adminMapper = new AdminMapper(this.auditMapper);
+}
+
+const mappers = new FakeMappers();
+const adminRepository = new AdminRepository(mappers, configService);
 
 const getFakeDomainAdmin = (guid = uuidService.uuid()) => ({
   guid: guid,
@@ -142,6 +153,10 @@ test('Should be able to update admin', async () => {
     const result = await adminRepository.updateByGuid(guid, dataToUpdate, txn);
     expect(result).toStrictEqual({
       ...getFakeDomainAdminResponse(guid),
+      audit: {
+        createdAt: now,
+        updatedAt: now
+      },
       firstName: dataToUpdate.firstName
     });
   });
@@ -164,7 +179,7 @@ test('Should be able to validate for login', async () => {
     const guid = uuidService.uuid();
     const fakeDomainAdmin = getFakeDomainAdmin(guid);
     await adminRepository.create(fakeDomainAdmin, txn);
-    const fetchedAdmin = await adminRepository.validationForLogin(
+    const fetchedAdmin = await adminRepository.validateForLogin(
       {
         emailId: fakeDomainAdmin.emailId,
         password: fakeDomainAdmin.password,
@@ -178,7 +193,7 @@ test('Should be able to validate for login', async () => {
 
 test('Should return null if login validation fails - validateForLogin', async () => {
   return knexService.transaction(async txn => {
-    const fetchedAdmin = await adminRepository.validationForLogin(
+    const fetchedAdmin = await adminRepository.validateForLogin(
       {
         emailId: 'hahaha',
         password: 'hahaha',

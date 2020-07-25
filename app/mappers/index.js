@@ -7,7 +7,7 @@ const AdminMapper = require('./admin-mapper.js');
 function Mappers() {
   this.auditMapper = new AuditMapper();
   this.countryMapper = new CountryMapper();
-  this.adminMapper = new AdminMapper();
+  this.adminMapper = new AdminMapper(this.auditMapper);
 }
 
 module.exports = Mappers;

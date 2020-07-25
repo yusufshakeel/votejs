@@ -34,13 +34,23 @@ const adminDbToDomain = {
   updatedAt: 'audit.updatedAt'
 };
 
-function AdminMapper() {
+function AdminMapper(auditMapper) {
   this.domainToDb = function (domainAdmin) {
     return objectMapper(domainAdmin, adminDomainToDb);
   };
 
   this.dbToDomain = function (dbAdmin) {
     return objectMapper(dbAdmin, adminDbToDomain);
+  };
+
+  this.updateDomainToDb = function (domainAdmin) {
+    return objectMapper(
+      {
+        ...domainAdmin,
+        ...auditMapper.updateDomainAudit()
+      },
+      adminDomainToDb
+    );
   };
 }
 
