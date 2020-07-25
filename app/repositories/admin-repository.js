@@ -1,7 +1,7 @@
 'use strict';
 
 const { isEmpty, first, pickBy } = require('lodash');
-const { findBy: queryFindBy } = require('../functional/query.js');
+const { select: selectQuery } = require('../functional/query.js');
 const TableRepository = require('./table-repository.js');
 const tableRepository = new TableRepository();
 const T = tableRepository.tables();
@@ -25,7 +25,7 @@ function AdminRepository(mappers, configService) {
   const { adminMapper } = mappers;
   const { dbQueryLimit: DB_QUERY_LIMIT } = configService;
 
-  const findBy = params => queryFindBy({ table: T.ADMIN, ...params });
+  const findBy = params => selectQuery({ table: T.ADMIN, ...params });
 
   this.create = async function (domainAdmin, transaction) {
     const dbAdmin = adminMapper.domainToDb(domainAdmin);
