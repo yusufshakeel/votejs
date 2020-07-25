@@ -1,6 +1,7 @@
 'use strict';
 
 const { isEmpty, first, pickBy } = require('lodash');
+const { findBy } = require('../functional/query.js');
 const TableRepository = require('./table-repository.js');
 const tableRepository = new TableRepository();
 const T = tableRepository.tables();
@@ -24,16 +25,6 @@ function AdminRepository(mappers, configService) {
   const { adminMapper } = mappers;
   const { dbQueryLimit: DB_QUERY_LIMIT } = configService;
 
-  const findBy = async function ({
-    whereClause,
-    columns,
-    limit = DB_QUERY_LIMIT,
-    offset = 0,
-    transaction
-  }) {
-    return transaction(T.ADMIN).select(columns).where(whereClause).limit(limit).offset(offset);
-  };
-
   this.create = async function (domainAdmin, transaction) {
     const dbAdmin = adminMapper.domainToDb(domainAdmin);
     const result = await transaction(T.ADMIN).insert(dbAdmin).returning(columnsToReturn);
@@ -42,6 +33,7 @@ function AdminRepository(mappers, configService) {
 
   this.findByGuid = async function (guid, transaction) {
     const result = await findBy({
+      table: T.ADMIN,
       whereClause: { guid },
       columns: columnsToReturn,
       transaction
@@ -52,6 +44,7 @@ function AdminRepository(mappers, configService) {
 
   this.findByEmailId = async function (emailId, transaction) {
     const result = await findBy({
+      table: T.ADMIN,
       whereClause: { emailId },
       columns: columnsToReturn,
       transaction
@@ -62,6 +55,7 @@ function AdminRepository(mappers, configService) {
 
   this.findByUserName = async function (userName, transaction) {
     const result = await findBy({
+      table: T.ADMIN,
       whereClause: { userName },
       columns: columnsToReturn,
       transaction
@@ -76,6 +70,7 @@ function AdminRepository(mappers, configService) {
     transaction
   ) {
     const result = await findBy({
+      table: T.ADMIN,
       whereClause: { accountStatus },
       columns: columnsToReturn,
       limit,
@@ -106,6 +101,7 @@ function AdminRepository(mappers, configService) {
       accountStatus: ADMIN_ACCOUNT_STATUS_ACTIVE
     });
     const result = await findBy({
+      table: T.ADMIN,
       whereClause: pickBy(whereClause),
       columns: columnsToReturn,
       limit: 1,
