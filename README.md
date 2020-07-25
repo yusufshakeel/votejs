@@ -77,6 +77,23 @@ You can use the demo admin to explore the APIs in dev environment.
   passcode: '123456'
 }
 ```
+You will find this in `seed/admin.js` file.
+
+#### Demo voter for DEV environment
+
+For development environment the following demo voter account is created when you run the `db:seed` command.
+
+You can use the demo voter to explore the APIs in dev environment.
+
+```
+{
+  userName: 'demo.dev.user',
+  emailId: 'demo.dev.user@example.com',
+  password: 'root1234'
+  passcode: '123456'
+}
+```
+You will find this in `seed/voter.js` file.
 
 
 ## License

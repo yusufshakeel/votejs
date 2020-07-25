@@ -9,5 +9,7 @@ test('Should confirm the existence of required properties', () => {
   const mappers = new Mappers();
   const configService = ConfigService();
   const repositories = new Repositories(mappers, configService);
-  expect(keys(repositories).sort()).toStrictEqual(['countryRepository', 'adminRepository'].sort());
+  expect(keys(repositories).sort()).toStrictEqual(
+    ['countryRepository', 'adminRepository', 'voterRepository'].sort()
+  );
 });
