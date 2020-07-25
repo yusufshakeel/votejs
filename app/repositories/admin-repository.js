@@ -1,7 +1,11 @@
 'use strict';
 
 const { isEmpty, first, pickBy } = require('lodash');
-const { select: selectQuery } = require('../functional/query.js');
+const {
+  select: selectQuery,
+  insert: insertQuery,
+  update: updateQuery
+} = require('../functional/query.js');
 const TableRepository = require('./table-repository.js');
 const tableRepository = new TableRepository();
 const T = tableRepository.tables();
@@ -29,7 +33,12 @@ function AdminRepository(mappers, configService) {
 
   this.create = async function (domainAdmin, transaction) {
     const dbAdmin = adminMapper.domainToDb(domainAdmin);
-    const result = await transaction(T.ADMIN).insert(dbAdmin).returning(columnsToReturn);
+    const result = await insertQuery({
+      table: T.ADMIN,
+      dataToInsert: dbAdmin,
+      columnsToReturn,
+      transaction
+    });
     return adminMapper.dbToDomain(first(result));
   };
 
@@ -83,10 +92,13 @@ function AdminRepository(mappers, configService) {
     const fetchedAdmin = await this.findByGuid(guid, transaction);
     if (isEmpty(fetchedAdmin)) return null;
     const dataToUpdate = adminMapper.updateDomainToDb(domainAdmin);
-    const result = await transaction(T.ADMIN)
-      .update(dataToUpdate)
-      .where({ guid })
-      .returning(columnsToReturn);
+    const result = await updateQuery({
+      table: T.ADMIN,
+      dataToUpdate,
+      whereClause: { guid },
+      columnsToReturn,
+      transaction
+    });
     return adminMapper.dbToDomain(first(result));
   };
 
