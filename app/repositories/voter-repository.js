@@ -1,7 +1,11 @@
 'use strict';
 
 const { isEmpty, first, pickBy } = require('lodash');
-const { select: selectQuery } = require('../functional/query.js');
+const {
+  select: selectQuery,
+  insert: insertQuery,
+  update: updateQuery
+} = require('../functional/query.js');
 const TableRepository = require('./table-repository.js');
 const tableRepository = new TableRepository();
 const T = tableRepository.tables();
@@ -29,7 +33,12 @@ function VoterRepository(mappers, configService) {
 
   this.create = async function (domainVoter, transaction) {
     const dbVoter = voterMapper.domainToDb(domainVoter);
-    const result = await transaction(T.VOTER).insert(dbVoter).returning(columnsToReturn);
+    const result = await insertQuery({
+      table: T.VOTER,
+      dataToInsert: dbVoter,
+      columnsToReturn,
+      transaction
+    });
     return voterMapper.dbToDomain(first(result));
   };
 
@@ -83,10 +92,13 @@ function VoterRepository(mappers, configService) {
     const fetchedVoter = await this.findByGuid(guid, transaction);
     if (isEmpty(fetchedVoter)) return null;
     const dataToUpdate = voterMapper.updateDomainToDb(domainVoter);
-    const result = await transaction(T.VOTER)
-      .update(dataToUpdate)
-      .where({ guid })
-      .returning(columnsToReturn);
+    const result = await updateQuery({
+      table: T.VOTER,
+      dataToUpdate,
+      whereClause: { guid },
+      columnsToReturn,
+      transaction
+    });
     return voterMapper.dbToDomain(first(result));
   };
 
