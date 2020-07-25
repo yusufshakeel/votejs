@@ -1,7 +1,7 @@
 'use strict';
 
 const TimeService = require('../../../../app/services/time-service.js');
-const AdminMapper = require('../../../../app/mappers/admin-mapper.js');
+const VoterMapper = require('../../../../app/mappers/voter-mapper.js');
 
 const timeService = new TimeService();
 
@@ -15,13 +15,13 @@ function FakeAuditMapper() {
 
 function FakeMappers() {
   this.auditMapper = new FakeAuditMapper();
-  this.adminMapper = new AdminMapper(this.auditMapper);
+  this.voterMapper = new VoterMapper(this.auditMapper);
 }
 
 const mapper = new FakeMappers();
-const { adminMapper } = mapper;
+const { voterMapper } = mapper;
 
-const fakeDomainAdmin = {
+const fakeDomainVoter = {
   guid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
   firstName: 'John',
   middleName: 'Super',
@@ -39,7 +39,7 @@ const fakeDomainAdmin = {
   }
 };
 
-const fakeDbAdmin = {
+const fakeDbVoter = {
   guid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
   firstName: 'John',
   middleName: 'Super',
@@ -56,16 +56,16 @@ const fakeDbAdmin = {
 };
 
 test('Should be able to map domain to db', () => {
-  expect(adminMapper.domainToDb(fakeDomainAdmin)).toStrictEqual(fakeDbAdmin);
+  expect(voterMapper.domainToDb(fakeDomainVoter)).toStrictEqual(fakeDbVoter);
 });
 
 test('Should be able to map db to Domain', () => {
-  expect(adminMapper.dbToDomain(fakeDbAdmin)).toStrictEqual(fakeDomainAdmin);
+  expect(voterMapper.dbToDomain(fakeDbVoter)).toStrictEqual(fakeDomainVoter);
 });
 
 test('Should be able to map update domain to db', () => {
   expect(
-    adminMapper.updateDomainToDb({
+    voterMapper.updateDomainToDb({
       firstName: 'Jane',
       lastName: 'Doe'
     })
