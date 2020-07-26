@@ -10,7 +10,8 @@ const ElectionMapper = require('../../../../app/mappers/election-mapper.js');
 const ElectionConfigurationMapper = require('../../../../app/mappers/election-configuration-mapper.js');
 
 const {
-  ELECTION_CONFIGURATION_STATUS_ACTIVE
+  ELECTION_CONFIGURATION_STATUS_ACTIVE,
+  ELECTION_CONFIGURATION_STATUS_INACTIVE
 } = require('../../../../app/constants/election-configuration-constants.js');
 
 const { ELECTION_STATUS_PUBLIC } = require('../../../../app/constants/election-constants.js');
@@ -93,7 +94,11 @@ const getFakeDomainElectionConfigurationResponse = (guid, electionGuid, candidat
   }
 });
 
-const fakeDomainElections = [getFakeDomainElection(), getFakeDomainElection()];
+const fakeDomainElections = [
+  getFakeDomainElection(),
+  getFakeDomainElection(),
+  getFakeDomainElection()
+];
 
 const fakeDomainCandidates = [
   getFakeDomainCandidate(),
@@ -121,6 +126,11 @@ const fakeDomainElectionConfigurations = [
   getFakeDomainElectionConfiguration({
     electionGuid: fakeDomainElections[1].guid,
     candidateGuid: fakeDomainCandidates[2].guid
+  }),
+  // election config #5 -- consists of -- election #3, candidate #1 -- this is for update test
+  getFakeDomainElectionConfiguration({
+    electionGuid: fakeDomainElections[2].guid,
+    candidateGuid: fakeDomainCandidates[0].guid
   })
 ];
 
@@ -128,7 +138,8 @@ beforeAll(() => {
   return knexService.transaction(async txn => {
     await Promise.all([
       electionRepository.create(fakeDomainElections[0], txn),
-      electionRepository.create(fakeDomainElections[1], txn)
+      electionRepository.create(fakeDomainElections[1], txn),
+      electionRepository.create(fakeDomainElections[2], txn)
     ]);
     await Promise.all([
       candidateRepository.create(fakeDomainCandidates[0], txn),
@@ -283,6 +294,39 @@ test('Should return null if election configuration is not found - findByElection
       { electionConfigurationStatus: 'hahaha' },
       txn
     );
+    expect(result).toBeNull();
+  });
+});
+
+test('Should be able to update election configuration', async () => {
+  return knexService.transaction(async txn => {
+    await electionConfigurationRepository.upsert(fakeDomainElectionConfigurations[4], txn);
+    const dataToUpdate = {
+      electionConfigurationStatus: ELECTION_CONFIGURATION_STATUS_INACTIVE
+    };
+    const result = await electionConfigurationRepository.updateByGuid(
+      fakeDomainElectionConfigurations[4].guid,
+      dataToUpdate,
+      txn
+    );
+    expect(result).toStrictEqual({
+      ...fakeDomainElectionConfigurations[4],
+      ...dataToUpdate,
+      audit: {
+        createdAt: now,
+        updatedAt: now
+      }
+    });
+  });
+});
+
+test('Should return null when updating election configuration that does not exists - updateByGuid', async () => {
+  return knexService.transaction(async txn => {
+    const guid = uuidService.uuid();
+    const dataToUpdate = {
+      electionConfigurationStatus: ELECTION_CONFIGURATION_STATUS_ACTIVE
+    };
+    const result = await electionConfigurationRepository.updateByGuid(guid, dataToUpdate, txn);
     expect(result).toBeNull();
   });
 });
