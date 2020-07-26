@@ -220,6 +220,7 @@ test('Should be able to fetch election configuration by election guid', async ()
       { electionGuid: fakeDomainElections[0].guid },
       txn
     );
+    expect(result.length).toBeLessThanOrEqual(DB_QUERY_LIMIT);
     expect(result.sort()).toStrictEqual(
       [fakeDomainElectionConfigurations[0], fakeDomainElectionConfigurations[1]].sort()
     );
@@ -243,6 +244,7 @@ test('Should be able to fetch election configuration by candidate guid', async (
       { candidateGuid: fakeDomainCandidates[0].guid },
       txn
     );
+    expect(result.length).toBeLessThanOrEqual(DB_QUERY_LIMIT);
     expect(result.sort()).toStrictEqual(
       [fakeDomainElectionConfigurations[0], fakeDomainElectionConfigurations[2]].sort()
     );
