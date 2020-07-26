@@ -27,7 +27,7 @@ const mappers = new FakeMappers();
 const candidateRepository = new CandidateRepository(mappers, configService);
 
 const getFakeDomainCandidate = (guid = uuidService.uuid()) => ({
-  guid: guid,
+  guid,
   candidateHandle: `${guid}`,
   displayHeader: 'displayHeader',
   summary: 'summary',
@@ -38,7 +38,7 @@ const getFakeDomainCandidate = (guid = uuidService.uuid()) => ({
 });
 
 const getFakeDomainCandidateResponse = guid => ({
-  guid: guid,
+  guid,
   candidateHandle: `${guid}`,
   displayHeader: 'displayHeader',
   summary: 'summary',

@@ -27,7 +27,7 @@ const mappers = new FakeMappers();
 const adminRepository = new AdminRepository(mappers, configService);
 
 const getFakeDomainAdmin = (guid = uuidService.uuid()) => ({
-  guid: guid,
+  guid,
   firstName: 'Jane',
   middleName: 'Super',
   lastName: 'Doe',
@@ -44,6 +44,7 @@ const getFakeDomainAdmin = (guid = uuidService.uuid()) => ({
 });
 
 const getFakeDomainAdminResponse = guid => ({
+  guid,
   accountStatus: ADMIN_ACCOUNT_STATUS_ACTIVE,
   audit: {
     createdAt: now
@@ -52,7 +53,6 @@ const getFakeDomainAdminResponse = guid => ({
   emailId: `${guid}@example.com`,
   firstName: 'Jane',
   gender: 'FEMALE',
-  guid: `${guid}`,
   lastName: 'Doe',
   middleName: 'Super',
   userName: `${guid}`

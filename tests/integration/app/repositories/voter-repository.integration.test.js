@@ -27,7 +27,7 @@ const mappers = new FakeMappers();
 const voterRepository = new VoterRepository(mappers, configService);
 
 const getFakeDomainVoter = (guid = uuidService.uuid()) => ({
-  guid: guid,
+  guid,
   firstName: 'Jane',
   middleName: 'Super',
   lastName: 'Doe',
@@ -44,6 +44,7 @@ const getFakeDomainVoter = (guid = uuidService.uuid()) => ({
 });
 
 const getFakeDomainVoterResponse = guid => ({
+  guid,
   accountStatus: VOTER_ACCOUNT_STATUS_ACTIVE,
   audit: {
     createdAt: now
@@ -52,7 +53,6 @@ const getFakeDomainVoterResponse = guid => ({
   emailId: `${guid}@example.com`,
   firstName: 'Jane',
   gender: 'FEMALE',
-  guid: `${guid}`,
   lastName: 'Doe',
   middleName: 'Super',
   userName: `${guid}`

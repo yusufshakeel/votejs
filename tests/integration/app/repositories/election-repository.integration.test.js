@@ -30,7 +30,7 @@ const mappers = new FakeMappers();
 const electionRepository = new ElectionRepository(mappers, configService);
 
 const getFakeDomainElection = (guid = uuidService.uuid()) => ({
-  guid: guid,
+  guid,
   title: 'Some title',
   summary: 'Some summary',
   startsAt: now,
