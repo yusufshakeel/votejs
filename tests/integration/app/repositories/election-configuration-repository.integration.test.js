@@ -262,6 +262,31 @@ test('Should return null if election configuration is not found - findByCandidat
   });
 });
 
+test('Should be able to fetch election configuration by election configuration status', async () => {
+  return knexService.transaction(async txn => {
+    const result = await electionConfigurationRepository.findByElectionConfigurationStatus(
+      { electionConfigurationStatus: ELECTION_CONFIGURATION_STATUS_ACTIVE },
+      txn
+    );
+    expect(result.length).toBeLessThanOrEqual(DB_QUERY_LIMIT);
+    result.forEach(electionConfiguration => {
+      expect(electionConfiguration.electionConfigurationStatus).toBe(
+        ELECTION_CONFIGURATION_STATUS_ACTIVE
+      );
+    });
+  });
+});
+
+test('Should return null if election configuration is not found - findByElectionConfigurationStatus', async () => {
+  return knexService.transaction(async txn => {
+    const result = await electionConfigurationRepository.findByElectionConfigurationStatus(
+      { electionConfigurationStatus: 'hahaha' },
+      txn
+    );
+    expect(result).toBeNull();
+  });
+});
+
 afterAll(() => {
   return knexService.destroy();
 });
