@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest -c jest.config.json",
-    "test:refresh": "npm run db:reset-generate && npm run test",
+    "test:fresh": "npm run db:reset-generate && npm run test",
     "no-circular-dependecies": "npx madge -c ./app",
     "generate-docs": "npx jsdoc -c jsdocs.config.json",
     "lint": "npx eslint -c .eslintrc.json ./index.js ./app ./tests",

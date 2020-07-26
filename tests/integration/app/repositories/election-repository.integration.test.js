@@ -6,7 +6,7 @@ const ElectionRepository = require('../../../../app/repositories/election-reposi
 const ElectionMapper = require('../../../../app/mappers/election-mapper.js');
 const {
   ELECTION_STATUS_DRAFT,
-  ELECTION_STATUS_ACTIVE
+  ELECTION_STATUS_PUBLIC
 } = require('../../../../app/constants/election-constants.js');
 
 const services = new Services();
@@ -116,7 +116,7 @@ test('Should be able to update election', async () => {
     const fakeDomainElection = getFakeDomainElection(guid);
     await electionRepository.create(fakeDomainElection, txn);
     const dataToUpdate = {
-      electionStatus: ELECTION_STATUS_ACTIVE,
+      electionStatus: ELECTION_STATUS_PUBLIC,
       electionSettings: {
         field: 'value',
         field2: 'value2'
@@ -138,7 +138,7 @@ test('Should return null when updating election that does not exists - updateByG
   return knexService.transaction(async txn => {
     const guid = uuidService.uuid();
     const dataToUpdate = {
-      electionStatus: ELECTION_STATUS_ACTIVE,
+      electionStatus: ELECTION_STATUS_PUBLIC,
       electionSettings: {
         field: 'value',
         field2: 'value2'
@@ -171,7 +171,7 @@ test('Should be able to find all elections - with whereClause', async () => {
   return knexService.transaction(async txn => {
     const getFakeElection = () => ({
       ...getFakeDomainElection(uuidService.uuid()),
-      electionStatus: ELECTION_STATUS_ACTIVE
+      electionStatus: ELECTION_STATUS_PUBLIC
     });
     await Promise.all([
       electionRepository.create(getFakeElection(), txn),
@@ -179,12 +179,12 @@ test('Should be able to find all elections - with whereClause', async () => {
       electionRepository.create(getFakeElection(), txn)
     ]);
     const fetchedElections = await electionRepository.findAll(
-      { whereClause: { electionStatus: ELECTION_STATUS_ACTIVE }, limit: 3, page: 1 },
+      { whereClause: { electionStatus: ELECTION_STATUS_PUBLIC }, limit: 3, page: 1 },
       txn
     );
     expect(fetchedElections.length).toBe(3);
     fetchedElections.forEach(election => {
-      expect(election.electionStatus).toBe(ELECTION_STATUS_ACTIVE);
+      expect(election.electionStatus).toBe(ELECTION_STATUS_PUBLIC);
       const allFields = keys(getFakeDomainElectionResponse());
       const isReturnedFieldsCorrect = keys(election).every(field => allFields.includes(field));
       expect(isReturnedFieldsCorrect).toBeTruthy();
