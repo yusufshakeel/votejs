@@ -1,6 +1,5 @@
 'use strict';
 
-const { keys } = require('lodash');
 const Services = require('../../../../app/services');
 const CandidateRepository = require('../../../../app/repositories/candidate-repository.js');
 const ElectionRepository = require('../../../../app/repositories/election-repository.js');
@@ -181,7 +180,8 @@ test('Should be able to update existing election configuration - upsert', async 
       electionConfigurationRepository.upsert(fakeDomainElectionConfigurations[0], txn),
       electionConfigurationRepository.upsert(fakeDomainElectionConfigurations[1], txn),
       electionConfigurationRepository.upsert(fakeDomainElectionConfigurations[2], txn),
-      electionConfigurationRepository.upsert(fakeDomainElectionConfigurations[3], txn)
+      electionConfigurationRepository.upsert(fakeDomainElectionConfigurations[3], txn),
+      electionConfigurationRepository.upsert(fakeDomainElectionConfigurations[4], txn)
     ]);
     electionConfigurations.forEach((electionConfiguration, index) => {
       expect(electionConfiguration.electionGuid).toBe(
@@ -256,9 +256,9 @@ test('Should be able to fetch election configuration by candidate guid', async (
       txn
     );
     expect(result.length).toBeLessThanOrEqual(DB_QUERY_LIMIT);
-    expect(result.sort()).toStrictEqual(
-      [fakeDomainElectionConfigurations[0], fakeDomainElectionConfigurations[2]].sort()
-    );
+    result.forEach(electionConfiguration => {
+      expect(electionConfiguration.candidateGuid).toBe(fakeDomainCandidates[0].guid);
+    });
   });
 });
 
@@ -328,6 +328,34 @@ test('Should return null when updating election configuration that does not exis
     };
     const result = await electionConfigurationRepository.updateByGuid(guid, dataToUpdate, txn);
     expect(result).toBeNull();
+  });
+});
+
+test('Should be able to find all election configurations without passing any params', async () => {
+  return knexService.transaction(async txn => {
+    await Promise.all([
+      electionConfigurationRepository.upsert(fakeDomainElectionConfigurations[0], txn),
+      electionConfigurationRepository.upsert(fakeDomainElectionConfigurations[1], txn),
+      electionConfigurationRepository.upsert(fakeDomainElectionConfigurations[2], txn),
+      electionConfigurationRepository.upsert(fakeDomainElectionConfigurations[3], txn),
+      electionConfigurationRepository.upsert(fakeDomainElectionConfigurations[4], txn)
+    ]);
+    const fetchedElectionConfigurations = await electionConfigurationRepository.findAll({}, txn);
+    expect(fetchedElectionConfigurations.length).toBeLessThanOrEqual(DB_QUERY_LIMIT);
+  });
+});
+
+test('Should return null if election configuration is not found - findAll', async () => {
+  return knexService.transaction(async txn => {
+    const fetchedElectionConfigurations = await electionConfigurationRepository.findAll(
+      {
+        whereClause: { electionConfigurationStatus: 'hahaha' },
+        limit: DB_QUERY_LIMIT,
+        page: 1
+      },
+      txn
+    );
+    expect(fetchedElectionConfigurations).toBeNull();
   });
 });
 
