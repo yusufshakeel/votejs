@@ -63,6 +63,23 @@ test('Should be able to find by select query with lesser arguments', async () =>
   });
 });
 
+test('Should be able to find by select query with orderBy set to different column name', async () => {
+  return knexService.transaction(async txn => {
+    const result = await selectQuery({
+      ...pagination({ limit: 3 }),
+      table: T.COUNTRY,
+      orderBy: [
+        { column: 'createdAt', order: 'asc' },
+        { column: 'countryName', order: 'asc' }
+      ],
+      columnsToReturn: ['countryName', 'createdAt'],
+      transaction: txn
+    });
+    const countries = result.map(country => country.countryName);
+    expect(countries).toStrictEqual(['Afghanistan', 'Albania', 'Algeria']);
+  });
+});
+
 test('Should be able to create using insert query', async () => {
   return knexService.transaction(async txn => {
     const guid = uuidService.uuid();

@@ -12,6 +12,7 @@ const services = new Services();
 const { configService, knexService, uuidService, timeService } = services;
 
 const now = timeService.now();
+const DB_QUERY_LIMIT = configService.dbQueryLimit;
 
 function FakeAuditMapper() {
   this.updateDomainAudit = function () {
@@ -144,6 +145,55 @@ test('Should return null when updating election that does not exists - updateByG
     };
     const result = await electionRepository.updateByGuid(guid, dataToUpdate, txn);
     expect(result).toBeNull();
+  });
+});
+
+test('Should be able to find all elections without passing any params', async () => {
+  return knexService.transaction(async txn => {
+    const getFakeElection = () => getFakeDomainElection(uuidService.uuid());
+    await Promise.all([
+      electionRepository.create(getFakeElection(), txn),
+      electionRepository.create(getFakeElection(), txn),
+      electionRepository.create(getFakeElection(), txn)
+    ]);
+    const fetchedElections = await electionRepository.findAll({}, txn);
+    expect(fetchedElections.length).toBeLessThanOrEqual(DB_QUERY_LIMIT);
+  });
+});
+
+test('Should be able to find all elections - with whereClause', async () => {
+  return knexService.transaction(async txn => {
+    const getFakeElection = () => ({
+      ...getFakeDomainElection(uuidService.uuid()),
+      electionStatus: ELECTION_STATUS_ACTIVE
+    });
+    await Promise.all([
+      electionRepository.create(getFakeElection(), txn),
+      electionRepository.create(getFakeElection(), txn),
+      electionRepository.create(getFakeElection(), txn)
+    ]);
+    const fetchedElections = await electionRepository.findAll(
+      { whereClause: { electionStatus: ELECTION_STATUS_ACTIVE }, limit: 3, page: 1 },
+      txn
+    );
+    expect(fetchedElections.length).toBe(3);
+    fetchedElections.forEach(election => {
+      expect(election.electionStatus).toBe(ELECTION_STATUS_ACTIVE);
+    });
+  });
+});
+
+test('Should return null if election is not found - findAll', async () => {
+  return knexService.transaction(async txn => {
+    const fetchedElections = await electionRepository.findAll(
+      {
+        whereClause: { electionStatus: 'hahaha' },
+        limit: DB_QUERY_LIMIT,
+        page: 1
+      },
+      txn
+    );
+    expect(fetchedElections).toBeNull();
   });
 });
 

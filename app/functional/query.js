@@ -1,5 +1,6 @@
 'use strict';
 
+const { isEmpty } = require('lodash');
 const insertQuery = async ({ table, dataToInsert, columnsToReturn = ['guid'], transaction }) =>
   transaction(table).insert(dataToInsert).returning(columnsToReturn);
 
@@ -9,8 +10,19 @@ const selectQuery = async ({
   columnsToReturn = ['guid'],
   limit = 1,
   offset = 0,
+  orderBy = [{ column: 'createdAt', order: 'desc' }],
   transaction
-}) => transaction(table).select(columnsToReturn).where(whereClause).limit(limit).offset(offset);
+}) => {
+  if (isEmpty(whereClause)) {
+    return transaction(table).select(columnsToReturn).limit(limit).offset(offset).orderBy(orderBy);
+  }
+  return transaction(table)
+    .select(columnsToReturn)
+    .where(whereClause)
+    .limit(limit)
+    .offset(offset)
+    .orderBy(orderBy);
+};
 
 const updateQuery = async ({
   table,
