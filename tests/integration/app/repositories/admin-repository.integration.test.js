@@ -124,8 +124,7 @@ test('Should be able to fetch admin by accountStatus', async () => {
       adminRepository.create(getFakeAdmin(), txn)
     ]);
     const fetchedAdmins = await adminRepository.findByAccountStatus(
-      ADMIN_ACCOUNT_STATUS_ACTIVE,
-      { limit: 3, page: 1 },
+      { accountStatus: ADMIN_ACCOUNT_STATUS_ACTIVE, limit: 3, page: 1 },
       txn
     );
     expect(fetchedAdmins.length).toBe(3);
@@ -137,7 +136,7 @@ test('Should be able to fetch admin by accountStatus', async () => {
 
 test('Should return null if admin is not found - findByAccountStatus', async () => {
   return knexService.transaction(async txn => {
-    const result = await adminRepository.findByAccountStatus('hahaha', {}, txn);
+    const result = await adminRepository.findByAccountStatus({ accountStatus: 'hahaha' }, txn);
     expect(result).toBeNull();
   });
 });

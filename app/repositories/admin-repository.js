@@ -69,8 +69,7 @@ function AdminRepository(mappers, configService) {
   };
 
   this.findByAccountStatus = async function (
-    accountStatus,
-    { limit = DB_QUERY_LIMIT, page = 1 },
+    { accountStatus, limit = DB_QUERY_LIMIT, page = 1 },
     transaction
   ) {
     const result = await findBy({
