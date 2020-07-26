@@ -207,15 +207,28 @@ test('Should return null if election configuration is not found - findByGuid', a
   });
 });
 
-// test('Should be able to fetch election configuration by election guid', async () => {
-//   return knexService.transaction(async txn => {
-//     const result = await electionConfigurationRepository.findByElectionGuid(
-//       { electionGuid: fakeDomainElections[0].electionGuid, limit: 3, page: 1 },
-//       txn
-//     );
-//     console.log(result);
-//   });
-// });
+test('Should be able to fetch election configuration by election guid', async () => {
+  return knexService.transaction(async txn => {
+    const result = await electionConfigurationRepository.findByElectionGuid(
+      { electionGuid: fakeDomainElections[0].guid },
+      txn
+    );
+    expect(result.sort()).toStrictEqual(
+      [fakeDomainElectionConfigurations[0], fakeDomainElectionConfigurations[1]].sort()
+    );
+  });
+});
+
+test('Should return null if election configuration is not found - findByElectionGuid', async () => {
+  return knexService.transaction(async txn => {
+    const guid = uuidService.uuid();
+    const result = await electionConfigurationRepository.findByElectionGuid(
+      { electionGuid: guid },
+      txn
+    );
+    expect(result).toBeNull();
+  });
+});
 
 afterAll(() => {
   return knexService.destroy();
