@@ -27,6 +27,28 @@ function AdminRepository(mappers, configService) {
 
   const findBy = params => selectQuery({ table: T.ADMIN, ...params });
 
+  const find = async function ({ whereClause, transaction }) {
+    const result = await findBy({
+      ...pagination({ limit: 1, page: 1 }),
+      whereClause,
+      columnsToReturn,
+      transaction
+    });
+    if (isEmpty(result)) return null;
+    return adminMapper.dbToDomain(first(result));
+  };
+
+  const finds = async function ({ whereClause, limit, page, transaction }) {
+    const result = await findBy({
+      ...pagination({ limit, page }),
+      whereClause,
+      columnsToReturn,
+      transaction
+    });
+    if (isEmpty(result)) return null;
+    return result.map(row => adminMapper.dbToDomain(row));
+  };
+
   this.create = async function (domainAdmin, transaction) {
     const dbAdmin = adminMapper.domainToDb(domainAdmin);
     const result = await insertQuery({
@@ -38,48 +60,23 @@ function AdminRepository(mappers, configService) {
     return adminMapper.dbToDomain(first(result));
   };
 
-  this.findByGuid = async function (guid, transaction) {
-    const result = await findBy({
-      whereClause: { guid },
-      columnsToReturn,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return adminMapper.dbToDomain(first(result));
+  this.findByGuid = function (guid, transaction) {
+    return find({ whereClause: { guid }, transaction });
   };
 
-  this.findByEmailId = async function (emailId, transaction) {
-    const result = await findBy({
-      whereClause: { emailId },
-      columnsToReturn,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return adminMapper.dbToDomain(first(result));
+  this.findByEmailId = function (emailId, transaction) {
+    return find({ whereClause: { emailId }, transaction });
   };
 
-  this.findByUserName = async function (userName, transaction) {
-    const result = await findBy({
-      whereClause: { userName },
-      columnsToReturn,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return adminMapper.dbToDomain(first(result));
+  this.findByUserName = function (userName, transaction) {
+    return find({ whereClause: { userName }, transaction });
   };
 
-  this.findByAccountStatus = async function (
+  this.findByAccountStatus = function (
     { accountStatus, limit = DB_QUERY_LIMIT, page = 1 },
     transaction
   ) {
-    const result = await findBy({
-      ...pagination({ limit, page }),
-      whereClause: { accountStatus },
-      columnsToReturn,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return result.map(row => adminMapper.dbToDomain(row));
+    return finds({ whereClause: { accountStatus }, limit, page, transaction });
   };
 
   this.updateByGuid = async function (guid, domainAdmin, transaction) {
@@ -96,7 +93,7 @@ function AdminRepository(mappers, configService) {
     return adminMapper.dbToDomain(first(result));
   };
 
-  this.validateForLogin = async function ({ userName, emailId, password, passcode }, transaction) {
+  this.validateForLogin = function ({ userName, emailId, password, passcode }, transaction) {
     const whereClause = adminMapper.domainToDb({
       userName,
       emailId,
@@ -104,25 +101,11 @@ function AdminRepository(mappers, configService) {
       passcode,
       accountStatus: ADMIN_ACCOUNT_STATUS_ACTIVE
     });
-    const result = await findBy({
-      whereClause: pickBy(whereClause),
-      columnsToReturn,
-      limit: 1,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return adminMapper.dbToDomain(first(result));
+    return find({ whereClause: pickBy(whereClause), transaction });
   };
 
-  this.findAll = async function ({ whereClause, limit = DB_QUERY_LIMIT, page = 1 }, transaction) {
-    const result = await findBy({
-      ...pagination({ limit, page }),
-      whereClause,
-      columnsToReturn,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return result.map(row => adminMapper.dbToDomain(row));
+  this.findAll = function ({ whereClause, limit = DB_QUERY_LIMIT, page = 1 }, transaction) {
+    return finds({ whereClause, limit, page, transaction });
   };
 }
 

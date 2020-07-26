@@ -22,6 +22,28 @@ function CandidateRepository(mappers, configService) {
 
   const findBy = params => selectQuery({ table: T.CANDIDATE, ...params });
 
+  const find = async function ({ whereClause, transaction }) {
+    const result = await findBy({
+      ...pagination({ limit: 1, page: 1 }),
+      whereClause,
+      columnsToReturn,
+      transaction
+    });
+    if (isEmpty(result)) return null;
+    return candidateMapper.dbToDomain(first(result));
+  };
+
+  const finds = async function ({ whereClause, limit, page, transaction }) {
+    const result = await findBy({
+      ...pagination({ limit, page }),
+      whereClause,
+      columnsToReturn,
+      transaction
+    });
+    if (isEmpty(result)) return null;
+    return result.map(row => candidateMapper.dbToDomain(row));
+  };
+
   this.create = async function (domainCandidate, transaction) {
     const dbCandidate = candidateMapper.domainToDb(domainCandidate);
     const result = await insertQuery({
@@ -33,38 +55,19 @@ function CandidateRepository(mappers, configService) {
     return candidateMapper.dbToDomain(first(result));
   };
 
-  this.findByGuid = async function (guid, transaction) {
-    const result = await findBy({
-      whereClause: { guid },
-      columnsToReturn,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return candidateMapper.dbToDomain(first(result));
+  this.findByGuid = function (guid, transaction) {
+    return find({ whereClause: { guid }, transaction });
   };
 
-  this.findByCandidateHandle = async function (candidateHandle, transaction) {
-    const result = await findBy({
-      whereClause: { candidateHandle },
-      columnsToReturn,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return candidateMapper.dbToDomain(first(result));
+  this.findByCandidateHandle = function (candidateHandle, transaction) {
+    return find({ whereClause: { candidateHandle }, transaction });
   };
 
   this.findByCandidateStatus = async function (
     { candidateStatus, limit = DB_QUERY_LIMIT, page = 1 },
     transaction
   ) {
-    const result = await findBy({
-      ...pagination({ limit, page }),
-      whereClause: { candidateStatus },
-      columnsToReturn,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return result.map(row => candidateMapper.dbToDomain(row));
+    return finds({ whereClause: { candidateStatus }, limit, page, transaction });
   };
 
   this.updateByGuid = async function (guid, domainCandidate, transaction) {
@@ -81,15 +84,8 @@ function CandidateRepository(mappers, configService) {
     return candidateMapper.dbToDomain(first(result));
   };
 
-  this.findAll = async function ({ whereClause, limit = DB_QUERY_LIMIT, page = 1 }, transaction) {
-    const result = await findBy({
-      ...pagination({ limit, page }),
-      whereClause,
-      columnsToReturn,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return result.map(row => candidateMapper.dbToDomain(row));
+  this.findAll = function ({ whereClause, limit = DB_QUERY_LIMIT, page = 1 }, transaction) {
+    return finds({ whereClause, limit, page, transaction });
   };
 }
 
