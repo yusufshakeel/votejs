@@ -1,5 +1,6 @@
 'use strict';
 
+const { keys } = require('lodash');
 const Services = require('../../../../app/services');
 const CandidateRepository = require('../../../../app/repositories/candidate-repository.js');
 const CandidateMapper = require('../../../../app/mappers/candidate-mapper.js');
@@ -162,6 +163,9 @@ test('Should be able to find all admin without passing any params', async () => 
     ]);
     const fetchedCandidates = await candidateRepository.findAll({}, txn);
     expect(fetchedCandidates.length).toBeLessThanOrEqual(DB_QUERY_LIMIT);
+    fetchedCandidates.forEach(candidate => {
+      expect(keys(candidate).sort()).toStrictEqual(keys(getFakeDomainCandidateResponse()).sort());
+    });
   });
 });
 
@@ -180,6 +184,7 @@ test('Should be able to find all admin - with whereClause', async () => {
     expect(fetchedCandidates.length).toBeLessThanOrEqual(DB_QUERY_LIMIT);
     fetchedCandidates.forEach(candidate => {
       expect(candidate.candidateStatus).toBe(CANDIDATE_STATUS_ACTIVE);
+      expect(keys(candidate).sort()).toStrictEqual(keys(getFakeDomainCandidateResponse()).sort());
     });
   });
 });
