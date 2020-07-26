@@ -100,8 +100,7 @@ test('Should be able to fetch candidate by candidateStatus', async () => {
       candidateRepository.create(getFakeCandidate(), txn)
     ]);
     const fetchedCandidates = await candidateRepository.findByCandidateStatus(
-      CANDIDATE_STATUS_ACTIVE,
-      { limit: 3, page: 1 },
+      { candidateStatus: CANDIDATE_STATUS_ACTIVE, limit: 3, page: 1 },
       txn
     );
     expect(fetchedCandidates.length).toBe(3);
@@ -113,7 +112,10 @@ test('Should be able to fetch candidate by candidateStatus', async () => {
 
 test('Should return null if candidate is not found - findByCandidateStatus', async () => {
   return knexService.transaction(async txn => {
-    const result = await candidateRepository.findByCandidateStatus('hahaha', {}, txn);
+    const result = await candidateRepository.findByCandidateStatus(
+      { candidateStatus: 'hahaha' },
+      txn
+    );
     expect(result).toBeNull();
   });
 });

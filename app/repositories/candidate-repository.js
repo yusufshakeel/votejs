@@ -54,8 +54,7 @@ function CandidateRepository(mappers, configService) {
   };
 
   this.findByCandidateStatus = async function (
-    candidateStatus,
-    { limit = DB_QUERY_LIMIT, page = 1 },
+    { candidateStatus, limit = DB_QUERY_LIMIT, page = 1 },
     transaction
   ) {
     const result = await findBy({
