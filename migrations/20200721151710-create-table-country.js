@@ -46,6 +46,14 @@ exports.up = function(db, cb) {
       type: 'string',
       length: 2,
       unique: true
+    },
+    createdAt: {
+      type: 'timestamptz',
+      notNull: true,
+      defaultValue: new String('CURRENT_TIMESTAMP')
+    },
+    updatedAt: {
+      type: 'timestamptz'
     }
   }, cb);
 };
