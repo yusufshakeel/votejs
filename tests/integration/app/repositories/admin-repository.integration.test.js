@@ -1,5 +1,6 @@
 'use strict';
 
+const { keys } = require('lodash');
 const Services = require('../../../../app/services');
 const AdminRepository = require('../../../../app/repositories/admin-repository.js');
 const AdminMapper = require('../../../../app/mappers/admin-mapper.js');
@@ -218,6 +219,9 @@ test('Should be able to find all admin without passing any params', async () => 
     expect(fetchedAdmins.length).toBeLessThanOrEqual(DB_QUERY_LIMIT);
     fetchedAdmins.forEach(admin => {
       expect(admin.accountStatus).toBe(ADMIN_ACCOUNT_STATUS_ACTIVE);
+      const allFields = keys(getFakeDomainAdminResponse());
+      const isReturnedFields = keys(admin).every(field => allFields.includes(field));
+      expect(isReturnedFields).toBeTruthy();
     });
   });
 });
@@ -239,6 +243,9 @@ test('Should be able to find all admin - with whereClause', async () => {
     expect(fetchedAdmins.length).toBeLessThanOrEqual(DB_QUERY_LIMIT);
     fetchedAdmins.forEach(admin => {
       expect(admin.accountStatus).toBe(ADMIN_ACCOUNT_STATUS_ACTIVE);
+      const allFields = keys(getFakeDomainAdminResponse());
+      const isReturnedFields = keys(admin).every(field => allFields.includes(field));
+      expect(isReturnedFields).toBeTruthy();
     });
   });
 });
