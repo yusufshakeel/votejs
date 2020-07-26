@@ -1,7 +1,12 @@
 'use strict';
 
 const { keys, first } = require('lodash');
-const { selectQuery, insertQuery, updateQuery } = require('../../../../app/functional/query.js');
+const {
+  selectQuery,
+  insertQuery,
+  updateQuery,
+  pagination
+} = require('../../../../app/functional/query.js');
 const Services = require('../../../../app/services');
 const Mappers = require('../../../../app/mappers');
 const TableRepository = require('../../../../app/repositories/table-repository.js');
@@ -144,6 +149,20 @@ test('Should be able to update with lesser arguments', async () => {
       }
     ]);
   });
+});
+
+test('Should be able to generate limit and offset for pagination when non is provided', () => {
+  expect(pagination({})).toStrictEqual({ limit: 1, offset: 0 });
+});
+
+test('Should be able to generate limit and offset for pagination when limit is provided', () => {
+  expect(pagination({ limit: 10 })).toStrictEqual({ limit: 10, offset: 0 });
+});
+
+test('Should be able to generate limit and offset for pagination when both are provided', () => {
+  expect(pagination({ limit: 10, page: 1 })).toStrictEqual({ limit: 10, offset: 0 });
+  expect(pagination({ limit: 10, page: 2 })).toStrictEqual({ limit: 10, offset: 10 });
+  expect(pagination({ limit: 10, page: 3 })).toStrictEqual({ limit: 10, offset: 20 });
 });
 
 afterAll(() => {

@@ -20,8 +20,11 @@ const updateQuery = async ({
   transaction
 }) => transaction(table).update(dataToUpdate).where(whereClause).returning(columnsToReturn);
 
+const pagination = ({ limit = 1, page = 1 }) => ({ limit, offset: (page - 1) * limit });
+
 module.exports = {
   insertQuery,
   updateQuery,
-  selectQuery
+  selectQuery,
+  pagination
 };
