@@ -12,7 +12,8 @@ test('Should confirm the existence of required properties', () => {
       'adminMapper',
       'voterMapper',
       'candidateMapper',
-      'electionMapper'
+      'electionMapper',
+      'electionConfigurationMapper'
     ].sort()
   );
 });
