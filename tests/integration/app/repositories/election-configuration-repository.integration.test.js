@@ -77,7 +77,8 @@ const getFakeDomainElectionConfiguration = ({
   candidateGuid,
   electionConfigurationStatus: ELECTION_CONFIGURATION_STATUS_ACTIVE,
   audit: {
-    createdAt: now
+    createdAt: now,
+    updatedAt: now
   }
 });
 
@@ -87,7 +88,8 @@ const getFakeDomainElectionConfigurationResponse = (guid, electionGuid, candidat
   candidateGuid,
   electionConfigurationStatus: ELECTION_CONFIGURATION_STATUS_ACTIVE,
   audit: {
-    createdAt: now
+    createdAt: now,
+    updatedAt: now
   }
 });
 
@@ -180,6 +182,40 @@ test('Should be able to update existing election configuration - upsert', async 
     });
   });
 });
+
+test('Should be able to fetch election configuration by guid', async () => {
+  return knexService.transaction(async txn => {
+    const result = await electionConfigurationRepository.findByGuid(
+      fakeDomainElectionConfigurations[0].guid,
+      txn
+    );
+    expect(result).toStrictEqual(
+      getFakeDomainElectionConfigurationResponse(
+        fakeDomainElectionConfigurations[0].guid,
+        fakeDomainElectionConfigurations[0].electionGuid,
+        fakeDomainElectionConfigurations[0].candidateGuid
+      )
+    );
+  });
+});
+
+test('Should return null if election configuration is not found - findByGuid', async () => {
+  return knexService.transaction(async txn => {
+    const guid = uuidService.uuid();
+    const result = await electionConfigurationRepository.findByGuid(guid, txn);
+    expect(result).toBeNull();
+  });
+});
+
+// test('Should be able to fetch election configuration by election guid', async () => {
+//   return knexService.transaction(async txn => {
+//     const result = await electionConfigurationRepository.findByElectionGuid(
+//       { electionGuid: fakeDomainElections[0].electionGuid, limit: 3, page: 1 },
+//       txn
+//     );
+//     console.log(result);
+//   });
+// });
 
 afterAll(() => {
   return knexService.destroy();

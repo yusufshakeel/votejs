@@ -60,12 +60,18 @@ function ElectionConfigurationRepository(mappers, configService) {
     return find({ whereClause: { guid }, transaction });
   };
 
-  this.findByElectionGuid = function (electionGuid, transaction) {
-    return find({ whereClause: { electionGuid }, transaction });
+  this.findByElectionGuid = function (
+    { electionGuid, limit = DB_QUERY_LIMIT, page = 1 },
+    transaction
+  ) {
+    return finds({ whereClause: { electionGuid }, limit, page, transaction });
   };
 
-  this.findByCandidateGuid = function (candidateGuid, transaction) {
-    return find({ whereClause: { candidateGuid }, transaction });
+  this.findByCandidateGuid = function (
+    { candidateGuid, limit = DB_QUERY_LIMIT, page = 1 },
+    transaction
+  ) {
+    return finds({ whereClause: { candidateGuid }, limit, page, transaction });
   };
 
   this.findByElectionConfigurationStatus = function (
