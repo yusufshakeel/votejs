@@ -27,6 +27,27 @@ function VoterRepository(mappers, configService) {
 
   const findBy = params => selectQuery({ table: T.VOTER, ...params });
 
+  const find = async function ({ whereClause, transaction }) {
+    const result = await findBy({
+      whereClause,
+      columnsToReturn,
+      transaction
+    });
+    if (isEmpty(result)) return null;
+    return voterMapper.dbToDomain(first(result));
+  };
+
+  const finds = async function ({ whereClause, limit, page, transaction }) {
+    const result = await findBy({
+      ...pagination({ limit, page }),
+      whereClause,
+      columnsToReturn,
+      transaction
+    });
+    if (isEmpty(result)) return null;
+    return result.map(row => voterMapper.dbToDomain(row));
+  };
+
   this.create = async function (domainVoter, transaction) {
     const dbVoter = voterMapper.domainToDb(domainVoter);
     const result = await insertQuery({
@@ -38,48 +59,23 @@ function VoterRepository(mappers, configService) {
     return voterMapper.dbToDomain(first(result));
   };
 
-  this.findByGuid = async function (guid, transaction) {
-    const result = await findBy({
-      whereClause: { guid },
-      columnsToReturn,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return voterMapper.dbToDomain(first(result));
+  this.findByGuid = function (guid, transaction) {
+    return find({ whereClause: { guid }, transaction });
   };
 
-  this.findByEmailId = async function (emailId, transaction) {
-    const result = await findBy({
-      whereClause: { emailId },
-      columnsToReturn,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return voterMapper.dbToDomain(first(result));
+  this.findByEmailId = function (emailId, transaction) {
+    return find({ whereClause: { emailId }, transaction });
   };
 
-  this.findByUserName = async function (userName, transaction) {
-    const result = await findBy({
-      whereClause: { userName },
-      columnsToReturn,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return voterMapper.dbToDomain(first(result));
+  this.findByUserName = function (userName, transaction) {
+    return find({ whereClause: { userName }, transaction });
   };
 
-  this.findByAccountStatus = async function (
+  this.findByAccountStatus = function (
     { accountStatus, limit = DB_QUERY_LIMIT, page = 1 },
     transaction
   ) {
-    const result = await findBy({
-      ...pagination({ limit, page }),
-      whereClause: { accountStatus },
-      columnsToReturn,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return result.map(row => voterMapper.dbToDomain(row));
+    return finds({ whereClause: { accountStatus }, limit, page, transaction });
   };
 
   this.updateByGuid = async function (guid, domainVoter, transaction) {
@@ -96,7 +92,7 @@ function VoterRepository(mappers, configService) {
     return voterMapper.dbToDomain(first(result));
   };
 
-  this.validateForLogin = async function ({ userName, emailId, password, passcode }, transaction) {
+  this.validateForLogin = function ({ userName, emailId, password, passcode }, transaction) {
     const whereClause = voterMapper.domainToDb({
       userName,
       emailId,
@@ -104,25 +100,11 @@ function VoterRepository(mappers, configService) {
       passcode,
       accountStatus: VOTER_ACCOUNT_STATUS_ACTIVE
     });
-    const result = await findBy({
-      whereClause: pickBy(whereClause),
-      columnsToReturn,
-      limit: 1,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return voterMapper.dbToDomain(first(result));
+    return find({ whereClause: pickBy(whereClause), limit: 1, transaction });
   };
 
-  this.findAll = async function ({ whereClause, limit = DB_QUERY_LIMIT, page = 1 }, transaction) {
-    const result = await findBy({
-      ...pagination({ limit, page }),
-      whereClause,
-      columnsToReturn,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return result.map(row => voterMapper.dbToDomain(row));
+  this.findAll = function ({ whereClause, limit = DB_QUERY_LIMIT, page = 1 }, transaction) {
+    return finds({ whereClause, limit, page, transaction });
   };
 }
 
