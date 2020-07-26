@@ -24,6 +24,28 @@ function ElectionRepository(mappers, configService) {
 
   const findBy = params => selectQuery({ table: T.ELECTION, ...params });
 
+  const find = async function ({ whereClause, transaction }) {
+    const result = await findBy({
+      ...pagination({ limit: 1, page: 1 }),
+      whereClause,
+      columnsToReturn,
+      transaction
+    });
+    if (isEmpty(result)) return null;
+    return electionMapper.dbToDomain(first(result));
+  };
+
+  const finds = async function ({ whereClause, limit, page, transaction }) {
+    const result = await findBy({
+      ...pagination({ limit, page }),
+      whereClause,
+      columnsToReturn,
+      transaction
+    });
+    if (isEmpty(result)) return null;
+    return result.map(row => electionMapper.dbToDomain(row));
+  };
+
   this.create = async function (domainElection, transaction) {
     const dbElection = electionMapper.domainToDb(domainElection);
     const result = await insertQuery({
@@ -35,28 +57,15 @@ function ElectionRepository(mappers, configService) {
     return electionMapper.dbToDomain(first(result));
   };
 
-  this.findByGuid = async function (guid, transaction) {
-    const result = await findBy({
-      whereClause: { guid },
-      columnsToReturn,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return electionMapper.dbToDomain(first(result));
+  this.findByGuid = function (guid, transaction) {
+    return find({ whereClause: { guid }, transaction });
   };
 
-  this.findByElectionStatus = async function (
+  this.findByElectionStatus = function (
     { electionStatus, limit = DB_QUERY_LIMIT, page = 1 },
     transaction
   ) {
-    const result = await findBy({
-      ...pagination({ limit, page }),
-      whereClause: { electionStatus },
-      columnsToReturn,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return result.map(row => electionMapper.dbToDomain(row));
+    return finds({ whereClause: { electionStatus }, limit, page, transaction });
   };
 
   this.updateByGuid = async function (guid, domainElection, transaction) {
@@ -73,15 +82,8 @@ function ElectionRepository(mappers, configService) {
     return electionMapper.dbToDomain(first(result));
   };
 
-  this.findAll = async function ({ whereClause, limit = DB_QUERY_LIMIT, page = 1 }, transaction) {
-    const result = await findBy({
-      ...pagination({ limit, page }),
-      whereClause,
-      columnsToReturn,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return result.map(row => electionMapper.dbToDomain(row));
+  this.findAll = function ({ whereClause, limit = DB_QUERY_LIMIT, page = 1 }, transaction) {
+    return finds({ whereClause, limit, page, transaction });
   };
 }
 
