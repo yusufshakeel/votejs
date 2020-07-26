@@ -8,7 +8,7 @@ module.exports = [
   },
   {
     countryCode: 'ALA',
-    countryName: 'Åland',
+    countryName: 'Aland',
     code: 'AX'
   },
   {
@@ -908,7 +908,7 @@ module.exports = [
   },
   {
     countryCode: 'REU',
-    countryName: 'Réunion',
+    countryName: 'Reunion',
     code: 'RE'
   },
   {
@@ -928,7 +928,7 @@ module.exports = [
   },
   {
     countryCode: 'BLM',
-    countryName: 'Saint Barthélemy',
+    countryName: 'Saint Barthelemy',
     code: 'BL'
   },
   {
@@ -973,7 +973,7 @@ module.exports = [
   },
   {
     countryCode: 'STP',
-    countryName: 'São Tomé and Príncipe',
+    countryName: 'Sao Tome and Príncipe',
     code: 'ST'
   },
   {

@@ -72,11 +72,11 @@ test('Should be able to find by select query with orderBy set to different colum
         { column: 'createdAt', order: 'asc' },
         { column: 'countryName', order: 'asc' }
       ],
-      columnsToReturn: ['countryName', 'createdAt'],
+      columnsToReturn: ['countryName'],
       transaction: txn
     });
     const countries = result.map(country => country.countryName);
-    expect(countries).toStrictEqual(['Afghanistan', 'Albania', 'Algeria']);
+    expect(countries).toStrictEqual(['Afghanistan', 'Aland', 'Albania']);
   });
 });
 
