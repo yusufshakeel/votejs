@@ -220,8 +220,8 @@ test('Should be able to find all admin without passing any params', async () => 
     fetchedAdmins.forEach(admin => {
       expect(admin.accountStatus).toBe(ADMIN_ACCOUNT_STATUS_ACTIVE);
       const allFields = keys(getFakeDomainAdminResponse());
-      const isReturnedFields = keys(admin).every(field => allFields.includes(field));
-      expect(isReturnedFields).toBeTruthy();
+      const isReturnedFieldsCorrect = keys(admin).every(field => allFields.includes(field));
+      expect(isReturnedFieldsCorrect).toBeTruthy();
     });
   });
 });
@@ -244,8 +244,8 @@ test('Should be able to find all admin - with whereClause', async () => {
     fetchedAdmins.forEach(admin => {
       expect(admin.accountStatus).toBe(ADMIN_ACCOUNT_STATUS_ACTIVE);
       const allFields = keys(getFakeDomainAdminResponse());
-      const isReturnedFields = keys(admin).every(field => allFields.includes(field));
-      expect(isReturnedFields).toBeTruthy();
+      const isReturnedFieldsCorrect = keys(admin).every(field => allFields.includes(field));
+      expect(isReturnedFieldsCorrect).toBeTruthy();
     });
   });
 });
