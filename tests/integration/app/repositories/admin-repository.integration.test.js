@@ -9,6 +9,7 @@ const services = new Services();
 const { configService, knexService, uuidService, timeService } = services;
 
 const now = timeService.now();
+const DB_QUERY_LIMIT = configService.dbQueryLimit;
 
 function FakeAuditMapper() {
   this.updateDomainAudit = function () {
@@ -202,6 +203,57 @@ test('Should return null if login validation fails - validateForLogin', async ()
       txn
     );
     expect(fetchedAdmin).toBeNull();
+  });
+});
+
+test('Should be able to find all admin without passing any params', async () => {
+  return knexService.transaction(async txn => {
+    const getFakeAdmin = () => getFakeDomainAdmin(uuidService.uuid());
+    await Promise.all([
+      adminRepository.create(getFakeAdmin(), txn),
+      adminRepository.create(getFakeAdmin(), txn),
+      adminRepository.create(getFakeAdmin(), txn)
+    ]);
+    const fetchedAdmins = await adminRepository.findAll({}, txn);
+    expect(fetchedAdmins.length).toBeLessThanOrEqual(DB_QUERY_LIMIT);
+    fetchedAdmins.forEach(admin => {
+      expect(admin.accountStatus).toBe(ADMIN_ACCOUNT_STATUS_ACTIVE);
+    });
+  });
+});
+
+test('Should be able to find all admin - with whereClause', async () => {
+  return knexService.transaction(async txn => {
+    const getFakeAdmin = () => getFakeDomainAdmin(uuidService.uuid());
+    await Promise.all([
+      adminRepository.create(getFakeAdmin(), txn),
+      adminRepository.create(getFakeAdmin(), txn),
+      adminRepository.create(getFakeAdmin(), txn)
+    ]);
+    const fetchedAdmins = await adminRepository.findAll(
+      {
+        whereClause: { accountStatus: ADMIN_ACCOUNT_STATUS_ACTIVE }
+      },
+      txn
+    );
+    expect(fetchedAdmins.length).toBeLessThanOrEqual(DB_QUERY_LIMIT);
+    fetchedAdmins.forEach(admin => {
+      expect(admin.accountStatus).toBe(ADMIN_ACCOUNT_STATUS_ACTIVE);
+    });
+  });
+});
+
+test('Should return null if admin is not found - findAll', async () => {
+  return knexService.transaction(async txn => {
+    const fetchedAdmins = await adminRepository.findAll(
+      {
+        whereClause: { accountStatus: 'hahaha' },
+        limit: DB_QUERY_LIMIT,
+        page: 1
+      },
+      txn
+    );
+    expect(fetchedAdmins).toBeNull();
   });
 });
 
