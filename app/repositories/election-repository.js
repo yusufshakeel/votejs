@@ -46,8 +46,7 @@ function ElectionRepository(mappers, configService) {
   };
 
   this.findByElectionStatus = async function (
-    electionStatus,
-    { limit = DB_QUERY_LIMIT, page = 1 },
+    { electionStatus, limit = DB_QUERY_LIMIT, page = 1 },
     transaction
   ) {
     const result = await findBy({

@@ -91,8 +91,7 @@ test('Should be able to fetch election by findByElectionStatus', async () => {
       electionRepository.create(getFakeElection(), txn)
     ]);
     const fetchedElections = await electionRepository.findByElectionStatus(
-      ELECTION_STATUS_DRAFT,
-      { limit: 3, page: 1 },
+      { electionStatus: ELECTION_STATUS_DRAFT, limit: 3, page: 1 },
       txn
     );
     expect(fetchedElections.length).toBe(3);
@@ -104,7 +103,7 @@ test('Should be able to fetch election by findByElectionStatus', async () => {
 
 test('Should return null if election is not found - findByElectionStatus', async () => {
   return knexService.transaction(async txn => {
-    const result = await electionRepository.findByElectionStatus('hahaha', {}, txn);
+    const result = await electionRepository.findByElectionStatus({ electionStatus: 'hahaha' }, txn);
     expect(result).toBeNull();
   });
 });
