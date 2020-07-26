@@ -112,7 +112,12 @@ const fakeDomainElectionConfigurations = [
     electionGuid: fakeDomainElections[0].guid,
     candidateGuid: fakeDomainCandidates[1].guid
   }),
-  // election config #3 -- consists of -- election #2, candidate #3
+  // election config #3 -- consists of -- election #2, candidate #1
+  getFakeDomainElectionConfiguration({
+    electionGuid: fakeDomainElections[1].guid,
+    candidateGuid: fakeDomainCandidates[0].guid
+  }),
+  // election config #4 -- consists of -- election #2, candidate #3
   getFakeDomainElectionConfiguration({
     electionGuid: fakeDomainElections[1].guid,
     candidateGuid: fakeDomainCandidates[2].guid
@@ -138,7 +143,8 @@ test('Should be able to create new election configuration', async () => {
     const electionConfigurations = await Promise.all([
       electionConfigurationRepository.create(fakeDomainElectionConfigurations[0], txn),
       electionConfigurationRepository.create(fakeDomainElectionConfigurations[1], txn),
-      electionConfigurationRepository.create(fakeDomainElectionConfigurations[2], txn)
+      electionConfigurationRepository.create(fakeDomainElectionConfigurations[2], txn),
+      electionConfigurationRepository.create(fakeDomainElectionConfigurations[3], txn)
     ]);
     electionConfigurations.forEach((electionConfiguration, index) => {
       expect(electionConfiguration.electionGuid).toBe(
@@ -163,7 +169,8 @@ test('Should be able to update existing election configuration - upsert', async 
     const electionConfigurations = await Promise.all([
       electionConfigurationRepository.upsert(fakeDomainElectionConfigurations[0], txn),
       electionConfigurationRepository.upsert(fakeDomainElectionConfigurations[1], txn),
-      electionConfigurationRepository.upsert(fakeDomainElectionConfigurations[2], txn)
+      electionConfigurationRepository.upsert(fakeDomainElectionConfigurations[2], txn),
+      electionConfigurationRepository.upsert(fakeDomainElectionConfigurations[3], txn)
     ]);
     electionConfigurations.forEach((electionConfiguration, index) => {
       expect(electionConfiguration.electionGuid).toBe(
@@ -220,6 +227,29 @@ test('Should be able to fetch election configuration by election guid', async ()
 });
 
 test('Should return null if election configuration is not found - findByElectionGuid', async () => {
+  return knexService.transaction(async txn => {
+    const guid = uuidService.uuid();
+    const result = await electionConfigurationRepository.findByElectionGuid(
+      { electionGuid: guid },
+      txn
+    );
+    expect(result).toBeNull();
+  });
+});
+
+test('Should be able to fetch election configuration by candidate guid', async () => {
+  return knexService.transaction(async txn => {
+    const result = await electionConfigurationRepository.findByCandidateGuid(
+      { candidateGuid: fakeDomainCandidates[0].guid },
+      txn
+    );
+    expect(result.sort()).toStrictEqual(
+      [fakeDomainElectionConfigurations[0], fakeDomainElectionConfigurations[2]].sort()
+    );
+  });
+});
+
+test('Should return null if election configuration is not found - findByCandidateGuid', async () => {
   return knexService.transaction(async txn => {
     const guid = uuidService.uuid();
     const result = await electionConfigurationRepository.findByElectionGuid(
