@@ -130,6 +130,11 @@ const fakeDomainElectionConfigurations = [
   getFakeDomainElectionConfiguration({
     electionGuid: fakeDomainElections[2].guid,
     candidateGuid: fakeDomainCandidates[0].guid
+  }),
+  // election config #6 -- consists of -- election #3, candidate #3 -- this is for upsert test
+  getFakeDomainElectionConfiguration({
+    electionGuid: fakeDomainElections[2].guid,
+    candidateGuid: fakeDomainCandidates[2].guid
   })
 ];
 
@@ -171,6 +176,22 @@ test('Should be able to create new election configuration', async () => {
         )
       );
     });
+  });
+});
+
+test('Should be able to create new election configuration - upsert', async () => {
+  return knexService.transaction(async txn => {
+    const electionConfigurations = await electionConfigurationRepository.upsert(
+      fakeDomainElectionConfigurations[5],
+      txn
+    );
+    expect(electionConfigurations).toStrictEqual(
+      getFakeDomainElectionConfigurationResponse(
+        fakeDomainElectionConfigurations[5].guid,
+        fakeDomainElectionConfigurations[5].electionGuid,
+        fakeDomainElectionConfigurations[5].candidateGuid
+      )
+    );
   });
 });
 
