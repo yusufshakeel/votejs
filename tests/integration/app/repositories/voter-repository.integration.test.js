@@ -124,8 +124,7 @@ test('Should be able to fetch voter by accountStatus', async () => {
       voterRepository.create(getFakeVoter(), txn)
     ]);
     const fetchedVoters = await voterRepository.findByAccountStatus(
-      VOTER_ACCOUNT_STATUS_ACTIVE,
-      { limit: 3, page: 1 },
+      { accountStatus: VOTER_ACCOUNT_STATUS_ACTIVE, limit: 3, page: 1 },
       txn
     );
     expect(fetchedVoters.length).toBe(3);
@@ -137,7 +136,7 @@ test('Should be able to fetch voter by accountStatus', async () => {
 
 test('Should return null if voter is not found - findByAccountStatus', async () => {
   return knexService.transaction(async txn => {
-    const result = await voterRepository.findByAccountStatus('hahaha', {}, txn);
+    const result = await voterRepository.findByAccountStatus({ accountStatus: 'hahaha' }, txn);
     expect(result).toBeNull();
   });
 });
