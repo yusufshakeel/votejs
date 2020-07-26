@@ -9,6 +9,7 @@ const services = new Services();
 const { configService, knexService, uuidService, timeService } = services;
 
 const now = timeService.now();
+const DB_QUERY_LIMIT = configService.dbQueryLimit;
 
 function FakeAuditMapper() {
   this.updateDomainAudit = function () {
@@ -148,6 +149,52 @@ test('Should return null when updating candidate that does not exists - updateBy
     };
     const result = await candidateRepository.updateByGuid(guid, dataToUpdate, txn);
     expect(result).toBeNull();
+  });
+});
+
+test('Should be able to find all admin without passing any params', async () => {
+  return knexService.transaction(async txn => {
+    const getFakeCandidate = () => getFakeDomainCandidate(uuidService.uuid());
+    await Promise.all([
+      candidateRepository.create(getFakeCandidate(), txn),
+      candidateRepository.create(getFakeCandidate(), txn),
+      candidateRepository.create(getFakeCandidate(), txn)
+    ]);
+    const fetchedCandidates = await candidateRepository.findAll({}, txn);
+    expect(fetchedCandidates.length).toBeLessThanOrEqual(DB_QUERY_LIMIT);
+  });
+});
+
+test('Should be able to find all admin - with whereClause', async () => {
+  return knexService.transaction(async txn => {
+    const getFakeCandidate = () => getFakeDomainCandidate(uuidService.uuid());
+    await Promise.all([
+      candidateRepository.create(getFakeCandidate(), txn),
+      candidateRepository.create(getFakeCandidate(), txn),
+      candidateRepository.create(getFakeCandidate(), txn)
+    ]);
+    const fetchedCandidates = await candidateRepository.findAll(
+      { whereClause: { candidateStatus: CANDIDATE_STATUS_ACTIVE } },
+      txn
+    );
+    expect(fetchedCandidates.length).toBeLessThanOrEqual(DB_QUERY_LIMIT);
+    fetchedCandidates.forEach(candidate => {
+      expect(candidate.candidateStatus).toBe(CANDIDATE_STATUS_ACTIVE);
+    });
+  });
+});
+
+test('Should return null if candidate is not found - findAll', async () => {
+  return knexService.transaction(async txn => {
+    const fetchedCandidates = await candidateRepository.findAll(
+      {
+        whereClause: { candidateStatus: 'hahaha' },
+        limit: DB_QUERY_LIMIT,
+        page: 1
+      },
+      txn
+    );
+    expect(fetchedCandidates).toBeNull();
   });
 });
 
