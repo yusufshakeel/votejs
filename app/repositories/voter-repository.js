@@ -1,7 +1,7 @@
 'use strict';
 
 const { isEmpty, first, pickBy } = require('lodash');
-const { selectQuery, insertQuery, updateQuery } = require('../functional/query.js');
+const { selectQuery, insertQuery, updateQuery, pagination } = require('../functional/query.js');
 const TableRepository = require('./table-repository.js');
 const tableRepository = new TableRepository();
 const T = tableRepository.tables();
@@ -73,10 +73,9 @@ function VoterRepository(mappers, configService) {
     transaction
   ) {
     const result = await findBy({
+      ...pagination({ limit, page }),
       whereClause: { accountStatus },
       columnsToReturn,
-      limit,
-      offset: (page - 1) * limit,
       transaction
     });
     if (isEmpty(result)) return null;
