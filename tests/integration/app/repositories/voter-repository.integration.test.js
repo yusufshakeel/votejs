@@ -1,5 +1,6 @@
 'use strict';
 
+const { keys } = require('lodash');
 const Services = require('../../../../app/services');
 const VoterRepository = require('../../../../app/repositories/voter-repository.js');
 const VoterMapper = require('../../../../app/mappers/voter-mapper.js');
@@ -9,6 +10,7 @@ const services = new Services();
 const { configService, knexService, uuidService, timeService } = services;
 
 const now = timeService.now();
+const DB_QUERY_LIMIT = configService.dbQueryLimit;
 
 function FakeAuditMapper() {
   this.updateDomainAudit = function () {
@@ -202,6 +204,63 @@ test('Should return null if login validation fails - validateForLogin', async ()
       txn
     );
     expect(fetchedVoter).toBeNull();
+  });
+});
+
+test('Should be able to find all voter without passing any params', async () => {
+  return knexService.transaction(async txn => {
+    const getFakeVoter = () => getFakeDomainVoter(uuidService.uuid());
+    await Promise.all([
+      voterRepository.create(getFakeVoter(), txn),
+      voterRepository.create(getFakeVoter(), txn),
+      voterRepository.create(getFakeVoter(), txn)
+    ]);
+    const fetchedVoters = await voterRepository.findAll({}, txn);
+    expect(fetchedVoters.length).toBeLessThanOrEqual(DB_QUERY_LIMIT);
+    fetchedVoters.forEach(voter => {
+      const allFields = keys(getFakeDomainVoterResponse());
+      const isReturnedFieldsCorrect = keys(voter).every(field => allFields.includes(field));
+      expect(isReturnedFieldsCorrect).toBeTruthy();
+    });
+  });
+});
+
+test('Should be able to find all voter - with whereClause', async () => {
+  return knexService.transaction(async txn => {
+    const getFakeVoter = () => getFakeDomainVoter(uuidService.uuid());
+    await Promise.all([
+      voterRepository.create(getFakeVoter(), txn),
+      voterRepository.create(getFakeVoter(), txn),
+      voterRepository.create(getFakeVoter(), txn)
+    ]);
+    const fetchedVoters = await voterRepository.findAll(
+      {
+        whereClause: { accountStatus: VOTER_ACCOUNT_STATUS_ACTIVE },
+        limit: DB_QUERY_LIMIT,
+        page: 1
+      },
+      txn
+    );
+    expect(fetchedVoters.length).toBeLessThanOrEqual(DB_QUERY_LIMIT);
+    fetchedVoters.forEach(voter => {
+      const allFields = keys(getFakeDomainVoterResponse());
+      const isReturnedFieldsCorrect = keys(voter).every(field => allFields.includes(field));
+      expect(isReturnedFieldsCorrect).toBeTruthy();
+    });
+  });
+});
+
+test('Should return null if voter is not found - findAll', async () => {
+  return knexService.transaction(async txn => {
+    const fetchedVoters = await voterRepository.findAll(
+      {
+        whereClause: { accountStatus: 'hahaha' },
+        limit: DB_QUERY_LIMIT,
+        page: 1
+      },
+      txn
+    );
+    expect(fetchedVoters).toBeNull();
   });
 });
 

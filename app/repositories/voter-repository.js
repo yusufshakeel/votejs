@@ -113,6 +113,17 @@ function VoterRepository(mappers, configService) {
     if (isEmpty(result)) return null;
     return voterMapper.dbToDomain(first(result));
   };
+
+  this.findAll = async function ({ whereClause, limit = DB_QUERY_LIMIT, page = 1 }, transaction) {
+    const result = await findBy({
+      ...pagination({ limit, page }),
+      whereClause,
+      columnsToReturn,
+      transaction
+    });
+    if (isEmpty(result)) return null;
+    return result.map(row => voterMapper.dbToDomain(row));
+  };
 }
 
 module.exports = VoterRepository;
