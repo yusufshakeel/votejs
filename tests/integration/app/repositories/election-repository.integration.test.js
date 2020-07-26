@@ -1,5 +1,6 @@
 'use strict';
 
+const { keys } = require('lodash');
 const Services = require('../../../../app/services');
 const ElectionRepository = require('../../../../app/repositories/election-repository.js');
 const ElectionMapper = require('../../../../app/mappers/election-mapper.js');
@@ -158,6 +159,11 @@ test('Should be able to find all elections without passing any params', async ()
     ]);
     const fetchedElections = await electionRepository.findAll({}, txn);
     expect(fetchedElections.length).toBeLessThanOrEqual(DB_QUERY_LIMIT);
+    fetchedElections.forEach(election => {
+      const allFields = keys(getFakeDomainElectionResponse());
+      const isReturnedFieldsCorrect = keys(election).every(field => allFields.includes(field));
+      expect(isReturnedFieldsCorrect).toBeTruthy();
+    });
   });
 });
 
@@ -179,6 +185,9 @@ test('Should be able to find all elections - with whereClause', async () => {
     expect(fetchedElections.length).toBe(3);
     fetchedElections.forEach(election => {
       expect(election.electionStatus).toBe(ELECTION_STATUS_ACTIVE);
+      const allFields = keys(getFakeDomainElectionResponse());
+      const isReturnedFieldsCorrect = keys(election).every(field => allFields.includes(field));
+      expect(isReturnedFieldsCorrect).toBeTruthy();
     });
   });
 });
