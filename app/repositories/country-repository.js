@@ -1,7 +1,7 @@
 'use strict';
 
 const { isEmpty, first } = require('lodash');
-const { selectQuery, insertQuery, updateQuery } = require('../functional/query.js');
+const { selectQuery, insertQuery, updateQuery, pagination } = require('../functional/query.js');
 const TableRepository = require('./table-repository.js');
 const tableRepository = new TableRepository();
 const T = tableRepository.tables();
@@ -12,6 +12,17 @@ function CountryRepository(mappers) {
   const { countryMapper } = mappers;
 
   const findBy = params => selectQuery({ table: T.COUNTRY, ...params });
+
+  const find = async function ({ whereClause, transaction }) {
+    const result = await findBy({
+      ...pagination({ limit: 1, page: 1 }),
+      whereClause,
+      columnsToReturn,
+      transaction
+    });
+    if (isEmpty(result)) return null;
+    return countryMapper.dbToDomain(first(result));
+  };
 
   this.create = async function (domainCountry, transaction) {
     const dbCountry = countryMapper.domainToDb(domainCountry);
@@ -24,24 +35,12 @@ function CountryRepository(mappers) {
     return countryMapper.dbToDomain(first(result));
   };
 
-  this.findByCountryCode = async function (countryCode, transaction) {
-    const result = await findBy({
-      whereClause: { countryCode },
-      columnsToReturn,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return countryMapper.dbToDomain(first(result));
+  this.findByCountryCode = function (countryCode, transaction) {
+    return find({ whereClause: { countryCode }, transaction });
   };
 
-  this.findByCode = async function (code, transaction) {
-    const result = await findBy({
-      whereClause: { code },
-      columnsToReturn,
-      transaction
-    });
-    if (isEmpty(result)) return null;
-    return countryMapper.dbToDomain(first(result));
+  this.findByCode = function (code, transaction) {
+    return find({ whereClause: { code }, transaction });
   };
 
   this.updateByCountryCode = async function (countryCode, domainCountry, transaction) {
