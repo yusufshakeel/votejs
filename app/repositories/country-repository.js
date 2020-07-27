@@ -4,7 +4,7 @@ const { isEmpty, first } = require('lodash');
 const { selectQuery, insertQuery, updateQuery, pagination } = require('../functional/query.js');
 const TableRepository = require('./table-repository.js');
 const tableRepository = new TableRepository();
-const T = tableRepository.tables();
+const { tables: T } = tableRepository;
 
 const columnsToReturn = ['countryCode', 'countryName', 'code'];
 

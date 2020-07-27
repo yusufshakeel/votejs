@@ -5,7 +5,7 @@ const TableRepository = require('../../../../app/repositories/table-repository.j
 
 test('Should confirm the existence of required properties', () => {
   const tableRepository = new TableRepository();
-  expect(keys(tableRepository.tables())).toStrictEqual([
+  expect(keys(tableRepository.tables)).toStrictEqual([
     'ADMIN',
     'CANDIDATE',
     'COUNTRY',

@@ -4,7 +4,7 @@ const { isEmpty, first, pickBy } = require('lodash');
 const { selectQuery, insertQuery, updateQuery, pagination } = require('../functional/query.js');
 const TableRepository = require('./table-repository.js');
 const tableRepository = new TableRepository();
-const T = tableRepository.tables();
+const { tables: T } = tableRepository;
 const { VOTER_ACCOUNT_STATUS_ACTIVE } = require('../constants/voter-constants.js');
 
 const columnsToReturn = [

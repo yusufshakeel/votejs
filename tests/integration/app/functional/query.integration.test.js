@@ -14,7 +14,7 @@ const tableRepository = new TableRepository();
 
 const mappers = new Mappers();
 const services = new Services();
-const T = tableRepository.tables();
+const { tables: T } = tableRepository;
 const { adminMapper } = mappers;
 const { knexService } = services;
 
