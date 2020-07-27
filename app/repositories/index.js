@@ -3,7 +3,7 @@
 const AdminRepository = require('./admin-repository.js');
 const CandidateRepository = require('./candidate-repository.js');
 const CountryRepository = require('./country-repository.js');
-const ElectionConfigurationRepository = require('./election-configuration-repository.js');
+const ElectionCandidateRepository = require('./election-candidate-repository.js');
 const ElectionRepository = require('./election-repository.js');
 const VoterRepository = require('./voter-repository.js');
 
@@ -13,10 +13,7 @@ function Repositories(mappers, configService) {
   this.voterRepository = new VoterRepository(mappers, configService);
   this.candidateRepository = new CandidateRepository(mappers, configService);
   this.electionRepository = new ElectionRepository(mappers, configService);
-  this.electionConfigurationRepository = new ElectionConfigurationRepository(
-    mappers,
-    configService
-  );
+  this.electionCandidateRepository = new ElectionCandidateRepository(mappers, configService);
 }
 
 module.exports = Repositories;
