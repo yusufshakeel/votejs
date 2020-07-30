@@ -12,6 +12,7 @@ const columnsToReturn = [
   'summary',
   'startsAt',
   'endsAt',
+  'voteOn',
   'electionStatus',
   'electionSettings',
   'createdAt',

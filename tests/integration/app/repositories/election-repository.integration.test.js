@@ -6,7 +6,8 @@ const ElectionRepository = require('../../../../app/repositories/election-reposi
 const ElectionMapper = require('../../../../app/mappers/election-mapper.js');
 const {
   ELECTION_STATUS_DRAFT,
-  ELECTION_STATUS_PUBLIC
+  ELECTION_STATUS_PUBLIC,
+  ELECTION_VOTE_ON_CANDIDATE
 } = require('../../../../app/constants/election-constants.js');
 
 const services = new Services();
@@ -35,6 +36,7 @@ const getFakeDomainElection = (guid = uuidService.uuid()) => ({
   summary: 'Some summary',
   startsAt: now,
   endsAt: now,
+  voteOn: ELECTION_VOTE_ON_CANDIDATE,
   electionStatus: ELECTION_STATUS_DRAFT,
   electionSettings: {
     field: 'value'
@@ -50,6 +52,7 @@ const getFakeDomainElectionResponse = guid => ({
   summary: 'Some summary',
   startsAt: now,
   endsAt: now,
+  voteOn: ELECTION_VOTE_ON_CANDIDATE,
   electionStatus: ELECTION_STATUS_DRAFT,
   electionSettings: {
     field: 'value'

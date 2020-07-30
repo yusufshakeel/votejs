@@ -45,6 +45,11 @@ exports.up = function (db, cb) {
       type: 'timestamptz',
       notNull: true
     },
+    voteOn: {
+      type: 'string',
+      notNull: true,
+      defaultValue: 'CANDIDATE'
+    },
     electionStatus: {
       type: 'string',
       notNull: true,
