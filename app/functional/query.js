@@ -14,10 +14,16 @@ const selectQuery = async ({
   transaction
 }) => {
   if (isEmpty(whereClause)) {
-    return transaction(table).select(columnsToReturn).limit(limit).offset(offset).orderBy(orderBy);
+    return transaction
+      .select(columnsToReturn)
+      .from(table)
+      .limit(limit)
+      .offset(offset)
+      .orderBy(orderBy);
   }
-  return transaction(table)
+  return transaction
     .select(columnsToReturn)
+    .from(table)
     .where(whereClause)
     .limit(limit)
     .offset(offset)
