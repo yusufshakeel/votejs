@@ -1,6 +1,7 @@
 'use strict';
 
 const Services = require('../../../../app/services');
+const { update } = require('../../../../app/functional');
 const CandidateRepository = require('../../../../app/repositories/candidate-repository.js');
 const ElectionRepository = require('../../../../app/repositories/election-repository.js');
 const ElectionCandidateRepository = require('../../../../app/repositories/election-candidate-repository.js');
@@ -224,13 +225,20 @@ test('Should be able to fetch election candidate by guid', async () => {
       fakeDomainElectionCandidates[0].guid,
       txn
     );
-    expect(result).toStrictEqual(
+    const expected = update(
       getFakeDomainElectionCandidateResponse(
         fakeDomainElectionCandidates[0].guid,
         fakeDomainElectionCandidates[0].electionGuid,
         fakeDomainElectionCandidates[0].candidateGuid
-      )
+      ),
+      {
+        candidateDisplayHeader: { $set: fakeDomainCandidates[0].displayHeader },
+        candidateHandle: { $set: fakeDomainCandidates[0].candidateHandle },
+        candidateStatus: { $set: fakeDomainCandidates[0].candidateStatus },
+        candidateSummary: { $set: fakeDomainCandidates[0].summary }
+      }
     );
+    expect(result).toStrictEqual(expected);
   });
 });
 
@@ -248,10 +256,22 @@ test('Should be able to fetch election candidate by election guid', async () => 
       { electionGuid: fakeDomainElections[0].guid },
       txn
     );
+    const expected = [
+      update(fakeDomainElectionCandidates[0], {
+        candidateDisplayHeader: { $set: fakeDomainCandidates[0].displayHeader },
+        candidateHandle: { $set: fakeDomainCandidates[0].candidateHandle },
+        candidateStatus: { $set: fakeDomainCandidates[0].candidateStatus },
+        candidateSummary: { $set: fakeDomainCandidates[0].summary }
+      }),
+      update(fakeDomainElectionCandidates[1], {
+        candidateDisplayHeader: { $set: fakeDomainCandidates[1].displayHeader },
+        candidateHandle: { $set: fakeDomainCandidates[1].candidateHandle },
+        candidateStatus: { $set: fakeDomainCandidates[1].candidateStatus },
+        candidateSummary: { $set: fakeDomainCandidates[1].summary }
+      })
+    ].sort();
     expect(result.length).toBeLessThanOrEqual(DB_QUERY_LIMIT);
-    expect(result.sort()).toStrictEqual(
-      [fakeDomainElectionCandidates[0], fakeDomainElectionCandidates[1]].sort()
-    );
+    expect(result.sort()).toStrictEqual(expected);
   });
 });
 

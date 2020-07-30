@@ -10,6 +10,8 @@ function TableRepository() {
     VOTE: 'VOTE',
     VOTER: 'VOTER'
   };
+
+  this.column = table => column => `${table}.${column}`;
 }
 
 module.exports = TableRepository;

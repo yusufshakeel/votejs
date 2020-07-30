@@ -7,6 +7,10 @@ const electionCandidateDomainToDb = {
   electionGuid: 'electionGuid',
   candidateGuid: 'candidateGuid',
   electionCandidateStatus: 'electionCandidateStatus',
+  candidateDisplayHeader: 'candidateDisplayHeader',
+  candidateHandle: 'candidateHandle',
+  candidateSummary: 'candidateSummary',
+  candidateStatus: 'candidateStatus',
   'audit.createdAt': 'createdAt',
   'audit.updatedAt': 'updatedAt'
 };
@@ -16,6 +20,10 @@ const electionCandidateDbToDomain = {
   electionGuid: 'electionGuid',
   candidateGuid: 'candidateGuid',
   electionCandidateStatus: 'electionCandidateStatus',
+  candidateDisplayHeader: 'candidateDisplayHeader',
+  candidateHandle: 'candidateHandle',
+  candidateSummary: 'candidateSummary',
+  candidateStatus: 'candidateStatus',
   createdAt: 'audit.createdAt',
   updatedAt: 'audit.updatedAt'
 };

@@ -5,6 +5,7 @@ const ElectionCandidateMapper = require('../../../../app/mappers/election-candid
 const {
   ELECTION_CANDIDATE_STATUS_ACTIVE
 } = require('../../../../app/constants/election-candidate-constants.js');
+const { CANDIDATE_STATUS_ACTIVE } = require('../../../../app/constants/candidate-constants.js');
 
 const timeService = new TimeService();
 
@@ -29,6 +30,10 @@ const fakeDomainElectionCandidate = {
   electionGuid: '8e17d7b7-c236-496f-92cd-10e1859fdd3b',
   candidateGuid: '7e17d7b7-c236-496f-92cd-10e1859fdd3b',
   electionCandidateStatus: ELECTION_CANDIDATE_STATUS_ACTIVE,
+  candidateDisplayHeader: 'candidateDisplayHeader',
+  candidateHandle: 'candidateHandle',
+  candidateSummary: 'candidateSummary',
+  candidateStatus: CANDIDATE_STATUS_ACTIVE,
   audit: {
     createdAt: now,
     updatedAt: now
@@ -40,6 +45,10 @@ const fakeDbElectionCandidate = {
   electionGuid: '8e17d7b7-c236-496f-92cd-10e1859fdd3b',
   candidateGuid: '7e17d7b7-c236-496f-92cd-10e1859fdd3b',
   electionCandidateStatus: ELECTION_CANDIDATE_STATUS_ACTIVE,
+  candidateDisplayHeader: 'candidateDisplayHeader',
+  candidateHandle: 'candidateHandle',
+  candidateSummary: 'candidateSummary',
+  candidateStatus: CANDIDATE_STATUS_ACTIVE,
   createdAt: now,
   updatedAt: now
 };
