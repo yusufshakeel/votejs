@@ -2,7 +2,10 @@
 
 const TimeService = require('../../../../app/services/time-service.js');
 const ElectionMapper = require('../../../../app/mappers/election-mapper.js');
-const { ELECTION_STATUS_DRAFT, ELECTION_VOTE_ON_CANDIDATE } = require('../../../../app/constants/election-constants.js');
+const {
+  ELECTION_STATUS_DRAFT,
+  ELECTION_VOTE_ON_CANDIDATE
+} = require('../../../../app/constants/election-constants.js');
 
 const timeService = new TimeService();
 
