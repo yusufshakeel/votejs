@@ -15,7 +15,7 @@ exports.setup = function (options, seedLink) {
 };
 
 exports.up = function (db, cb) {
-  return db.createTable('VOTE', {
+  return db.createTable('VOTE_CANDIDATE', {
     id: {
       type: 'int',
       unsigned: true,
@@ -33,7 +33,7 @@ exports.up = function (db, cb) {
       type: 'uuid',
       notNull: true,
       foreignKey: {
-        name: 'VOTE_electionGuid_ELECTION_guid_fk',
+        name: 'VOTE_CANDIDATE_electionGuid_ELECTION_guid_fk',
         table: 'ELECTION',
         rules: {
           onDelete: 'CASCADE',
@@ -46,7 +46,7 @@ exports.up = function (db, cb) {
       type: 'uuid',
       notNull: true,
       foreignKey: {
-        name: 'VOTE_candidateGuid_CANDIDATE_guid_fk',
+        name: 'VOTE_CANDIDATE_candidateGuid_CANDIDATE_guid_fk',
         table: 'CANDIDATE',
         rules: {
           onDelete: 'CASCADE',
@@ -59,7 +59,7 @@ exports.up = function (db, cb) {
       type: 'uuid',
       notNull: true,
       foreignKey: {
-        name: 'VOTE_voterGuid_VOTER_guid_fk',
+        name: 'VOTE_CANDIDATE_voterGuid_VOTER_guid_fk',
         table: 'VOTER',
         rules: {
           onDelete: 'CASCADE',
@@ -85,7 +85,7 @@ exports.up = function (db, cb) {
 };
 
 exports.down = function (db, cb) {
-  return db.dropTable('VOTE', {}, cb);
+  return db.dropTable('VOTE_CANDIDATE', {}, cb);
 };
 
 exports._meta = {
