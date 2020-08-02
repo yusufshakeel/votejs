@@ -8,6 +8,7 @@ const CandidateMapper = require('./candidate-mapper.js');
 const ElectionMapper = require('./election-mapper.js');
 const ElectionCandidateMapper = require('./election-candidate-mapper.js');
 const VoteCandidateMapper = require('./vote-candidate-mapper.js');
+const TopicMapper = require('./topic-mapper.js');
 
 function Mappers() {
   this.auditMapper = new AuditMapper();
@@ -18,6 +19,7 @@ function Mappers() {
   this.electionMapper = new ElectionMapper(this.auditMapper);
   this.electionCandidateMapper = new ElectionCandidateMapper(this.auditMapper);
   this.voteCandidateMapper = new VoteCandidateMapper(this.auditMapper);
+  this.topicMapper = new TopicMapper(this.auditMapper);
 }
 
 module.exports = Mappers;
