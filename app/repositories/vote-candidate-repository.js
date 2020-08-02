@@ -4,7 +4,8 @@ const { isEmpty, first } = require('lodash');
 const { selectQuery, insertQuery, updateQuery, pagination } = require('../functional/query.js');
 const TableRepository = require('./table-repository.js');
 const tableRepository = new TableRepository();
-const { tables: T } = tableRepository;
+const { tables: T, column: tableColumn } = tableRepository;
+
 const {
   VOTE_CANDIDATE_VOTE_STATUS_VALID,
   VOTE_CANDIDATE_VOTE_STATUS_INVALID,
@@ -119,6 +120,18 @@ function VoteCandidateRepository(mappers, configService) {
   this.deleteVote = function (guid, transaction) {
     const domainVoteCandidate = { voteStatus: VOTE_CANDIDATE_VOTE_STATUS_DELETED };
     return updateByGuid(guid, domainVoteCandidate, transaction);
+  };
+
+  this.reportByVoteStatusAndElectionGuid = async function (electionGuid, transaction) {
+    const result = await transaction
+      .select(tableColumn(T.VOTE_CANDIDATE)('voteStatus'))
+      .count('candidateGuid', { as: 'voteCount' })
+      .from(T.VOTE_CANDIDATE)
+      .where({ electionGuid })
+      .groupBy(tableColumn(T.VOTE_CANDIDATE)('voteStatus'))
+      .orderBy(tableColumn(T.VOTE_CANDIDATE)('voteStatus'));
+    if (isEmpty(result)) return null;
+    return voteCandidateMapper.reportByVoteStatusAndElectionGuidDbToDomain(electionGuid, result);
   };
 }
 

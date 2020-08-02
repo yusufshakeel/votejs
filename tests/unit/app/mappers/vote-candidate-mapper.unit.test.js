@@ -70,3 +70,25 @@ test('Should be able to map update domain to db', () => {
     updatedAt: now
   });
 });
+
+test('Should be able to map vote result by voteStatus and electionGuid from Db to Domain', () => {
+  expect(
+    voteCandidateMapper.reportByVoteStatusAndElectionGuidDbToDomain(
+      'c7c0f661-58a0-4809-af6b-901b43231443',
+      [
+        { voteStatus: 'DELETED', voteCount: '1' },
+        { voteStatus: 'INVALID', voteCount: '1' },
+        { voteStatus: 'REVERTED', voteCount: '1' },
+        { voteStatus: 'VALID', voteCount: '8' }
+      ]
+    )
+  ).toStrictEqual({
+    electionGuid: 'c7c0f661-58a0-4809-af6b-901b43231443',
+    votes: [
+      { voteStatus: 'DELETED', voteCount: '1' },
+      { voteStatus: 'INVALID', voteCount: '1' },
+      { voteStatus: 'REVERTED', voteCount: '1' },
+      { voteStatus: 'VALID', voteCount: '8' }
+    ]
+  });
+});

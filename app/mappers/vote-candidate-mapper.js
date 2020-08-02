@@ -22,6 +22,14 @@ const voteCandidateDbToDomain = {
   updatedAt: 'audit.updatedAt'
 };
 
+const voteCandidateReportByVoteStatusAndElectionGuidDbToDomain = {
+  electionGuid: 'electionGuid',
+  votes: {
+    key: 'votes',
+    transform: elems => elems.map(el => ({ voteStatus: el.voteStatus, voteCount: el.voteCount }))
+  }
+};
+
 function VoteCandidateMapper(auditMapper) {
   this.domainToDb = function (domainVoteCandidate) {
     return objectMapper(domainVoteCandidate, voteCandidateDomainToDb);
@@ -38,6 +46,16 @@ function VoteCandidateMapper(auditMapper) {
         ...auditMapper.updateDomainAudit()
       },
       voteCandidateDomainToDb
+    );
+  };
+
+  this.reportByVoteStatusAndElectionGuidDbToDomain = function (electionGuid, votes) {
+    return objectMapper(
+      {
+        electionGuid,
+        votes
+      },
+      voteCandidateReportByVoteStatusAndElectionGuidDbToDomain
     );
   };
 }
