@@ -1,14 +1,14 @@
 'use strict';
 
-const AdminRepository = require('./admin-repository.js');
-const CandidateRepository = require('./candidate-repository.js');
 const CountryRepository = require('./country-repository.js');
-const ElectionCandidateRepository = require('./election-candidate-repository.js');
-const ElectionRepository = require('./election-repository.js');
+const AdminRepository = require('./admin-repository.js');
 const VoterRepository = require('./voter-repository.js');
-const VoteCandidateRepository = require('./vote-candidate-repository.js');
+const CandidateRepository = require('./candidate-repository.js');
 const TopicRepository = require('./topic-repository.js');
+const ElectionRepository = require('./election-repository.js');
+const ElectionCandidateRepository = require('./election-candidate-repository.js');
 const ElectionTopicRepository = require('./election-topic-repository.js');
+const VoteCandidateRepository = require('./vote-candidate-repository.js');
 
 function Repositories(mappers, configService) {
   this.countryRepository = new CountryRepository(mappers);
