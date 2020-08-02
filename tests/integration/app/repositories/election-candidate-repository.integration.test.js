@@ -326,8 +326,8 @@ test('Should be able to fetch election candidate by candidate guid', async () =>
 test('Should return null if election candidate is not found - findByCandidateGuid', async () => {
   return knexService.transaction(async txn => {
     const guid = uuidService.uuid();
-    const result = await electionCandidateRepository.findByElectionGuid(
-      { electionGuid: guid },
+    const result = await electionCandidateRepository.findByCandidateGuid(
+      { candidateGuid: guid },
       txn
     );
     expect(result).toBeNull();

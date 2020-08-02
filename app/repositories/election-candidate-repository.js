@@ -182,7 +182,7 @@ function ElectionCandidateRepository(mappers, configService) {
 
   this.countByElectionGuid = async function (electionGuid, transaction) {
     const result = await transaction
-      .count(tableColumn(T.ELECTION_CANDIDATE)('guid'), { as: 'candidateCount ' })
+      .count(tableColumn(T.ELECTION_CANDIDATE)('guid'), { as: 'candidateCount' })
       .from(T.ELECTION_CANDIDATE)
       .where({ electionGuid });
     return electionCandidateMapper.countByElectionGuidDbToDomain(

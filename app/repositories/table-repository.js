@@ -9,7 +9,8 @@ function TableRepository() {
     ELECTION_CANDIDATE: 'ELECTION_CANDIDATE',
     VOTER: 'VOTER',
     VOTE_CANDIDATE: 'VOTE_CANDIDATE',
-    TOPIC: 'TOPIC'
+    TOPIC: 'TOPIC',
+    ELECTION_TOPIC: 'ELECTION_TOPIC'
   };
 
   this.column = table => column => `${table}.${column}`;
