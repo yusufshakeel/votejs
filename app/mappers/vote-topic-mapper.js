@@ -2,27 +2,27 @@
 
 const objectMapper = require('object-mapper');
 
-const voteCandidateDomainToDb = {
+const voteTopicDomainToDb = {
   guid: 'guid',
   electionGuid: 'electionGuid',
-  candidateGuid: 'candidateGuid',
+  topicGuid: 'topicGuid',
   voterGuid: 'voterGuid',
   voteStatus: 'voteStatus',
   'audit.createdAt': 'createdAt',
   'audit.updatedAt': 'updatedAt'
 };
 
-const voteCandidateDbToDomain = {
+const voteTopicDbToDomain = {
   guid: 'guid',
   electionGuid: 'electionGuid',
-  candidateGuid: 'candidateGuid',
+  topicGuid: 'topicGuid',
   voterGuid: 'voterGuid',
   voteStatus: 'voteStatus',
   createdAt: 'audit.createdAt',
   updatedAt: 'audit.updatedAt'
 };
 
-const voteCandidateReportByVoteStatusAndElectionGuidDbToDomain = {
+const voteTopicReportByVoteStatusAndElectionGuidDbToDomain = {
   electionGuid: 'electionGuid',
   votes: {
     key: 'votes',
@@ -30,35 +30,35 @@ const voteCandidateReportByVoteStatusAndElectionGuidDbToDomain = {
   }
 };
 
-const voteCandidateReportByValidVoteCountCandidateGuidForElectionGuidDbToDomain = {
+const voteTopicReportByValidVoteCountTopicGuidForElectionGuidDbToDomain = {
   electionGuid: 'electionGuid',
   votes: {
     key: 'votes',
     transform: elems =>
       elems.map(el => ({
-        candidateGuid: el.candidateGuid,
-        candidateHandle: el.candidateHandle,
+        topicGuid: el.topicGuid,
+        topicTitle: el.topicTitle,
         voteCount: el.voteCount
       }))
   }
 };
 
-function VoteCandidateMapper(auditMapper) {
-  this.domainToDb = function (domainVoteCandidate) {
-    return objectMapper(domainVoteCandidate, voteCandidateDomainToDb);
+function VoteTopicMapper(auditMapper) {
+  this.domainToDb = function (domainVoteTopic) {
+    return objectMapper(domainVoteTopic, voteTopicDomainToDb);
   };
 
-  this.dbToDomain = function (dbVoteCandidate) {
-    return objectMapper(dbVoteCandidate, voteCandidateDbToDomain);
+  this.dbToDomain = function (dbVoteTopic) {
+    return objectMapper(dbVoteTopic, voteTopicDbToDomain);
   };
 
-  this.updateDomainToDb = function (domainVoteCandidate) {
+  this.updateDomainToDb = function (domainVoteTopic) {
     return objectMapper(
       {
-        ...domainVoteCandidate,
+        ...domainVoteTopic,
         ...auditMapper.updateDomainAudit()
       },
-      voteCandidateDomainToDb
+      voteTopicDomainToDb
     );
   };
 
@@ -68,23 +68,23 @@ function VoteCandidateMapper(auditMapper) {
         electionGuid,
         votes
       },
-      voteCandidateReportByVoteStatusAndElectionGuidDbToDomain
+      voteTopicReportByVoteStatusAndElectionGuidDbToDomain
     );
   };
 
-  this.reportByValidVoteCountCandidateGuidForElectionGuidDbToDomain = function (
+  this.reportByValidVoteCountTopicGuidForElectionGuidDbToDomain = function (
     electionGuid,
     votes,
-    electionCandidates
+    electionTopics
   ) {
     const enrichedVotes = votes.map(vote => {
-      const candidate = electionCandidates.find(
-        electionCandidate => electionCandidate.candidateGuid === vote.candidateGuid
+      const topic = electionTopics.find(
+        electionTopic => electionTopic.topicGuid === vote.topicGuid
       );
-      const { candidateHandle } = candidate;
+      const { topicTitle } = topic;
       return {
         ...vote,
-        candidateHandle
+        topicTitle
       };
     });
     return objectMapper(
@@ -92,9 +92,9 @@ function VoteCandidateMapper(auditMapper) {
         electionGuid,
         votes: enrichedVotes
       },
-      voteCandidateReportByValidVoteCountCandidateGuidForElectionGuidDbToDomain
+      voteTopicReportByValidVoteCountTopicGuidForElectionGuidDbToDomain
     );
   };
 }
 
-module.exports = VoteCandidateMapper;
+module.exports = VoteTopicMapper;
