@@ -31,7 +31,8 @@
       {
         "allow": [
           "time",
-          "timeEnd"
+          "timeEnd",
+          "error"
         ]
       }
     ],

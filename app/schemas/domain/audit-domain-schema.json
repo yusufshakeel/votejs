@@ -1,0 +1,23 @@
+{
+  "$id": "audit",
+  "type": "object",
+  "required": [
+    "createdAt"
+  ],
+  "properties": {
+    "createdAt": {
+      "type": [
+        "string",
+        "object"
+      ],
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": [
+        "string",
+        "object"
+      ],
+      "format": "date-time"
+    }
+  }
+}
