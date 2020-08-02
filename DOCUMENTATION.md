@@ -2,6 +2,10 @@
 
 Table of contents
 
+* [Three layers](#three-layers)
+  * [API](#api-layer)
+  * [Domain](#domain-layer)
+  * [Db](#db-layer)
 * [DOMAIN to DB contracts](#domain-to-db-contracts)
   * [Audit](#audit-domain-to-db)
   * [Country](#country-domain-to-db)
@@ -14,6 +18,41 @@ Table of contents
   * [Election Topic](#election-topic-domain-to-db)
   * [Vote Candidate](#vote-candidate-domain-to-db)
   * [Vote Topic](#vote-topic-domain-to-db)
+
+## Three layers
+
+The project is divided into three layers.
+
+* API layer
+* Domain layer
+* DB layer
+
+```
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+         request
+       --------->        --------->          --------->
+WORLD               API              DOMAIN              DB
+       <---------        <---------          <---------
+        response
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+### API layer
+
+This layer consists of APIs that are exposed to the world.
+It receives requests and passes them to the Domain layer.
+It passes the response from the Domain layer to the world.
+
+### Domain layer
+
+This layer receives requests from the API layer and passes it to the DB layer. On receiving response from the DB layer
+it passes that to the API layer. This layer also deals with request/response validation.
+
+### DB layer
+
+This layer interacts with the database.
 
 ## DOMAIN to DB contracts
 
