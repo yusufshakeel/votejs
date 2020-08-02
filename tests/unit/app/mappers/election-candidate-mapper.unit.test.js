@@ -75,3 +75,15 @@ test('Should be able to map update domain to db', () => {
     updatedAt: now
   });
 });
+
+test('Should be able to map count candidate count by electionGuid', () => {
+  expect(
+    electionCandidateMapper.countByElectionGuidDbToDomain(
+      '94723cd2-994b-413e-87fe-448cb747e101',
+      10
+    )
+  ).toStrictEqual({
+    electionGuid: '94723cd2-994b-413e-87fe-448cb747e101',
+    candidateCount: 10
+  });
+});

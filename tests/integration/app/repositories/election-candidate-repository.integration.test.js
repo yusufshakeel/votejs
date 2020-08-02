@@ -97,6 +97,7 @@ const getFakeDomainElectionCandidateResponse = (guid, electionGuid, candidateGui
 const fakeDomainElections = [
   getFakeDomainElection(),
   getFakeDomainElection(),
+  getFakeDomainElection(),
   getFakeDomainElection()
 ];
 
@@ -136,6 +137,21 @@ const fakeDomainElectionCandidates = [
   getFakeDomainElectionCandidate({
     electionGuid: fakeDomainElections[2].guid,
     candidateGuid: fakeDomainCandidates[2].guid
+  }),
+  // election candidate #7 -- consists of -- election #4, candidate #1 -- for count
+  getFakeDomainElectionCandidate({
+    electionGuid: fakeDomainElections[3].guid,
+    candidateGuid: fakeDomainCandidates[0].guid
+  }),
+  // election candidate #8 -- consists of -- election #4, candidate #2 -- for count
+  getFakeDomainElectionCandidate({
+    electionGuid: fakeDomainElections[3].guid,
+    candidateGuid: fakeDomainCandidates[1].guid
+  }),
+  // election candidate #9 -- consists of -- election #4, candidate #3 -- for count
+  getFakeDomainElectionCandidate({
+    electionGuid: fakeDomainElections[3].guid,
+    candidateGuid: fakeDomainCandidates[2].guid
   })
 ];
 
@@ -144,12 +160,20 @@ beforeAll(() => {
     await Promise.all([
       electionRepository.create(fakeDomainElections[0], txn),
       electionRepository.create(fakeDomainElections[1], txn),
-      electionRepository.create(fakeDomainElections[2], txn)
+      electionRepository.create(fakeDomainElections[2], txn),
+      electionRepository.create(fakeDomainElections[3], txn)
     ]);
     await Promise.all([
       candidateRepository.create(fakeDomainCandidates[0], txn),
       candidateRepository.create(fakeDomainCandidates[1], txn),
       candidateRepository.create(fakeDomainCandidates[2], txn)
+    ]);
+
+    // for count
+    await Promise.all([
+      electionCandidateRepository.create(fakeDomainElectionCandidates[6], txn),
+      electionCandidateRepository.create(fakeDomainElectionCandidates[7], txn),
+      electionCandidateRepository.create(fakeDomainElectionCandidates[8], txn)
     ]);
   });
 });
@@ -391,6 +415,30 @@ test('Should return null if election candidate is not found - findAll', async ()
       txn
     );
     expect(fetchedElectionCandidates).toBeNull();
+  });
+});
+
+test('Should be able to count candidates by electionGuid', async () => {
+  return knexService.transaction(async txn => {
+    const result = await electionCandidateRepository.countByElectionGuid(
+      fakeDomainElections[3].guid,
+      txn
+    );
+    expect(result).toStrictEqual({
+      electionGuid: fakeDomainElections[3].guid,
+      candidateCount: '3'
+    });
+  });
+});
+
+test('Should return 0 as candidateCount if election candidate is not found = countByElectionGuid', async () => {
+  return knexService.transaction(async txn => {
+    const guid = uuidService.uuid();
+    const result = await electionCandidateRepository.countByElectionGuid(guid, txn);
+    expect(result).toStrictEqual({
+      electionGuid: guid,
+      candidateCount: '0'
+    });
   });
 });
 

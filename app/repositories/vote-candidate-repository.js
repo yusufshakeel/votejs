@@ -23,10 +23,11 @@ const columnsToReturn = [
   'updatedAt'
 ];
 
-function VoteCandidateRepository(mappers, configService) {
+function VoteCandidateRepository(mappers, configService, repositories) {
   const self = this;
   const { voteCandidateMapper } = mappers;
   const { dbQueryLimit: DB_QUERY_LIMIT } = configService;
+  const { electionCandidateRepository } = repositories;
 
   const findBy = params => selectQuery({ table: T.VOTE_CANDIDATE, ...params });
 
@@ -132,6 +133,39 @@ function VoteCandidateRepository(mappers, configService) {
       .orderBy(tableColumn(T.VOTE_CANDIDATE)('voteStatus'));
     if (isEmpty(result)) return null;
     return voteCandidateMapper.reportByVoteStatusAndElectionGuidDbToDomain(electionGuid, result);
+  };
+
+  this.reportByValidVoteCountCandidateGuidForElectionGuid = async function (
+    electionGuid,
+    transaction
+  ) {
+    const votes = await transaction
+      .select(tableColumn(T.VOTE_CANDIDATE)('candidateGuid'))
+      .count('candidateGuid', { as: 'voteCount' })
+      .from(T.VOTE_CANDIDATE)
+      .where({ electionGuid, voteStatus: VOTE_CANDIDATE_VOTE_STATUS_VALID })
+      .groupBy(tableColumn(T.VOTE_CANDIDATE)('candidateGuid'))
+      .orderBy('voteCount', 'desc');
+
+    if (isEmpty(votes)) return null;
+
+    const electionCandidateCount = await electionCandidateRepository.countByElectionGuid(
+      electionGuid,
+      transaction
+    );
+    const electionCandidates = await electionCandidateRepository.findByElectionGuid(
+      {
+        electionGuid,
+        limit: electionCandidateCount.candidateCount
+      },
+      transaction
+    );
+
+    return voteCandidateMapper.reportByValidVoteCountCandidateGuidForElectionGuidDbToDomain(
+      electionGuid,
+      votes,
+      electionCandidates
+    );
   };
 }
 

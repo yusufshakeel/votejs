@@ -15,7 +15,9 @@ function Repositories(mappers, configService) {
   this.candidateRepository = new CandidateRepository(mappers, configService);
   this.electionRepository = new ElectionRepository(mappers, configService);
   this.electionCandidateRepository = new ElectionCandidateRepository(mappers, configService);
-  this.voteCandidateRepository = new VoteCandidateRepository(mappers, configService);
+  this.voteCandidateRepository = new VoteCandidateRepository(mappers, configService, {
+    electionCandidateRepository: this.electionCandidateRepository
+  });
 }
 
 module.exports = Repositories;

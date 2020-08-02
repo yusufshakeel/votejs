@@ -30,6 +30,19 @@ const voteCandidateReportByVoteStatusAndElectionGuidDbToDomain = {
   }
 };
 
+const voteCandidateReportByValidVoteCountCandidateGuidForElectionGuidDbToDomain = {
+  electionGuid: 'electionGuid',
+  votes: {
+    key: 'votes',
+    transform: elems =>
+      elems.map(el => ({
+        candidateGuid: el.candidateGuid,
+        candidateHandle: el.candidateHandle,
+        voteCount: el.voteCount
+      }))
+  }
+};
+
 function VoteCandidateMapper(auditMapper) {
   this.domainToDb = function (domainVoteCandidate) {
     return objectMapper(domainVoteCandidate, voteCandidateDomainToDb);
@@ -56,6 +69,30 @@ function VoteCandidateMapper(auditMapper) {
         votes
       },
       voteCandidateReportByVoteStatusAndElectionGuidDbToDomain
+    );
+  };
+
+  this.reportByValidVoteCountCandidateGuidForElectionGuidDbToDomain = function (
+    electionGuid,
+    votes,
+    electionCandidates
+  ) {
+    const enrichedVotes = votes.map(vote => {
+      const candidate = electionCandidates.find(electionCandidate => {
+        return electionCandidate.candidateGuid === vote.candidateGuid;
+      });
+      const { candidateHandle } = candidate;
+      return {
+        ...vote,
+        candidateHandle
+      };
+    });
+    return objectMapper(
+      {
+        electionGuid,
+        votes: enrichedVotes
+      },
+      voteCandidateReportByValidVoteCountCandidateGuidForElectionGuidDbToDomain
     );
   };
 }

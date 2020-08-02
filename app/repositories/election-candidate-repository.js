@@ -179,6 +179,17 @@ function ElectionCandidateRepository(mappers, configService) {
   this.findAll = function ({ whereClause, limit = DB_QUERY_LIMIT, page = 1 }, transaction) {
     return finds({ whereClause, limit, page, transaction });
   };
+
+  this.countByElectionGuid = async function (electionGuid, transaction) {
+    const result = await transaction
+      .count(tableColumn(T.ELECTION_CANDIDATE)('guid'), { as: 'candidateCount ' })
+      .from(T.ELECTION_CANDIDATE)
+      .where({ electionGuid });
+    return electionCandidateMapper.countByElectionGuidDbToDomain(
+      electionGuid,
+      first(result).candidateCount
+    );
+  };
 }
 
 module.exports = ElectionCandidateRepository;

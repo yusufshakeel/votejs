@@ -92,3 +92,59 @@ test('Should be able to map vote result by voteStatus and electionGuid from Db t
     ]
   });
 });
+
+test('Should be able to map valid vote result by CandidateGuid for electionGuid from Db to Domain', () => {
+  expect(
+    voteCandidateMapper.reportByValidVoteCountCandidateGuidForElectionGuidDbToDomain(
+      'f38cf29e-d393-4d1c-8c40-2c8544fc5eed',
+      [
+        {
+          candidateGuid: '316d778d-e24b-4bc3-9c69-d18543a164bb',
+          voteCount: '2'
+        },
+        {
+          candidateGuid: '44c1455d-6deb-4cba-bae5-816afe0aa16a',
+          voteCount: '3'
+        }
+      ],
+      [
+        {
+          guid: 'f170c2ba-b5b7-4068-b06d-9be928055880',
+          electionGuid: 'f38cf29e-d393-4d1c-8c40-2c8544fc5eed',
+          candidateGuid: '316d778d-e24b-4bc3-9c69-d18543a164bb',
+          electionCandidateStatus: 'ACTIVE',
+          candidateDisplayHeader: 'Candidate display header 316d778d-e24b-4bc3-9c69-d18543a164bb',
+          candidateHandle: 'Candidate Handle 316d778d-e24b-4bc3-9c69-d18543a164bb',
+          candidateSummary: 'Candidate summary 316d778d-e24b-4bc3-9c69-d18543a164bb',
+          candidateStatus: 'ACTIVE',
+          audit: [Object]
+        },
+        {
+          guid: '3dfa9e53-481a-4e1a-8c87-11e65735e8be',
+          electionGuid: 'f38cf29e-d393-4d1c-8c40-2c8544fc5eed',
+          candidateGuid: '44c1455d-6deb-4cba-bae5-816afe0aa16a',
+          electionCandidateStatus: 'ACTIVE',
+          candidateDisplayHeader: 'Candidate display header 44c1455d-6deb-4cba-bae5-816afe0aa16a',
+          candidateHandle: 'Candidate Handle 44c1455d-6deb-4cba-bae5-816afe0aa16a',
+          candidateSummary: 'Candidate summary 44c1455d-6deb-4cba-bae5-816afe0aa16a',
+          candidateStatus: 'ACTIVE',
+          audit: [Object]
+        }
+      ]
+    )
+  ).toStrictEqual({
+    electionGuid: 'f38cf29e-d393-4d1c-8c40-2c8544fc5eed',
+    votes: [
+      {
+        candidateGuid: '316d778d-e24b-4bc3-9c69-d18543a164bb',
+        candidateHandle: 'Candidate Handle 316d778d-e24b-4bc3-9c69-d18543a164bb',
+        voteCount: '2'
+      },
+      {
+        candidateGuid: '44c1455d-6deb-4cba-bae5-816afe0aa16a',
+        candidateHandle: 'Candidate Handle 44c1455d-6deb-4cba-bae5-816afe0aa16a',
+        voteCount: '3'
+      }
+    ]
+  });
+});

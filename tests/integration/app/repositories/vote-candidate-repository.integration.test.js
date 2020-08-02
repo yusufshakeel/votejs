@@ -54,7 +54,9 @@ const candidateRepository = new CandidateRepository(mappers, configService);
 const electionRepository = new ElectionRepository(mappers, configService);
 const electionCandidateRepository = new ElectionCandidateRepository(mappers, configService);
 const voterRepository = new VoterRepository(mappers, configService);
-const voteCandidateRepository = new VoteCandidateRepository(mappers, configService);
+const voteCandidateRepository = new VoteCandidateRepository(mappers, configService, {
+  electionCandidateRepository
+});
 
 const getFakeDomainVoter = ({
   guid = uuidService.uuid(),
@@ -202,6 +204,89 @@ beforeAll(() => {
       electionCandidateRepository.create(fakeDomainElectionCandidates[1], txn),
       electionCandidateRepository.create(fakeDomainElectionCandidates[2], txn),
       electionCandidateRepository.create(fakeDomainElectionCandidates[3], txn)
+    ]);
+
+    // ----------- for report
+    await voteCandidateRepository.invalidVote(
+      (
+        await voteCandidateRepository.create(
+          getFakeVoteCandidate({
+            electionGuid: fakeDomainElectionCandidates[2].electionGuid,
+            candidateGuid: fakeDomainElectionCandidates[2].candidateGuid,
+            voterGuid: fakeDomainVoters[0].guid
+          }),
+          txn
+        )
+      ).guid,
+      txn
+    );
+    await voteCandidateRepository.revertVote(
+      (
+        await voteCandidateRepository.create(
+          getFakeVoteCandidate({
+            electionGuid: fakeDomainElectionCandidates[2].electionGuid,
+            candidateGuid: fakeDomainElectionCandidates[2].candidateGuid,
+            voterGuid: fakeDomainVoters[0].guid
+          }),
+          txn
+        )
+      ).guid,
+      txn
+    );
+    await voteCandidateRepository.deleteVote(
+      (
+        await voteCandidateRepository.create(
+          getFakeVoteCandidate({
+            electionGuid: fakeDomainElectionCandidates[2].electionGuid,
+            candidateGuid: fakeDomainElectionCandidates[2].candidateGuid,
+            voterGuid: fakeDomainVoters[0].guid
+          }),
+          txn
+        )
+      ).guid,
+      txn
+    );
+    await Promise.all([
+      voteCandidateRepository.create(
+        getFakeVoteCandidate({
+          electionGuid: fakeDomainElectionCandidates[2].electionGuid,
+          candidateGuid: fakeDomainElectionCandidates[2].candidateGuid,
+          voterGuid: fakeDomainVoters[0].guid
+        }),
+        txn
+      ),
+      voteCandidateRepository.create(
+        getFakeVoteCandidate({
+          electionGuid: fakeDomainElectionCandidates[2].electionGuid,
+          candidateGuid: fakeDomainElectionCandidates[2].candidateGuid,
+          voterGuid: fakeDomainVoters[1].guid
+        }),
+        txn
+      ),
+      voteCandidateRepository.create(
+        getFakeVoteCandidate({
+          electionGuid: fakeDomainElectionCandidates[3].electionGuid,
+          candidateGuid: fakeDomainElectionCandidates[3].candidateGuid,
+          voterGuid: fakeDomainVoters[2].guid
+        }),
+        txn
+      ),
+      voteCandidateRepository.create(
+        getFakeVoteCandidate({
+          electionGuid: fakeDomainElectionCandidates[3].electionGuid,
+          candidateGuid: fakeDomainElectionCandidates[3].candidateGuid,
+          voterGuid: fakeDomainVoters[3].guid
+        }),
+        txn
+      ),
+      voteCandidateRepository.create(
+        getFakeVoteCandidate({
+          electionGuid: fakeDomainElectionCandidates[3].electionGuid,
+          candidateGuid: fakeDomainElectionCandidates[3].candidateGuid,
+          voterGuid: fakeDomainVoters[4].guid
+        }),
+        txn
+      )
     ]);
   });
 });
@@ -514,95 +599,8 @@ test('Should return null if vote candidate is not found - deleteVote', async () 
   });
 });
 
-test('Should be able to report vote candidate result by voteStatus and electionGuid', async () => {
+test('Should be able to report voting result by voteStatus for electionGuid', async () => {
   return knexService.transaction(async txn => {
-    // create and then invalidate
-    await voteCandidateRepository.invalidVote(
-      (
-        await voteCandidateRepository.create(
-          getFakeVoteCandidate({
-            electionGuid: fakeDomainElectionCandidates[2].electionGuid,
-            candidateGuid: fakeDomainElectionCandidates[2].candidateGuid,
-            voterGuid: fakeDomainVoters[0].guid
-          }),
-          txn
-        )
-      ).guid,
-      txn
-    );
-
-    // create and then revert
-    await voteCandidateRepository.revertVote(
-      (
-        await voteCandidateRepository.create(
-          getFakeVoteCandidate({
-            electionGuid: fakeDomainElectionCandidates[2].electionGuid,
-            candidateGuid: fakeDomainElectionCandidates[2].candidateGuid,
-            voterGuid: fakeDomainVoters[0].guid
-          }),
-          txn
-        )
-      ).guid,
-      txn
-    );
-
-    // create and then delete
-    await voteCandidateRepository.deleteVote(
-      (
-        await voteCandidateRepository.create(
-          getFakeVoteCandidate({
-            electionGuid: fakeDomainElectionCandidates[2].electionGuid,
-            candidateGuid: fakeDomainElectionCandidates[2].candidateGuid,
-            voterGuid: fakeDomainVoters[0].guid
-          }),
-          txn
-        )
-      ).guid,
-      txn
-    );
-
-    await Promise.all([
-      voteCandidateRepository.create(
-        getFakeVoteCandidate({
-          electionGuid: fakeDomainElectionCandidates[2].electionGuid,
-          candidateGuid: fakeDomainElectionCandidates[2].candidateGuid,
-          voterGuid: fakeDomainVoters[0].guid
-        }),
-        txn
-      ),
-      voteCandidateRepository.create(
-        getFakeVoteCandidate({
-          electionGuid: fakeDomainElectionCandidates[2].electionGuid,
-          candidateGuid: fakeDomainElectionCandidates[2].candidateGuid,
-          voterGuid: fakeDomainVoters[1].guid
-        }),
-        txn
-      ),
-      voteCandidateRepository.create(
-        getFakeVoteCandidate({
-          electionGuid: fakeDomainElectionCandidates[3].electionGuid,
-          candidateGuid: fakeDomainElectionCandidates[3].candidateGuid,
-          voterGuid: fakeDomainVoters[2].guid
-        }),
-        txn
-      ),
-      voteCandidateRepository.create(
-        getFakeVoteCandidate({
-          electionGuid: fakeDomainElectionCandidates[3].electionGuid,
-          candidateGuid: fakeDomainElectionCandidates[3].candidateGuid,
-          voterGuid: fakeDomainVoters[3].guid
-        }),
-        txn
-      ),
-      voteCandidateRepository.create(
-        getFakeVoteCandidate({
-          electionGuid: fakeDomainElectionCandidates[3].electionGuid,
-          candidateGuid: fakeDomainElectionCandidates[3].candidateGuid,
-          voterGuid: fakeDomainVoters[4].guid
-        }),
-        txn
-      )
-    ]);
     const result = await voteCandidateRepository.reportByVoteStatusAndElectionGuid(
       fakeDomainElectionCandidates[3].electionGuid,
       txn
@@ -619,10 +617,45 @@ test('Should be able to report vote candidate result by voteStatus and electionG
   });
 });
 
-test('Should return null if report vote candidate result by voteStatus and electionGuid does not exists', async () => {
+test('Should return null if voting result by voteStatus for electionGuid does not exists', async () => {
   return knexService.transaction(async txn => {
     const guid = uuidService.uuid();
     const result = await voteCandidateRepository.reportByVoteStatusAndElectionGuid(guid, txn);
+    expect(result).toBeNull();
+  });
+});
+
+test('Should be able to report valid voting result by candidateGuid for electionGuid', async () => {
+  return knexService.transaction(async txn => {
+    const result = await voteCandidateRepository.reportByValidVoteCountCandidateGuidForElectionGuid(
+      fakeDomainElectionCandidates[3].electionGuid,
+      txn
+    );
+    expect(result).toStrictEqual({
+      electionGuid: fakeDomainElectionCandidates[3].electionGuid,
+      votes: [
+        {
+          candidateGuid: fakeDomainElectionCandidates[3].candidateGuid,
+          candidateHandle: `Candidate Handle ${fakeDomainElectionCandidates[3].candidateGuid}`,
+          voteCount: '3'
+        },
+        {
+          candidateGuid: fakeDomainElectionCandidates[2].candidateGuid,
+          candidateHandle: `Candidate Handle ${fakeDomainElectionCandidates[2].candidateGuid}`,
+          voteCount: '2'
+        }
+      ]
+    });
+  });
+});
+
+test('Should return null if voting result by candidateGuid for electionGuid does not exists', async () => {
+  return knexService.transaction(async txn => {
+    const guid = uuidService.uuid();
+    const result = await voteCandidateRepository.reportByValidVoteCountCandidateGuidForElectionGuid(
+      guid,
+      txn
+    );
     expect(result).toBeNull();
   });
 });
