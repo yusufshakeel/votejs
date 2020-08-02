@@ -76,10 +76,10 @@ test('Should return null if candidate is not found - findByGuid', async () => {
 test('Should be able to fetch candidate by candidateHandle', async () => {
   return knexService.transaction(async txn => {
     const guid = uuidService.uuid();
-    const fakeDomainAdmin = getFakeDomainCandidate(guid);
-    await candidateRepository.create(fakeDomainAdmin, txn);
+    const fakeDomainCandidate = getFakeDomainCandidate(guid);
+    await candidateRepository.create(fakeDomainCandidate, txn);
     const result = await candidateRepository.findByCandidateHandle(
-      fakeDomainAdmin.candidateHandle,
+      fakeDomainCandidate.candidateHandle,
       txn
     );
     expect(result).toStrictEqual(getFakeDomainCandidateResponse(guid));
@@ -153,7 +153,7 @@ test('Should return null when updating candidate that does not exists - updateBy
   });
 });
 
-test('Should be able to find all admin without passing any params', async () => {
+test('Should be able to find all candidate without passing any params', async () => {
   return knexService.transaction(async txn => {
     const getFakeCandidate = () => getFakeDomainCandidate(uuidService.uuid());
     await Promise.all([
@@ -171,7 +171,7 @@ test('Should be able to find all admin without passing any params', async () => 
   });
 });
 
-test('Should be able to find all admin - with whereClause', async () => {
+test('Should be able to find all candidate - with whereClause', async () => {
   return knexService.transaction(async txn => {
     const getFakeCandidate = () => getFakeDomainCandidate(uuidService.uuid());
     await Promise.all([
