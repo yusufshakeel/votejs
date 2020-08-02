@@ -1,10 +1,25 @@
 # DOCUMENTATION.md
 
+Table of contents
+
+* [DOMAIN to DB contracts](#domain-to-db-contracts)
+  * [Audit](#audit-domain-to-db)
+  * [Country](#country-domain-to-db)
+  * [Admin](#admin-domain-to-db)
+  * [Voter](#voter-domain-to-db)
+  * [Candidate](#candidate-domain-to-db)
+  * [Topic](#topic-domain-to-db)
+  * [Election](#election-domain-to-db)
+  * [Election Candidate](#election-candidate-domain-to-db)
+  * [Election Topic](#election-topic-domain-to-db)
+  * [Vote Candidate](#vote-candidate-domain-to-db)
+  * [Vote Topic](#vote-topic-domain-to-db)
+
 ## DOMAIN to DB contracts
 
 This section talks about the JSON schema to be used in DOMAIN layer if we want to save them in DB layer.
 
-### AUDIT
+### AUDIT (domain to db)
 
 ```json
 {
@@ -15,7 +30,7 @@ This section talks about the JSON schema to be used in DOMAIN layer if we want t
 }
 ```
 
-### COUNTRY
+### COUNTRY (domain to db)
 
 ```json
 {
@@ -25,7 +40,7 @@ This section talks about the JSON schema to be used in DOMAIN layer if we want t
 }
 ```
 
-### ADMIN
+### ADMIN (domain to db)
 
 ```json
 {
@@ -47,7 +62,7 @@ This section talks about the JSON schema to be used in DOMAIN layer if we want t
 }
 ```
 
-### VOTER
+### VOTER (domain to db)
 
 ```json
 {
@@ -69,7 +84,7 @@ This section talks about the JSON schema to be used in DOMAIN layer if we want t
 }
 ```
 
-### CANDIDATE
+### CANDIDATE (domain to db)
 
 ```json
 {
@@ -85,7 +100,7 @@ This section talks about the JSON schema to be used in DOMAIN layer if we want t
 }
 ```
 
-### TOPIC
+### TOPIC (domain to db)
 
 ```json
 {
@@ -100,7 +115,7 @@ This section talks about the JSON schema to be used in DOMAIN layer if we want t
 }
 ```
 
-### ELECTION
+### ELECTION (domain to db)
 
 ```json
 {
@@ -125,7 +140,7 @@ This section talks about the JSON schema to be used in DOMAIN layer if we want t
 }
 ```
 
-### ELECTION CANDIDATE
+### ELECTION CANDIDATE (domain to db)
 
 ```json
 {
@@ -144,7 +159,7 @@ This section talks about the JSON schema to be used in DOMAIN layer if we want t
 }
 ```
 
-### ELECTION TOPIC
+### ELECTION TOPIC (domain to db)
 
 ```json
 {
@@ -162,7 +177,7 @@ This section talks about the JSON schema to be used in DOMAIN layer if we want t
 }
 ```
 
-### VOTE CANDIDATE
+### VOTE CANDIDATE (domain to db)
 
 ```json
 {
@@ -178,7 +193,7 @@ This section talks about the JSON schema to be used in DOMAIN layer if we want t
 }
 ```
 
-### VOTE TOPIC
+### VOTE TOPIC (domain to db)
 
 ```json
 {
