@@ -14,7 +14,8 @@ test('Should confirm the existence of required properties', () => {
     'VOTER',
     'VOTE_CANDIDATE',
     'TOPIC',
-    'ELECTION_TOPIC'
+    'ELECTION_TOPIC',
+    'VOTE_TOPIC'
   ]);
 });
 
