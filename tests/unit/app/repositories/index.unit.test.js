@@ -17,7 +17,8 @@ test('Should confirm the existence of required properties', () => {
       'candidateRepository',
       'electionRepository',
       'electionCandidateRepository',
-      'voteCandidateRepository'
+      'voteCandidateRepository',
+      'topicRepository'
     ].sort()
   );
 });
