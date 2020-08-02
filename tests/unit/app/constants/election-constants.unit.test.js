@@ -10,7 +10,8 @@ test('Should confirm the constants', () => {
       'ELECTION_STATUS_DRAFT',
       'ELECTION_STATUS_PRIVATE',
       'ELECTION_STATUS_PUBLIC',
-      'ELECTION_VOTE_ON_CANDIDATE'
+      'ELECTION_VOTE_ON_CANDIDATE',
+      'ELECTION_VOTE_ON_TOPIC'
     ].sort()
   );
 });
@@ -21,4 +22,5 @@ test('Should confirm the contant values', () => {
   expect(CONSTANTS.ELECTION_STATUS_PRIVATE).toBe('PRIVATE');
   expect(CONSTANTS.ELECTION_STATUS_DELETED).toBe('DELETED');
   expect(CONSTANTS.ELECTION_VOTE_ON_CANDIDATE).toBe('CANDIDATE');
+  expect(CONSTANTS.ELECTION_VOTE_ON_TOPIC).toBe('TOPIC');
 });
