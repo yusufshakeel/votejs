@@ -1,0 +1,26 @@
+{
+  "$id": "countryCreateApiSchema",
+  "type": "object",
+  "required": [
+    "countryCode",
+    "countryName",
+    "code"
+  ],
+  "properties": {
+    "countryCode": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 3
+    },
+    "countryName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "code": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 2
+    }
+  }
+}
