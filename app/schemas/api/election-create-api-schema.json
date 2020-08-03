@@ -1,0 +1,84 @@
+{
+  "$id": "electionCreateApiSchema",
+  "type": "object",
+  "required": [
+    "title",
+    "startsAt",
+    "endsAt",
+    "voteOn",
+    "electionSettings"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "summary": {
+      "type": "string"
+    },
+    "startsAt": {
+      "type": [
+        "string",
+        "object"
+      ],
+      "format": "date-time"
+    },
+    "endsAt": {
+      "type": [
+        "string",
+        "object"
+      ],
+      "format": "date-time"
+    },
+    "voteOn": {
+      "type": "string",
+      "enum": [
+        "CANDIDATE",
+        "TOPIC"
+      ],
+      "default": "CANDIDATE"
+    },
+    "electionStatus": {
+      "type": "string",
+      "enum": [
+        "DRAFT",
+        "PUBLIC",
+        "PRIVATE",
+        "DELETED"
+      ],
+      "default": "DRAFT"
+    },
+    "electionSettings": {
+      "type": "object",
+      "required": [
+        "voter"
+      ],
+      "properties": {
+        "voter": {
+          "type": "object",
+          "required": [
+            "totalNumberOfVotesAllowed",
+            "isVoteDeletingAllowed",
+            "isVoteRevertingAllowed"
+          ],
+          "properties": {
+            "totalNumberOfVotesAllowed": {
+              "type": "number",
+              "minLength": 1,
+              "default": 1
+            },
+            "isVoteDeletingAllowed": {
+              "type": "boolean",
+              "default": false
+            },
+            "isVoteRevertingAllowed": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      }
+    }
+  }
+}
