@@ -14,7 +14,7 @@ const VoteTopicMapper = require('./vote-topic-mapper.js');
 
 function Mappers() {
   this.auditMapper = new AuditMapper();
-  this.countryMapper = new CountryMapper();
+  this.countryMapper = new CountryMapper(this.auditMapper);
   this.adminMapper = new AdminMapper(this.auditMapper);
   this.voterMapper = new VoterMapper(this.auditMapper);
   this.candidateMapper = new CandidateMapper(this.auditMapper);
