@@ -2,6 +2,20 @@
 
 const objectMapper = require('object-mapper');
 
+const topicApiToDomain = {
+  title: 'title',
+  summary: 'summary',
+  topicStatus: 'topicStatus'
+};
+
+const topicDomainToApi = {
+  guid: 'guid',
+  title: 'title',
+  summary: 'summary',
+  topicStatus: 'topicStatus',
+  audit: 'audit'
+};
+
 const topicDomainToDb = {
   guid: 'guid',
   title: 'title',
@@ -21,6 +35,14 @@ const topicDbToDomain = {
 };
 
 function TopicMapper(auditMapper) {
+  this.apiToDomain = function (apiTopic) {
+    return objectMapper(apiTopic, topicApiToDomain);
+  };
+
+  this.domainToApi = function (domainTopic) {
+    return objectMapper(domainTopic, topicDomainToApi);
+  };
+
   this.domainToDb = function (domainTopic) {
     return objectMapper(domainTopic, topicDomainToDb);
   };

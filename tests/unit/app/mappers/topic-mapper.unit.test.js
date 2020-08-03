@@ -21,6 +21,12 @@ function FakeMappers() {
 const mapper = new FakeMappers();
 const { topicMapper } = mapper;
 
+const fakeApiTopic = {
+  title: 'title',
+  summary: 'summary',
+  topicStatus: 'ACTIVE'
+};
+
 const fakeDomainTopic = {
   guid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
   title: 'title',
@@ -40,6 +46,27 @@ const fakeDbTopic = {
   createdAt: now,
   updatedAt: now
 };
+
+test('Should be able to map api to domain', () => {
+  expect(topicMapper.apiToDomain(fakeApiTopic)).toStrictEqual({
+    title: 'title',
+    summary: 'summary',
+    topicStatus: 'ACTIVE'
+  });
+});
+
+test('Should be able to map domain to api', () => {
+  expect(topicMapper.domainToApi(fakeDomainTopic)).toStrictEqual({
+    guid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
+    title: 'title',
+    summary: 'summary',
+    topicStatus: 'ACTIVE',
+    audit: {
+      createdAt: now,
+      updatedAt: now
+    }
+  });
+});
 
 test('Should be able to map domain to db', () => {
   expect(topicMapper.domainToDb(fakeDomainTopic)).toStrictEqual(fakeDbTopic);
