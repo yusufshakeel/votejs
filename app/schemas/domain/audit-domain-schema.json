@@ -1,5 +1,5 @@
 {
-  "$id": "audit",
+  "$id": "auditDomainSchema",
   "type": "object",
   "required": [
     "createdAt"

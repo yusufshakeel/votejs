@@ -1,6 +1,6 @@
 'use strict';
 
-const ajvValidator = require('../../../../../app/validators/ajv-validator.js')({});
+const ajvValidator = require('../../../../../app/validators/ajv-validator.js')({ logError: true });
 const schema = require('../../../../../app/schemas/api/admin-create-api-schema.json');
 
 test('Should return false if no fields passed', () => {
@@ -30,6 +30,7 @@ test('Should be able to validate schema with all fields', () => {
       userName: 'janedoe',
       password: 'root1234',
       passcode: '123456',
+      accountStatus: 'ACTIVE',
       gender: 'FEMALE',
       countryCode: 'IND'
     })

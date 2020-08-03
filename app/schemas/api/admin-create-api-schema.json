@@ -43,6 +43,14 @@
       "type": "string",
       "minLength": 6
     },
+    "accountStatus": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE",
+        "DELETED"
+      ]
+    },
     "gender": {
       "type": "string",
       "enum": [

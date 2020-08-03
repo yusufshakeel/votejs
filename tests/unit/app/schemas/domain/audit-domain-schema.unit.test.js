@@ -1,6 +1,6 @@
 'use strict';
 
-const ajvValidator = require('../../../../../app/validators/ajv-validator.js')({});
+const ajvValidator = require('../../../../../app/validators/ajv-validator.js')({ logError: true });
 const schema = require('../../../../../app/schemas/domain/audit-domain-schema.json');
 const Services = require('../../../../../app/services');
 const services = new Services();
