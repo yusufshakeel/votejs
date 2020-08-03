@@ -6,7 +6,7 @@ const TableRepository = require('./table-repository.js');
 const tableRepository = new TableRepository();
 const { tables: T } = tableRepository;
 
-const columnsToReturn = ['countryCode', 'countryName', 'code'];
+const columnsToReturn = ['guid', 'countryCode', 'countryName', 'code', 'createdAt', 'updatedAt'];
 
 function CountryRepository(mappers) {
   const { countryMapper } = mappers;
@@ -44,7 +44,9 @@ function CountryRepository(mappers) {
   };
 
   this.updateByCountryCode = async function (countryCode, domainCountry, transaction) {
-    const dbCountry = countryMapper.domainToDb(domainCountry);
+    const fetchedCountry = await this.findByCountryCode(countryCode, transaction);
+    if (isEmpty(fetchedCountry)) return null;
+    const dbCountry = countryMapper.updateDomainToDb(domainCountry);
     const result = await updateQuery({
       table: T.COUNTRY,
       dataToUpdate: dbCountry,
