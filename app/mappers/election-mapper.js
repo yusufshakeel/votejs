@@ -2,6 +2,28 @@
 
 const objectMapper = require('object-mapper');
 
+const electionApiToDomain = {
+  title: 'title',
+  summary: 'summary',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  voteOn: 'voteOn',
+  electionStatus: 'electionStatus',
+  electionSettings: 'electionSettings'
+};
+
+const electionDomainToApi = {
+  guid: 'guid',
+  title: 'title',
+  summary: 'summary',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
+  voteOn: 'voteOn',
+  electionStatus: 'electionStatus',
+  electionSettings: 'electionSettings',
+  audit: 'audit'
+};
+
 const electionDomainToDb = {
   guid: 'guid',
   title: 'title',
@@ -29,6 +51,14 @@ const electionDbToDomain = {
 };
 
 function ElectionMapper(auditMapper) {
+  this.apiToDomain = function (apiElection) {
+    return objectMapper(apiElection, electionApiToDomain);
+  };
+
+  this.domainToApi = function (domainElection) {
+    return objectMapper(domainElection, electionDomainToApi);
+  };
+
   this.domainToDb = function (domainElection) {
     return objectMapper(domainElection, electionDomainToDb);
   };

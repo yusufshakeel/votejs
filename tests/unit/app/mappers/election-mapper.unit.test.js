@@ -25,6 +25,18 @@ function FakeMappers() {
 const mapper = new FakeMappers();
 const { electionMapper } = mapper;
 
+const fakeApiElection = {
+  title: 'title',
+  summary: 'summary',
+  startsAt: now,
+  endsAt: now,
+  voteOn: ELECTION_VOTE_ON_CANDIDATE,
+  electionStatus: ELECTION_STATUS_DRAFT,
+  electionSettings: {
+    field: 'value'
+  }
+};
+
 const fakeDomainElection = {
   guid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
   title: 'title',
@@ -56,6 +68,39 @@ const fakeDbElection = {
   createdAt: now,
   updatedAt: now
 };
+
+test('Should be able to map api to domain', () => {
+  expect(electionMapper.apiToDomain(fakeApiElection)).toStrictEqual({
+    title: 'title',
+    summary: 'summary',
+    startsAt: now,
+    endsAt: now,
+    voteOn: ELECTION_VOTE_ON_CANDIDATE,
+    electionStatus: ELECTION_STATUS_DRAFT,
+    electionSettings: {
+      field: 'value'
+    }
+  });
+});
+
+test('Should be able to map domain to api', () => {
+  expect(electionMapper.domainToApi(fakeDomainElection)).toStrictEqual({
+    guid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
+    title: 'title',
+    summary: 'summary',
+    startsAt: now,
+    endsAt: now,
+    voteOn: ELECTION_VOTE_ON_CANDIDATE,
+    electionStatus: ELECTION_STATUS_DRAFT,
+    electionSettings: {
+      field: 'value'
+    },
+    audit: {
+      createdAt: now,
+      updatedAt: now
+    }
+  });
+});
 
 test('Should be able to map domain to db', () => {
   expect(electionMapper.domainToDb(fakeDomainElection)).toStrictEqual(fakeDbElection);
