@@ -1,0 +1,28 @@
+{
+  "$id": "electionCandidateCreateApiSchema",
+  "type": "object",
+  "required": [
+    "electionGuid",
+    "candidateGuid",
+    "electionCandidateStatus"
+  ],
+  "properties": {
+    "electionGuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "candidateGuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "electionCandidateStatus": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE",
+        "DELETED"
+      ],
+      "default": "ACTIVE"
+    }
+  }
+}

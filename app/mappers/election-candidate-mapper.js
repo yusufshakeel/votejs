@@ -5,11 +5,7 @@ const objectMapper = require('object-mapper');
 const electionCandidateApiToDomain = {
   electionGuid: 'electionGuid',
   candidateGuid: 'candidateGuid',
-  electionCandidateStatus: 'electionCandidateStatus',
-  candidateDisplayHeader: 'candidateDisplayHeader',
-  candidateHandle: 'candidateHandle',
-  candidateSummary: 'candidateSummary',
-  candidateStatus: 'candidateStatus'
+  electionCandidateStatus: 'electionCandidateStatus'
 };
 
 const electionCandidateDomainToApi = {

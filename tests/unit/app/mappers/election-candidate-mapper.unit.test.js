@@ -28,11 +28,7 @@ const { electionCandidateMapper } = mapper;
 const fakeApiElectionCandidate = {
   electionGuid: '8e17d7b7-c236-496f-92cd-10e1859fdd3b',
   candidateGuid: '7e17d7b7-c236-496f-92cd-10e1859fdd3b',
-  electionCandidateStatus: ELECTION_CANDIDATE_STATUS_ACTIVE,
-  candidateDisplayHeader: 'candidateDisplayHeader',
-  candidateHandle: 'candidateHandle',
-  candidateSummary: 'candidateSummary',
-  candidateStatus: CANDIDATE_STATUS_ACTIVE
+  electionCandidateStatus: ELECTION_CANDIDATE_STATUS_ACTIVE
 };
 
 const fakeDomainElectionCandidate = {
@@ -65,13 +61,9 @@ const fakeDbElectionCandidate = {
 
 test('Should be able to map api to domain', () => {
   expect(electionCandidateMapper.apiToDomain(fakeApiElectionCandidate)).toStrictEqual({
-    candidateDisplayHeader: 'candidateDisplayHeader',
+    electionGuid: '8e17d7b7-c236-496f-92cd-10e1859fdd3b',
     candidateGuid: '7e17d7b7-c236-496f-92cd-10e1859fdd3b',
-    candidateHandle: 'candidateHandle',
-    candidateStatus: 'ACTIVE',
-    candidateSummary: 'candidateSummary',
-    electionCandidateStatus: 'ACTIVE',
-    electionGuid: '8e17d7b7-c236-496f-92cd-10e1859fdd3b'
+    electionCandidateStatus: ELECTION_CANDIDATE_STATUS_ACTIVE
   });
 });
 
