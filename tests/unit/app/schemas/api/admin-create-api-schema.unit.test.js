@@ -1,6 +1,6 @@
 'use strict';
 
-const ajvValidator = require('../../../../helpers/ajv-validation.js')({});
+const ajvValidator = require('../../../../../app/validators/ajv-validator.js')({});
 const schema = require('../../../../../app/schemas/api/admin-create-api-schema.json');
 
 test('Should return false if no fields passed', () => {

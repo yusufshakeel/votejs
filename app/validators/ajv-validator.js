@@ -1,9 +1,8 @@
 'use strict';
 
 const Ajv = require('ajv');
-const ajvInstance = new Ajv({ removeAdditional: 'all' });
 
-module.exports = function ({ ajv = ajvInstance, logError = false }) {
+function AjvValidator({ ajv = new Ajv({ removeAdditional: 'all' }), logError = false }) {
   return function (schema, data) {
     const validate = ajv.compile(schema);
     const valid = validate(data);
@@ -13,4 +12,6 @@ module.exports = function ({ ajv = ajvInstance, logError = false }) {
     }
     return true;
   };
-};
+}
+
+module.exports = AjvValidator;
