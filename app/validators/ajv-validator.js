@@ -1,16 +1,18 @@
 'use strict';
 
 const Ajv = require('ajv');
+const Services = require('../services');
+const services = new Services();
+const { logService: { ERROR } } = services;
 
 function AjvValidator({ ajv = new Ajv({ removeAdditional: 'all' }), logError = false }) {
   return function (schema, data) {
     const validate = ajv.compile(schema);
-    const valid = validate(data);
-    if (!valid) {
-      logError ? console.error(validate.errors) : '';
-      return false;
+    const isValid = validate(data);
+    if (!isValid && logError) {
+      ERROR(validate.errors);
     }
-    return true;
+    return isValid;
   };
 }
 
