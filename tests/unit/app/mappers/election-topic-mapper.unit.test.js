@@ -25,6 +25,12 @@ function FakeMappers() {
 const mapper = new FakeMappers();
 const { electionTopicMapper } = mapper;
 
+const fakeApiElectionTopic = {
+  electionGuid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
+  topicGuid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
+  electionTopicStatus: ELECTION_TOPIC_STATUS_ACTIVE
+};
+
 const fakeDomainElectionTopic = {
   guid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
   electionGuid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
@@ -50,6 +56,30 @@ const fakeDbElectionTopic = {
   createdAt: now,
   updatedAt: now
 };
+
+test('Should be able to map api to domain', () => {
+  expect(electionTopicMapper.apiToDomain(fakeApiElectionTopic)).toStrictEqual({
+    electionGuid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
+    topicGuid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
+    electionTopicStatus: ELECTION_TOPIC_STATUS_ACTIVE
+  });
+});
+
+test('Should be able to map domain to api', () => {
+  expect(electionTopicMapper.domainToApi(fakeDomainElectionTopic)).toStrictEqual({
+    guid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
+    electionGuid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
+    topicGuid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
+    electionTopicStatus: ELECTION_TOPIC_STATUS_ACTIVE,
+    topicTitle: 'Some title',
+    topicSummary: 'Some summary',
+    topicStatus: TOPIC_STATUS_ACTIVE,
+    audit: {
+      createdAt: now,
+      updatedAt: now
+    }
+  });
+});
 
 test('Should be able to map domain to db', () => {
   expect(electionTopicMapper.domainToDb(fakeDomainElectionTopic)).toStrictEqual(
