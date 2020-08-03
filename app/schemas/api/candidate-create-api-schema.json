@@ -1,69 +1,34 @@
 {
-  "$id": "adminCreateApiSchema",
+  "$id": "candidateCreateApiSchema",
   "type": "object",
   "required": [
-    "firstName",
-    "emailId",
-    "userName",
-    "password",
-    "passcode",
-    "countryCode"
+    "candidateHandle",
+    "displayHeader"
   ],
   "properties": {
-    "firstName": {
+    "candidateHandle": {
       "type": "string",
-      "minLength": 1,
-      "maxLength": 255
-    },
-    "middleName": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 255
-    },
-    "lastName": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 255
-    },
-    "emailId": {
-      "type": "string",
-      "minLength": 5,
-      "maxLength": 300
-    },
-    "userName": {
-      "type": "string",
-      "minLength": 5,
+      "minLength": 3,
       "maxLength": 128
     },
-    "password": {
+    "displayHeader": {
       "type": "string",
-      "minLength": 8
+      "minLength": 1,
+      "maxLength": 500
     },
-    "passcode": {
+    "summary": {
       "type": "string",
-      "minLength": 6
+      "minLength": 1,
+      "maxLength": 255
     },
-    "accountStatus": {
+    "candidateStatus": {
       "type": "string",
       "enum": [
         "ACTIVE",
         "INACTIVE",
         "DELETED"
-      ]
-    },
-    "gender": {
-      "type": "string",
-      "enum": [
-        "MALE",
-        "FEMALE",
-        "OTHER",
-        "UNDISCLOSED"
-      ]
-    },
-    "countryCode": {
-      "type": "string",
-      "minLength": 3,
-      "maxLength": 3
+      ],
+      "default": "ACTIVE"
     }
   }
 }
