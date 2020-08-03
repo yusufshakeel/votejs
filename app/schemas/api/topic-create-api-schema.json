@@ -1,0 +1,27 @@
+{
+  "$id": "topicCreateApiSchema",
+  "type": "object",
+  "required": [
+    "title",
+    "topicStatus"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "summary": {
+      "type": "string"
+    },
+    "topicStatus": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE",
+        "DELETED"
+      ],
+      "default": "ACTIVE"
+    }
+  }
+}
