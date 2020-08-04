@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest -c jest.config.json",
+    "test:coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls",
     "test:fresh": "npm run db:reset-generate && npm run test",
     "no-circular-dependencies": "npx madge -c ./app",
     "generate-docs": "npx jsdoc -c jsdocs.config.json",
@@ -16,8 +17,7 @@
     "db:down": "npx db-migrate down --verbose",
     "db:reset": "npx db-migrate reset --verbose",
     "db:seed": "node seed/index.js",
-    "db:reset-generate": "npm run db:reset && npm run db:up && npm run db:seed",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+    "db:reset-generate": "npm run db:reset && npm run db:up && npm run db:seed"
   },
   "repository": {
     "type": "git",
