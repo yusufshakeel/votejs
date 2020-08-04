@@ -23,4 +23,5 @@ script:
   - npm run db:seed
   - npm run no-circular-dependencies
   - npm run lint
-  - npm run test:coveralls
+  - npm run test
+after_success: npm run coveralls
