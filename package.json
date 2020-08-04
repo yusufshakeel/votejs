@@ -16,7 +16,8 @@
     "db:down": "npx db-migrate down --verbose",
     "db:reset": "npx db-migrate reset --verbose",
     "db:seed": "node seed/index.js",
-    "db:reset-generate": "npm run db:reset && npm run db:up && npm run db:seed"
+    "db:reset-generate": "npm run db:reset && npm run db:up && npm run db:seed",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -36,12 +37,14 @@
   },
   "homepage": "https://github.com/yusufshakeel/votejs#readme",
   "devDependencies": {
+    "coveralls": "^3.1.0",
     "eslint": "^7.5.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.1.4",
     "jest": "^26.1.0",
     "jsdoc": "^3.6.4",
+    "nyc": "^15.1.0",
     "prettier": "^2.0.5"
   },
   "dependencies": {
