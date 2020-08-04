@@ -1,0 +1,34 @@
+{
+  "nodeEnvironment": "dev",
+  "logLevel": "info",
+  "database": {
+    "postgres": {
+      "host": "localhost",
+      "user": "",
+      "password": "",
+      "database": "votejs",
+      "port": 5432
+    }
+  },
+  "dbQuery": {
+    "limit": 20
+  },
+  "connectionPool": {
+    "knex": {
+      "min": 5,
+      "max": 10,
+      "acquireConnectionTimeout": 60000,
+      "idleTimeoutMillis": 300000
+    }
+  },
+  "passwordHashing": {
+    "algo": "PBKDF2",
+    "saltSize": 64,
+    "iterations": 204800,
+    "keylen": 256,
+    "digest": "sha512"
+  },
+  "encryptionAlgorithm": "aes-256-cbc",
+  "encryptionKey": "crypto-key-exactly-32-chars-long",
+  "encryptionIVLength": 16
+}

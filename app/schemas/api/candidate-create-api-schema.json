@@ -1,0 +1,34 @@
+{
+  "$id": "candidateCreateApiSchema",
+  "type": "object",
+  "required": [
+    "candidateHandle",
+    "displayHeader"
+  ],
+  "properties": {
+    "candidateHandle": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128
+    },
+    "displayHeader": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "candidateStatus": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE",
+        "DELETED"
+      ],
+      "default": "ACTIVE"
+    }
+  }
+}

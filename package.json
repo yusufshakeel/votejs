@@ -4,7 +4,19 @@
   "description": "This is a voting application using NodeJS.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest -c jest.config.json",
+    "test:fresh": "npm run db:reset-generate && npm run test",
+    "no-circular-dependencies": "npx madge -c ./app",
+    "generate-docs": "npx jsdoc -c jsdocs.config.json",
+    "lint": "npx eslint -c .eslintrc.json ./index.js ./app ./tests",
+    "lint:fix": "npx eslint --fix -c .eslintrc.json ./index.js ./app ./tests",
+    "precommit": "npm run no-circular-dependencies && npm run lint && npm run test:fresh && npm run generate-docs",
+    "dbmigrate:create": "npx db-migrate create",
+    "db:up": "npx db-migrate up --verbose",
+    "db:down": "npx db-migrate down --verbose",
+    "db:reset": "npx db-migrate reset --verbose",
+    "db:seed": "node seed/index.js",
+    "db:reset-generate": "npm run db:reset && npm run db:up && npm run db:seed"
   },
   "repository": {
     "type": "git",
@@ -22,5 +34,29 @@
   "bugs": {
     "url": "https://github.com/yusufshakeel/votejs/issues"
   },
-  "homepage": "https://github.com/yusufshakeel/votejs#readme"
+  "homepage": "https://github.com/yusufshakeel/votejs#readme",
+  "devDependencies": {
+    "eslint": "^7.5.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "jest": "^26.1.0",
+    "jsdoc": "^3.6.4",
+    "prettier": "^2.0.5"
+  },
+  "dependencies": {
+    "ajv": "^6.12.3",
+    "config": "^3.3.1",
+    "db-migrate": "^0.11.11",
+    "db-migrate-pg": "^1.2.2",
+    "immutability-helper": "^3.1.1",
+    "json-stringify-safe": "^5.0.1",
+    "knex": "^0.21.2",
+    "lodash": "^4.17.19",
+    "moment": "^2.27.0",
+    "object-mapper": "^6.2.0",
+    "pg": "^8.3.0",
+    "pino": "^6.4.0",
+    "uuid": "^8.2.0"
+  }
 }

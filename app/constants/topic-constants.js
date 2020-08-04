@@ -1,0 +1,7 @@
+'use strict';
+
+module.exports = {
+  TOPIC_STATUS_ACTIVE: 'ACTIVE',
+  TOPIC_STATUS_INACTIVE: 'INACTIVE',
+  TOPIC_STATUS_DELETED: 'DELETED'
+};

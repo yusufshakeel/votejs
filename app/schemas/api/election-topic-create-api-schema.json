@@ -1,0 +1,27 @@
+{
+  "$id": "electionTopicCreateApiSchema",
+  "type": "object",
+  "required": [
+    "electionGuid",
+    "topicGuid"
+  ],
+  "properties": {
+    "electionGuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "topicGuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "electionTopicStatus": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "INACTIVE",
+        "DELETED"
+      ],
+      "default": "ACTIVE"
+    }
+  }
+}

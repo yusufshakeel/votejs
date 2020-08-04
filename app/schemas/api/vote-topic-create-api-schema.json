@@ -1,0 +1,33 @@
+{
+  "$id": "voteTopicCreateApiSchema",
+  "type": "object",
+  "required": [
+    "electionGuid",
+    "topicGuid",
+    "voterGuid"
+  ],
+  "properties": {
+    "electionGuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "topicGuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "voterGuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "voteStatus": {
+      "type": "string",
+      "enum": [
+        "VALID",
+        "INVALID",
+        "REVERTED",
+        "DELETED"
+      ],
+      "default": "VALID"
+    }
+  }
+}

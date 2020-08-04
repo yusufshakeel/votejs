@@ -1,0 +1,24 @@
+{
+  "nodeEnvironment": "NODE_ENV",
+  "logLevel": "LOG_LEVEL",
+  "database": {
+    "postgres": {
+      "host": "DB_HOST",
+      "user": "DB_USER",
+      "password": "DB_PASSWORD",
+      "database": "DB_DATABASE",
+      "port": "DB_PORT"
+    }
+  },
+  "dbQuery": {
+    "limit": "DB_QUERY_LIMIT"
+  },
+  "connectionPool": {
+    "knex": {
+      "min": "MIN_CONNECTION_POOL",
+      "max": "MAX_CONNECTION_POOL",
+      "acquireConnectionTimeout": "ACQUIRE_CONNECTION_TIMEOUT"
+    }
+  },
+  "encryptionKey": "ENCRYPTION_KEY"
+}
