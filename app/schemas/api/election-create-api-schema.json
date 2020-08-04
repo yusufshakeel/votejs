@@ -1,6 +1,7 @@
 {
   "$id": "electionCreateApiSchema",
   "type": "object",
+  "additionalProperties": false,
   "required": [
     "title",
     "startsAt",
