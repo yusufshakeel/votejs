@@ -72,6 +72,7 @@ exports.up = function (db, cb) {
     },
     countryCode: {
       type: 'string',
+      notNull: true,
       length: 3,
       foreignKey: {
         name: 'VOTER_countryCode_COUNTRY_countryCode_fk',
