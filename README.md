@@ -95,6 +95,9 @@ You can use the demo voter to explore the APIs in dev environment.
 ```
 You will find this in `seed/voter.js` file.
 
+## DOCUMENTATION
+
+[DOCUMENTATION.md](./documentation.md)
 
 ## License
 It's free :smiley:
