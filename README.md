@@ -97,7 +97,7 @@ You will find this in `seed/voter.js` file.
 
 ## DOCUMENTATION
 
-[DOCUMENTATION.md](./documentation.md)
+[DOCUMENTATION.md](./DOCUMENTATION.md)
 
 ## License
 It's free :smiley:
