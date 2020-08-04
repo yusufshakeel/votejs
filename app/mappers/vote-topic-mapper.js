@@ -2,6 +2,22 @@
 
 const objectMapper = require('object-mapper');
 
+const voteTopicApiToDomain = {
+  electionGuid: 'electionGuid',
+  topicGuid: 'topicGuid',
+  voterGuid: 'voterGuid',
+  voteStatus: 'voteStatus'
+};
+
+const voteTopicDomainToApi = {
+  guid: 'guid',
+  electionGuid: 'electionGuid',
+  topicGuid: 'topicGuid',
+  voterGuid: 'voterGuid',
+  voteStatus: 'voteStatus',
+  audit: 'audit'
+};
+
 const voteTopicDomainToDb = {
   guid: 'guid',
   electionGuid: 'electionGuid',
@@ -44,6 +60,14 @@ const voteTopicReportByValidVoteCountTopicGuidForElectionGuidDbToDomain = {
 };
 
 function VoteTopicMapper(auditMapper) {
+  this.apiToDomain = function (apiVoteTopic) {
+    return objectMapper(apiVoteTopic, voteTopicApiToDomain);
+  };
+
+  this.domainToApi = function (domainVoteTopic) {
+    return objectMapper(domainVoteTopic, voteTopicDomainToApi);
+  };
+
   this.domainToDb = function (domainVoteTopic) {
     return objectMapper(domainVoteTopic, voteTopicDomainToDb);
   };
