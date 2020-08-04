@@ -26,6 +26,13 @@ function FakeMappers() {
 const mapper = new FakeMappers();
 const { voteCandidateMapper } = mapper;
 
+const fakeApiVoteCandidate = {
+  electionGuid: '8e17d7b7-c236-496f-92cd-10e1859fdd3b',
+  candidateGuid: '7e17d7b7-c236-496f-92cd-10e1859fdd3b',
+  voterGuid: '6e17d7b7-c236-496f-92cd-10e1859fdd3b',
+  voteStatus: VOTE_CANDIDATE_VOTE_STATUS_VALID
+};
+
 const fakeDomainVoteCandidate = {
   guid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
   electionGuid: '8e17d7b7-c236-496f-92cd-10e1859fdd3b',
@@ -47,6 +54,29 @@ const fakeDbVoteCandidate = {
   createdAt: now,
   updatedAt: now
 };
+
+test('Should be able to map api to domain', () => {
+  expect(voteCandidateMapper.apiToDomain(fakeApiVoteCandidate)).toStrictEqual({
+    electionGuid: '8e17d7b7-c236-496f-92cd-10e1859fdd3b',
+    candidateGuid: '7e17d7b7-c236-496f-92cd-10e1859fdd3b',
+    voterGuid: '6e17d7b7-c236-496f-92cd-10e1859fdd3b',
+    voteStatus: VOTE_CANDIDATE_VOTE_STATUS_VALID
+  });
+});
+
+test('Should be able to map domain to api', () => {
+  expect(voteCandidateMapper.domainToApi(fakeDomainVoteCandidate)).toStrictEqual({
+    guid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b',
+    electionGuid: '8e17d7b7-c236-496f-92cd-10e1859fdd3b',
+    candidateGuid: '7e17d7b7-c236-496f-92cd-10e1859fdd3b',
+    voterGuid: '6e17d7b7-c236-496f-92cd-10e1859fdd3b',
+    voteStatus: VOTE_CANDIDATE_VOTE_STATUS_VALID,
+    audit: {
+      createdAt: now,
+      updatedAt: now
+    }
+  });
+});
 
 test('Should be able to map domain to db', () => {
   expect(voteCandidateMapper.domainToDb(fakeDomainVoteCandidate)).toStrictEqual(
