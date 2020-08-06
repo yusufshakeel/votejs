@@ -83,7 +83,10 @@ function VoterRepository(mappers, configService, passwordService) {
   this.updateByGuid = async function (guid, domainVoter, transaction) {
     const fetchedVoter = await this.findByGuid(guid, transaction);
     if (isEmpty(fetchedVoter)) return null;
-    const dataToUpdate = voterMapper.updateDomainToDb(domainVoter);
+    const enrichedDomainVoter = domainVoter.password
+      ? { ...domainVoter, password: await hashPassword(domainVoter.password) }
+      : domainVoter;
+    const dataToUpdate = voterMapper.updateDomainToDb(enrichedDomainVoter);
     const result = await updateQuery({
       table: T.VOTER,
       dataToUpdate,
