@@ -7,7 +7,7 @@ const VoterMapper = require('../../../../app/mappers/voter-mapper.js');
 const { VOTER_ACCOUNT_STATUS_ACTIVE } = require('../../../../app/constants/voter-constants.js');
 
 const services = new Services();
-const { configService, knexService, uuidService, timeService } = services;
+const { configService, knexService, uuidService, timeService, passwordService } = services;
 
 const now = timeService.now();
 const DB_QUERY_LIMIT = configService.dbQueryLimit;
@@ -24,7 +24,7 @@ function FakeMappers() {
 }
 
 const mappers = new FakeMappers();
-const voterRepository = new VoterRepository(mappers, configService);
+const voterRepository = new VoterRepository(mappers, configService, passwordService);
 
 const getFakeDomainVoter = (guid = uuidService.uuid()) => ({
   guid,
@@ -149,8 +149,7 @@ test('Should be able to update voter', async () => {
     const fakeDomainVoter = getFakeDomainVoter(guid);
     await voterRepository.create(fakeDomainVoter, txn);
     const dataToUpdate = {
-      firstName: 'updated first name',
-      password: 'updated password'
+      firstName: 'updated first name'
     };
     const result = await voterRepository.updateByGuid(guid, dataToUpdate, txn);
     expect(result).toStrictEqual({
@@ -168,8 +167,7 @@ test('Should return null when updating voter that does not exists - updateByGuid
   return knexService.transaction(async txn => {
     const guid = uuidService.uuid();
     const dataToUpdate = {
-      firstName: 'updated first name',
-      password: 'updated password'
+      firstName: 'updated first name'
     };
     const result = await voterRepository.updateByGuid(guid, dataToUpdate, txn);
     expect(result).toBeNull();
@@ -193,6 +191,23 @@ test('Should be able to validate for login', async () => {
   });
 });
 
+test('Should return null if password is invalid for login', async () => {
+  return knexService.transaction(async txn => {
+    const guid = uuidService.uuid();
+    const fakeDomainVoter = getFakeDomainVoter(guid);
+    await voterRepository.create(fakeDomainVoter, txn);
+    const fetchedVoter = await voterRepository.validateForLogin(
+      {
+        emailId: fakeDomainVoter.emailId,
+        password: 'wrong-password',
+        passcode: fakeDomainVoter.passcode
+      },
+      txn
+    );
+    expect(fetchedVoter).toBeNull();
+  });
+});
+
 test('Should return null if login validation fails - validateForLogin', async () => {
   return knexService.transaction(async txn => {
     const fetchedVoter = await voterRepository.validateForLogin(
@@ -204,6 +219,45 @@ test('Should return null if login validation fails - validateForLogin', async ()
       txn
     );
     expect(fetchedVoter).toBeNull();
+  });
+});
+
+test('Should be able to update password', async () => {
+  return knexService.transaction(async txn => {
+    const guid = uuidService.uuid();
+    const fakeDomainVoter = getFakeDomainVoter(guid);
+    await voterRepository.create(fakeDomainVoter, txn);
+    const fetchedVoterBeforePasswordUpdate = await voterRepository.validateForLogin(
+      {
+        emailId: fakeDomainVoter.emailId,
+        password: fakeDomainVoter.password,
+        passcode: fakeDomainVoter.passcode
+      },
+      txn
+    );
+    expect(fetchedVoterBeforePasswordUpdate.guid).toBe(guid);
+    const dataToUpdate = {
+      firstName: 'Updated Name',
+      password: 'New Password'
+    };
+    const result = await voterRepository.updateByGuid(guid, dataToUpdate, txn);
+    expect(result).toStrictEqual({
+      ...getFakeDomainVoterResponse(guid),
+      audit: {
+        createdAt: now,
+        updatedAt: now
+      },
+      firstName: dataToUpdate.firstName
+    });
+    const fetchedVoterAfterPasswordUpdate = await voterRepository.validateForLogin(
+      {
+        emailId: fakeDomainVoter.emailId,
+        password: 'New Password',
+        passcode: fakeDomainVoter.passcode
+      },
+      txn
+    );
+    expect(fetchedVoterAfterPasswordUpdate.guid).toBe(guid);
   });
 });
 

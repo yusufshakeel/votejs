@@ -21,9 +21,10 @@ const columnsToReturn = [
   'updatedAt'
 ];
 
-function AdminRepository(mappers, configService) {
+function AdminRepository(mappers, configService, passwordService) {
   const { adminMapper } = mappers;
   const { dbQueryLimit: DB_QUERY_LIMIT } = configService;
+  const { hashPassword, isValidPasswordHash } = passwordService;
 
   const findBy = params => selectQuery({ table: T.ADMIN, ...params });
 
@@ -50,7 +51,8 @@ function AdminRepository(mappers, configService) {
   };
 
   this.create = async function (domainAdmin, transaction) {
-    const dbAdmin = adminMapper.domainToDb(domainAdmin);
+    const hashedPassword = await hashPassword(domainAdmin.password);
+    const dbAdmin = adminMapper.domainToDb({ ...domainAdmin, password: hashedPassword });
     const result = await insertQuery({
       table: T.ADMIN,
       dataToInsert: dbAdmin,
@@ -82,7 +84,10 @@ function AdminRepository(mappers, configService) {
   this.updateByGuid = async function (guid, domainAdmin, transaction) {
     const fetchedAdmin = await this.findByGuid(guid, transaction);
     if (isEmpty(fetchedAdmin)) return null;
-    const dataToUpdate = adminMapper.updateDomainToDb(domainAdmin);
+    const enrichedDomainAdmin = domainAdmin.password
+      ? { ...domainAdmin, password: await hashPassword(domainAdmin.password) }
+      : domainAdmin;
+    const dataToUpdate = adminMapper.updateDomainToDb(enrichedDomainAdmin);
     const result = await updateQuery({
       table: T.ADMIN,
       dataToUpdate,
@@ -93,15 +98,24 @@ function AdminRepository(mappers, configService) {
     return adminMapper.dbToDomain(first(result));
   };
 
-  this.validateForLogin = function ({ userName, emailId, password, passcode }, transaction) {
+  this.validateForLogin = async function ({ userName, emailId, password, passcode }, transaction) {
     const whereClause = adminMapper.domainToDb({
       userName,
       emailId,
-      password,
       passcode,
       accountStatus: ADMIN_ACCOUNT_STATUS_ACTIVE
     });
-    return find({ whereClause: pickBy(whereClause), transaction });
+    const result = await findBy({
+      ...pagination({ limit: 1, page: 1 }),
+      whereClause: pickBy(whereClause),
+      columnsToReturn: [...columnsToReturn, 'password'],
+      transaction
+    });
+    if (isEmpty(result)) return null;
+    const fetchedAdmin = first(result);
+    const isValidPassword = await isValidPasswordHash(fetchedAdmin.password, password);
+    if (!isValidPassword) return null;
+    return adminMapper.dbToDomain(fetchedAdmin);
   };
 
   this.findAll = function ({ whereClause, limit = DB_QUERY_LIMIT, page = 1 }, transaction) {

@@ -21,9 +21,10 @@ const columnsToReturn = [
   'updatedAt'
 ];
 
-function VoterRepository(mappers, configService) {
+function VoterRepository(mappers, configService, passwordService) {
   const { voterMapper } = mappers;
   const { dbQueryLimit: DB_QUERY_LIMIT } = configService;
+  const { hashPassword, isValidPasswordHash } = passwordService;
 
   const findBy = params => selectQuery({ table: T.VOTER, ...params });
 
@@ -49,7 +50,8 @@ function VoterRepository(mappers, configService) {
   };
 
   this.create = async function (domainVoter, transaction) {
-    const dbVoter = voterMapper.domainToDb(domainVoter);
+    const hashedPassword = await hashPassword(domainVoter.password);
+    const dbVoter = voterMapper.domainToDb({ ...domainVoter, password: hashedPassword });
     const result = await insertQuery({
       table: T.VOTER,
       dataToInsert: dbVoter,
@@ -81,7 +83,10 @@ function VoterRepository(mappers, configService) {
   this.updateByGuid = async function (guid, domainVoter, transaction) {
     const fetchedVoter = await this.findByGuid(guid, transaction);
     if (isEmpty(fetchedVoter)) return null;
-    const dataToUpdate = voterMapper.updateDomainToDb(domainVoter);
+    const enrichedDomainVoter = domainVoter.password
+      ? { ...domainVoter, password: await hashPassword(domainVoter.password) }
+      : domainVoter;
+    const dataToUpdate = voterMapper.updateDomainToDb(enrichedDomainVoter);
     const result = await updateQuery({
       table: T.VOTER,
       dataToUpdate,
@@ -92,15 +97,24 @@ function VoterRepository(mappers, configService) {
     return voterMapper.dbToDomain(first(result));
   };
 
-  this.validateForLogin = function ({ userName, emailId, password, passcode }, transaction) {
+  this.validateForLogin = async function ({ userName, emailId, password, passcode }, transaction) {
     const whereClause = voterMapper.domainToDb({
       userName,
       emailId,
-      password,
       passcode,
       accountStatus: VOTER_ACCOUNT_STATUS_ACTIVE
     });
-    return find({ whereClause: pickBy(whereClause), limit: 1, transaction });
+    const result = await findBy({
+      ...pagination({ limit: 1, page: 1 }),
+      whereClause: pickBy(whereClause),
+      columnsToReturn: [...columnsToReturn, 'password'],
+      transaction
+    });
+    if (isEmpty(result)) return null;
+    const fetchedVoter = first(result);
+    const isValidPassword = await isValidPasswordHash(fetchedVoter.password, password);
+    if (!isValidPassword) return null;
+    return voterMapper.dbToDomain(fetchedVoter);
   };
 
   this.findAll = function ({ whereClause, limit = DB_QUERY_LIMIT, page = 1 }, transaction) {
