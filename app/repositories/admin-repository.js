@@ -24,6 +24,7 @@ const columnsToReturn = [
 function AdminRepository(mappers, configService, passwordService) {
   const { adminMapper } = mappers;
   const { dbQueryLimit: DB_QUERY_LIMIT } = configService;
+  const { hashPassword, isValidPasswordHash } = passwordService;
 
   const findBy = params => selectQuery({ table: T.ADMIN, ...params });
 
@@ -50,7 +51,8 @@ function AdminRepository(mappers, configService, passwordService) {
   };
 
   this.create = async function (domainAdmin, transaction) {
-    const dbAdmin = adminMapper.domainToDb(domainAdmin);
+    const hashedPassword = await hashPassword(domainAdmin.password);
+    const dbAdmin = adminMapper.domainToDb({ ...domainAdmin, password: hashedPassword });
     const result = await insertQuery({
       table: T.ADMIN,
       dataToInsert: dbAdmin,
@@ -108,7 +110,8 @@ function AdminRepository(mappers, configService, passwordService) {
     });
     if (isEmpty(result)) return null;
     const fetchedAdmin = first(result);
-    if (!passwordService.isValidPasswordHash(fetchedAdmin.password, password)) return null;
+    const isValidPassword = await isValidPasswordHash(fetchedAdmin.password, password);
+    if (!isValidPassword) return null;
     return adminMapper.dbToDomain(fetchedAdmin);
   };
 

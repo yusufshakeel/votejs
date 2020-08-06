@@ -22,7 +22,7 @@
     }
   },
   "passwordHashing": {
-    "algo": "PBKDF2",
+    "algo": "pbkdf2",
     "saltSize": 64,
     "iterations": 204800,
     "keylen": 256,

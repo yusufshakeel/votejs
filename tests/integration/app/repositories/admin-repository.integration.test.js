@@ -182,7 +182,7 @@ test('Should be able to validate for login', async () => {
     const plainTextPassword = 'root1234';
     const fakeDomainAdmin = {
       ...getFakeDomainAdmin(guid),
-      password: passwordService.hashPassword(plainTextPassword)
+      password: plainTextPassword
     };
     await adminRepository.create(fakeDomainAdmin, txn);
     const fetchedAdmin = await adminRepository.validateForLogin(
@@ -203,7 +203,7 @@ test('Should return null if password is invalid for login', async () => {
     const plainTextPassword = 'root1234';
     const fakeDomainAdmin = {
       ...getFakeDomainAdmin(guid),
-      password: passwordService.hashPassword(plainTextPassword)
+      password: plainTextPassword
     };
     await adminRepository.create(fakeDomainAdmin, txn);
     const fetchedAdmin = await adminRepository.validateForLogin(

@@ -8,9 +8,10 @@ const services = new Services();
 const {
   knexService: knex,
   logService: { INFO, ERROR },
-  configService
+  configService,
+  passwordService
 } = services;
-const repositories = new Repositories({ mappers, configService });
+const repositories = new Repositories({ mappers, configService, passwordService });
 const { countryRepository, adminRepository, voterRepository } = repositories;
 
 function createDevDemoVoters(voters, txn) {
@@ -26,13 +27,7 @@ function createDevDemoVoters(voters, txn) {
 
 function createDevDemoAdmins(admins, txn) {
   INFO('Creating dev demo admins...');
-  return admins.map(admin => {
-    const domainAdmin = {
-      ...admin,
-      password: services.passwordService.hashPassword(admin.password)
-    };
-    return adminRepository.create(domainAdmin, txn);
-  });
+  return admins.map(admin => adminRepository.create(admin, txn));
 }
 
 function upsertCountries(countries, txn) {

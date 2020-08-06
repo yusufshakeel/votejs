@@ -1,38 +1,41 @@
 'use strict';
 
+const { promisify } = require('es6-promisify');
 const crypto = require('crypto');
+const pbkdf2 = promisify(crypto.pbkdf2);
+const randomBytes = promisify(crypto.randomBytes);
 
 function PasswordService(configService, base64Service, stringifyService) {
+  const self = this;
   const { passwordHashConfig: DEFAULT_CONFIG } = configService;
 
-  const generateSalt = function (config) {
-    return crypto.randomBytes(config.saltSize).toString('hex');
+  const toHex = data => data.toString('hex');
+
+  const generateSalt = async function (config) {
+    return randomBytes(config.saltSize).then(buffer => toHex(buffer));
   };
 
-  this.hashPassword = function (
-    plainTextPassword,
-    salt = generateSalt(DEFAULT_CONFIG),
-    config = DEFAULT_CONFIG
-  ) {
-    const hash = crypto.pbkdf2Sync(
+  this.hashPassword = async function (plainTextPassword, salt, config = DEFAULT_CONFIG) {
+    const saltForHash = salt ? salt : await generateSalt(DEFAULT_CONFIG);
+    const hash = await pbkdf2(
       plainTextPassword,
-      salt,
+      saltForHash,
       config.iterations,
       config.keylen,
       config.digest
-    );
+    ).then(buffer => toHex(buffer));
     return base64Service.encode(
       stringifyService.stringify({
-        salt,
-        hash: hash.toString('hex'),
+        salt: saltForHash,
+        hash,
         config
       })
     );
   };
 
-  this.isValidPasswordHash = function (hashedPassword, plainTextPassword) {
+  this.isValidPasswordHash = async function (hashedPassword, plainTextPassword) {
     const decodedData = stringifyService.parsify(base64Service.decode(hashedPassword));
-    const hash = this.hashPassword(plainTextPassword, decodedData.salt, decodedData.config);
+    const hash = await self.hashPassword(plainTextPassword, decodedData.salt, decodedData.config);
     return hash === hashedPassword;
   };
 }
