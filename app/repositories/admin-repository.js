@@ -21,7 +21,7 @@ const columnsToReturn = [
   'updatedAt'
 ];
 
-function AdminRepository(mappers, configService) {
+function AdminRepository(mappers, configService, passwordService) {
   const { adminMapper } = mappers;
   const { dbQueryLimit: DB_QUERY_LIMIT } = configService;
 
@@ -93,15 +93,23 @@ function AdminRepository(mappers, configService) {
     return adminMapper.dbToDomain(first(result));
   };
 
-  this.validateForLogin = function ({ userName, emailId, password, passcode }, transaction) {
+  this.validateForLogin = async function ({ userName, emailId, password, passcode }, transaction) {
     const whereClause = adminMapper.domainToDb({
       userName,
       emailId,
-      password,
       passcode,
       accountStatus: ADMIN_ACCOUNT_STATUS_ACTIVE
     });
-    return find({ whereClause: pickBy(whereClause), transaction });
+    const result = await findBy({
+      ...pagination({ limit: 1, page: 1 }),
+      whereClause: pickBy(whereClause),
+      columnsToReturn: [...columnsToReturn, 'password'],
+      transaction
+    });
+    if (isEmpty(result)) return null;
+    const fetchedAdmin = first(result);
+    if (!passwordService.isValidPasswordHash(fetchedAdmin.password, password)) return null;
+    return adminMapper.dbToDomain(fetchedAdmin);
   };
 
   this.findAll = function ({ whereClause, limit = DB_QUERY_LIMIT, page = 1 }, transaction) {
