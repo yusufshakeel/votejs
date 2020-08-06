@@ -10,7 +10,7 @@ const {
   logService: { INFO, ERROR },
   configService
 } = services;
-const repositories = new Repositories(mappers, configService);
+const repositories = new Repositories({ mappers, configService });
 const { countryRepository, adminRepository, voterRepository } = repositories;
 
 function createDevDemoVoters(voters, txn) {
