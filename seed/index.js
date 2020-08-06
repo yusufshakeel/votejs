@@ -16,13 +16,7 @@ const { countryRepository, adminRepository, voterRepository } = repositories;
 
 function createDevDemoVoters(voters, txn) {
   INFO('Creating dev demo voters...');
-  return voters.map(voter => {
-    const domainVoter = {
-      ...voter,
-      password: services.passwordService.hashPassword(voter.password)
-    };
-    return voterRepository.create(domainVoter, txn);
-  });
+  return voters.map(voter => voterRepository.create(voter, txn));
 }
 
 function createDevDemoAdmins(admins, txn) {

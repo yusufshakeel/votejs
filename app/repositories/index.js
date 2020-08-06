@@ -14,7 +14,7 @@ const VoteTopicRepository = require('./vote-topic-repository.js');
 function Repositories({ mappers, configService, passwordService }) {
   this.countryRepository = new CountryRepository(mappers);
   this.adminRepository = new AdminRepository(mappers, configService, passwordService);
-  this.voterRepository = new VoterRepository(mappers, configService);
+  this.voterRepository = new VoterRepository(mappers, configService, passwordService);
   this.candidateRepository = new CandidateRepository(mappers, configService);
   this.electionRepository = new ElectionRepository(mappers, configService);
   this.electionCandidateRepository = new ElectionCandidateRepository(mappers, configService);

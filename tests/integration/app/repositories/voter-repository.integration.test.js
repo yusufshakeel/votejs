@@ -7,7 +7,7 @@ const VoterMapper = require('../../../../app/mappers/voter-mapper.js');
 const { VOTER_ACCOUNT_STATUS_ACTIVE } = require('../../../../app/constants/voter-constants.js');
 
 const services = new Services();
-const { configService, knexService, uuidService, timeService } = services;
+const { configService, knexService, uuidService, timeService, passwordService } = services;
 
 const now = timeService.now();
 const DB_QUERY_LIMIT = configService.dbQueryLimit;
@@ -24,7 +24,7 @@ function FakeMappers() {
 }
 
 const mappers = new FakeMappers();
-const voterRepository = new VoterRepository(mappers, configService);
+const voterRepository = new VoterRepository(mappers, configService, passwordService);
 
 const getFakeDomainVoter = (guid = uuidService.uuid()) => ({
   guid,
@@ -190,6 +190,23 @@ test('Should be able to validate for login', async () => {
       txn
     );
     expect(fetchedVoter.guid).toBe(guid);
+  });
+});
+
+test('Should return null if password is invalid for login', async () => {
+  return knexService.transaction(async txn => {
+    const guid = uuidService.uuid();
+    const fakeDomainVoter = getFakeDomainVoter(guid);
+    await voterRepository.create(fakeDomainVoter, txn);
+    const fetchedVoter = await voterRepository.validateForLogin(
+      {
+        emailId: fakeDomainVoter.emailId,
+        password: 'wrong-password',
+        passcode: fakeDomainVoter.passcode
+      },
+      txn
+    );
+    expect(fetchedVoter).toBeNull();
   });
 });
 

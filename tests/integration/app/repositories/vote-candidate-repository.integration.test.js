@@ -30,7 +30,7 @@ const {
 } = require('../../../../app/constants/vote-candidate-constants.js');
 
 const services = new Services();
-const { configService, knexService, uuidService, timeService } = services;
+const { configService, knexService, uuidService, timeService, passwordService } = services;
 
 const now = timeService.now();
 
@@ -53,7 +53,7 @@ const mappers = new FakeMappers();
 const candidateRepository = new CandidateRepository(mappers, configService);
 const electionRepository = new ElectionRepository(mappers, configService);
 const electionCandidateRepository = new ElectionCandidateRepository(mappers, configService);
-const voterRepository = new VoterRepository(mappers, configService);
+const voterRepository = new VoterRepository(mappers, configService, passwordService);
 const voteCandidateRepository = new VoteCandidateRepository(mappers, configService, {
   electionCandidateRepository
 });

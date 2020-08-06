@@ -179,16 +179,12 @@ test('Should return null when updating admin that does not exists - updateByGuid
 test('Should be able to validate for login', async () => {
   return knexService.transaction(async txn => {
     const guid = uuidService.uuid();
-    const plainTextPassword = 'root1234';
-    const fakeDomainAdmin = {
-      ...getFakeDomainAdmin(guid),
-      password: plainTextPassword
-    };
+    const fakeDomainAdmin = getFakeDomainAdmin(guid);
     await adminRepository.create(fakeDomainAdmin, txn);
     const fetchedAdmin = await adminRepository.validateForLogin(
       {
         emailId: fakeDomainAdmin.emailId,
-        password: plainTextPassword,
+        password: fakeDomainAdmin.password,
         passcode: fakeDomainAdmin.passcode
       },
       txn
@@ -200,11 +196,7 @@ test('Should be able to validate for login', async () => {
 test('Should return null if password is invalid for login', async () => {
   return knexService.transaction(async txn => {
     const guid = uuidService.uuid();
-    const plainTextPassword = 'root1234';
-    const fakeDomainAdmin = {
-      ...getFakeDomainAdmin(guid),
-      password: plainTextPassword
-    };
+    const fakeDomainAdmin = getFakeDomainAdmin(guid);
     await adminRepository.create(fakeDomainAdmin, txn);
     const fetchedAdmin = await adminRepository.validateForLogin(
       {
