@@ -149,8 +149,7 @@ test('Should be able to update admin', async () => {
     const fakeDomainAdmin = getFakeDomainAdmin(guid);
     await adminRepository.create(fakeDomainAdmin, txn);
     const dataToUpdate = {
-      firstName: 'updated first name',
-      password: 'updated password'
+      firstName: 'updated first name'
     };
     const result = await adminRepository.updateByGuid(guid, dataToUpdate, txn);
     expect(result).toStrictEqual({
@@ -168,8 +167,7 @@ test('Should return null when updating admin that does not exists - updateByGuid
   return knexService.transaction(async txn => {
     const guid = uuidService.uuid();
     const dataToUpdate = {
-      firstName: 'updated first name',
-      password: 'updated password'
+      firstName: 'updated first name'
     };
     const result = await adminRepository.updateByGuid(guid, dataToUpdate, txn);
     expect(result).toBeNull();
@@ -221,6 +219,45 @@ test('Should return null if login validation fails - validateForLogin', async ()
       txn
     );
     expect(fetchedAdmin).toBeNull();
+  });
+});
+
+test('Should be able to update password', async () => {
+  return knexService.transaction(async txn => {
+    const guid = uuidService.uuid();
+    const fakeDomainAdmin = getFakeDomainAdmin(guid);
+    await adminRepository.create(fakeDomainAdmin, txn);
+    const fetchedAdminBeforePasswordUpdate = await adminRepository.validateForLogin(
+      {
+        emailId: fakeDomainAdmin.emailId,
+        password: fakeDomainAdmin.password,
+        passcode: fakeDomainAdmin.passcode
+      },
+      txn
+    );
+    expect(fetchedAdminBeforePasswordUpdate.guid).toBe(guid);
+    const dataToUpdate = {
+      firstName: 'Updated Name',
+      password: 'New Password'
+    };
+    const result = await adminRepository.updateByGuid(guid, dataToUpdate, txn);
+    expect(result).toStrictEqual({
+      ...getFakeDomainAdminResponse(guid),
+      audit: {
+        createdAt: now,
+        updatedAt: now
+      },
+      firstName: dataToUpdate.firstName
+    });
+    const fetchedAdminAfterPasswordUpdate = await adminRepository.validateForLogin(
+      {
+        emailId: fakeDomainAdmin.emailId,
+        password: 'New Password',
+        passcode: fakeDomainAdmin.passcode
+      },
+      txn
+    );
+    expect(fetchedAdminAfterPasswordUpdate.guid).toBe(guid);
   });
 });
 

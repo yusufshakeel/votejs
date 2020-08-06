@@ -84,7 +84,10 @@ function AdminRepository(mappers, configService, passwordService) {
   this.updateByGuid = async function (guid, domainAdmin, transaction) {
     const fetchedAdmin = await this.findByGuid(guid, transaction);
     if (isEmpty(fetchedAdmin)) return null;
-    const dataToUpdate = adminMapper.updateDomainToDb(domainAdmin);
+    const enrichedDomainAdmin = domainAdmin.password
+      ? { ...domainAdmin, password: await hashPassword(domainAdmin.password) }
+      : domainAdmin;
+    const dataToUpdate = adminMapper.updateDomainToDb(enrichedDomainAdmin);
     const result = await updateQuery({
       table: T.ADMIN,
       dataToUpdate,
