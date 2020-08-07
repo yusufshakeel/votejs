@@ -9,7 +9,7 @@ function throwRepositoryError(op) {
     try {
       return await op(...params);
     } catch (err) {
-      ERROR('throwRepositoryError', 'ERROR', err);
+      ERROR(err);
       throw err;
     }
   };
