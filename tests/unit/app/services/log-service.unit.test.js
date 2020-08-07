@@ -5,10 +5,10 @@ const ConfigService = require('../../../../app/services/config-service.js');
 const LogService = require('../../../../app/services/log-service.js');
 
 const fakePinoLogger = () => ({
-  info: (...v) => v,
-  success: (...v) => v,
-  error: (...v) => v,
-  verbose: (...v) => v
+  info: v => v,
+  success: v => v,
+  error: v => v,
+  verbose: v => v
 });
 const configService = ConfigService();
 const logService = LogService(configService, fakePinoLogger);
@@ -19,17 +19,17 @@ test('Should confirm the properties of logger', () => {
 });
 
 test('Should be able to call INFO', () => {
-  expect(INFO('a', 'b', 'c')).toStrictEqual(['a', 'b', 'c']);
+  expect(INFO('a')).toStrictEqual('a');
 });
 
 test('Should be able to call SUCCESS', () => {
-  expect(SUCCESS('a', 'b', 'c')).toStrictEqual(['a', 'b', 'c']);
+  expect(SUCCESS('a')).toStrictEqual('a');
 });
 
 test('Should be able to call ERROR', () => {
-  expect(ERROR('a', 'b', 'c')).toStrictEqual(['a', 'b', 'c']);
+  expect(ERROR('a')).toStrictEqual('a');
 });
 
 test('Should be able to call VERBOSE', () => {
-  expect(VERBOSE('a', 'b', 'c')).toStrictEqual(['a', 'b', 'c']);
+  expect(VERBOSE('a')).toStrictEqual('a');
 });

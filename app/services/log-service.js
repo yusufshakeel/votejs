@@ -8,10 +8,10 @@ function LogService(configService, pino = pinoLogger) {
   });
   return {
     logger,
-    INFO: (...params) => logger.info(...params),
-    SUCCESS: (...params) => logger.success(...params),
-    ERROR: (...params) => logger.error(...params),
-    VERBOSE: (...params) => logger.verbose(...params)
+    INFO: param => logger.info(param),
+    SUCCESS: param => logger.success(param),
+    ERROR: param => logger.error(param),
+    VERBOSE: param => logger.verbose(param)
   };
 }
 
