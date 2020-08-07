@@ -7,9 +7,10 @@ const mappers = new Mappers();
 const services = new Services();
 const {
   knexService: knex,
-  logService: { INFO, ERROR },
+  logService: { INFO, logERROR },
   configService,
-  passwordService
+  passwordService,
+  stringifyService: { stringify }
 } = services;
 const repositories = new Repositories({ mappers, configService, passwordService });
 const { countryRepository, adminRepository, voterRepository } = repositories;
@@ -47,6 +48,6 @@ run()
     INFO('Done!');
   })
   .catch(err => {
-    ERROR('An error occurred while setting up the seed data.', err);
+    logERROR('SEED', 'run', 'An error occurred while setting up the seed data.', stringify(err));
   })
   .finally(() => knex.destroy());

@@ -1,17 +1,25 @@
 'use strict';
 
+const { pickBy } = require('lodash');
+const stringify = require('json-stringify-safe');
 const pinoLogger = require('pino');
 
 function LogService(configService, pino = pinoLogger) {
   const logger = pino({
     level: configService.logLevel
   });
+  const logFn = fn => (module, functionName, message, details) =>
+    fn(pickBy({ module, functionName, message, details: stringify(details) }));
   return {
     logger,
-    INFO: (...params) => logger.info(...params),
-    SUCCESS: (...params) => logger.success(...params),
-    ERROR: (...params) => logger.error(...params),
-    VERBOSE: (...params) => logger.verbose(...params)
+    logINFO: logFn(logger.info),
+    logSUCCESS: logFn(logger.success),
+    logERROR: logFn(logger.error),
+    logVERBOSE: logFn(logger.verbose),
+    INFO: param => logger.info(param),
+    SUCCESS: param => logger.success(param),
+    ERROR: param => logger.error(param),
+    VERBOSE: param => logger.verbose(param)
   };
 }
 

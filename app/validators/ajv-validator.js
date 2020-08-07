@@ -2,10 +2,9 @@
 
 const Ajv = require('ajv');
 const Services = require('../services');
-const services = new Services();
 const {
   logService: { ERROR }
-} = services;
+} = new Services();
 
 function AjvValidator({ ajv = new Ajv({ removeAdditional: 'all' }), logError = false }) {
   return function (schema, data) {
