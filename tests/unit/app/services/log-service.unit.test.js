@@ -51,9 +51,7 @@ test('Should be able to call logINFO', () => {
     module: 'mod'
   });
   expect(logINFO('mod', 'fnName', 'msg', { foo: 'bar' })).toStrictEqual({
-    details: {
-      foo: 'bar'
-    },
+    details: '{"foo":"bar"}',
     functionName: 'fnName',
     message: 'msg',
     module: 'mod'
@@ -67,9 +65,7 @@ test('Should be able to call logSUCCESS', () => {
     module: 'mod'
   });
   expect(logSUCCESS('mod', 'fnName', 'msg', { foo: 'bar' })).toStrictEqual({
-    details: {
-      foo: 'bar'
-    },
+    details: '{"foo":"bar"}',
     functionName: 'fnName',
     message: 'msg',
     module: 'mod'
@@ -83,9 +79,7 @@ test('Should be able to call logERROR', () => {
     module: 'mod'
   });
   expect(logERROR('mod', 'fnName', 'msg', { foo: 'bar' })).toStrictEqual({
-    details: {
-      foo: 'bar'
-    },
+    details: '{"foo":"bar"}',
     functionName: 'fnName',
     message: 'msg',
     module: 'mod'
@@ -99,9 +93,7 @@ test('Should be able to call logVERBOSE', () => {
     module: 'mod'
   });
   expect(logVERBOSE('mod', 'fnName', 'msg', { foo: 'bar' })).toStrictEqual({
-    details: {
-      foo: 'bar'
-    },
+    details: '{"foo":"bar"}',
     functionName: 'fnName',
     message: 'msg',
     module: 'mod'

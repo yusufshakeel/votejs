@@ -1,6 +1,7 @@
 'use strict';
 
 const { pickBy } = require('lodash');
+const stringify = require('json-stringify-safe');
 const pinoLogger = require('pino');
 
 function LogService(configService, pino = pinoLogger) {
@@ -8,7 +9,7 @@ function LogService(configService, pino = pinoLogger) {
     level: configService.logLevel
   });
   const logFn = fn => (module, functionName, message, details) =>
-    fn(pickBy({ module, functionName, message, details }));
+    fn(pickBy({ module, functionName, message, details: stringify(details) }));
   return {
     logger,
     logINFO: logFn(logger.info),
