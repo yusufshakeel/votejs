@@ -1,5 +1,6 @@
 'use strict';
 
+const { keys } = require('lodash');
 const Services = require('../../../../app/services');
 const CountryRepository = require('../../../../app/repositories/country-repository.js');
 const CountryMapper = require('../../../../app/mappers/country-mapper.js');
@@ -138,6 +139,17 @@ test('Should be able to upsert - update', async () => {
         createdAt: now,
         updatedAt: now
       }
+    });
+  });
+});
+
+test('Should be able to fetch all countries', async () => {
+  return knexService.transaction(async txn => {
+    const fetchedCountries = await countryRepository.findAllCountries(txn);
+    fetchedCountries.forEach(country => {
+      expect(keys(country).sort()).toStrictEqual(
+        ['guid', 'countryCode', 'countryName', 'code', 'audit'].sort()
+      );
     });
   });
 });

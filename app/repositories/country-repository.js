@@ -65,6 +65,11 @@ function CountryRepository(mappers) {
     }
     return this.updateByCountryCode(dbCountry.countryCode, domainCountry, transaction);
   };
+
+  this.findAllCountries = async function (transaction) {
+    const result = await transaction.select(columnsToReturn).from(T.COUNTRY);
+    return result.map(country => countryMapper.dbToDomain(country));
+  };
 }
 
 module.exports = CountryRepository;
