@@ -87,3 +87,25 @@ test('Should be able to update country by countryCode', async () => {
   });
   expect(repositories.countryRepository.updateByCountryCode.mock.calls.length).toBe(1);
 });
+
+test('Should be able to fetch all countries', async () => {
+  const repositories = {
+    countryRepository: {
+      findAllCountries: jest.fn(() => {
+        return [
+          {
+            guid: '9e17d7b7-c236-496f-92cd-10e1859fdd3b'
+          }
+        ];
+      })
+    }
+  };
+  const services = {
+    knexService: {
+      transaction: async f => f()
+    }
+  };
+  const countryDispatcher = new CountryDispatcher({ mappers, services, repositories });
+  await countryDispatcher.findAllCountries();
+  expect(repositories.countryRepository.findAllCountries.mock.calls.length).toBe(1);
+});

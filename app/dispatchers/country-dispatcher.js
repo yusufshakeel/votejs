@@ -38,6 +38,13 @@ function CountryDispatcher({ mappers, services, repositories }) {
       return countryMapper.domainToApi(updatedCountry);
     });
   };
+
+  this.findAllCountries = function () {
+    return knexService.transaction(async txn => {
+      const fetchedCountries = await countryRepository.findAllCountries(txn);
+      return fetchedCountries.map(country => countryMapper.domainToApi(country));
+    });
+  };
 }
 
 module.exports = CountryDispatcher;
