@@ -138,7 +138,7 @@ test('Should be able to fetch election topic by electionTopicStatus', async () =
   expect(repositories.electionTopicRepository.findByElectionTopicStatus.mock.calls.length).toBe(1);
 });
 
-test('Should be able to update election by guid', async () => {
+test('Should be able to update election topic by guid', async () => {
   const repositories = {
     electionTopicRepository: {
       updateByGuid: jest.fn(() => {
